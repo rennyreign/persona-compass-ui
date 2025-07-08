@@ -25,8 +25,8 @@ export function Sidebar({ className }: SidebarProps) {
       isActive: false
     },
     {
-      name: 'Campaigns',
-      href: '/campaigns',
+      name: 'Performance',
+      href: '/performance',
       icon: Megaphone,
       isActive: false
     },

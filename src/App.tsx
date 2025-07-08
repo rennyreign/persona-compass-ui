@@ -6,6 +6,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import CreatePersona from "./pages/CreatePersona";
 import PersonaProfile from "./pages/PersonaProfile";
+import Performance from "./pages/Performance";
+import Insights from "./pages/Insights";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -20,6 +22,8 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/create-persona" element={<CreatePersona />} />
           <Route path="/persona/:id" element={<PersonaProfile />} />
+          <Route path="/performance" element={<Performance />} />
+          <Route path="/insights" element={<Insights />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
