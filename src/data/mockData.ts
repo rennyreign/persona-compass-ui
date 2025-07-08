@@ -80,7 +80,7 @@ export const mockPersonas: Persona[] = [
   {
     id: '1',
     name: 'Matthew',
-    program: 'Computer Science',
+    program: 'Supply Chain',
     ageRange: '18-22',
     careerStage: 'Undergraduate',
     avatar: '/lovable-uploads/d84fb05f-879d-4d53-9840-0637944579b1.png',
@@ -128,7 +128,7 @@ export const mockPersonas: Persona[] = [
   {
     id: '2',
     name: 'Liz',
-    program: 'MBA',
+    program: 'Healthcare',
     ageRange: '28-35',
     careerStage: 'Graduate/Professional',
     avatar: '/lovable-uploads/30655c8c-b40b-4fd0-8a4a-3b300a0ffd0f.png',
@@ -176,7 +176,7 @@ export const mockPersonas: Persona[] = [
   {
     id: '3',
     name: 'Claire',
-    program: 'Continuing Education',
+    program: 'Management Strategy & Leadership',
     ageRange: '45-55',
     careerStage: 'Mid-Career Professional',
     avatar: '/lovable-uploads/e790a73b-729c-4461-bda6-3bcefcc831d9.png',
@@ -224,7 +224,7 @@ export const mockPersonas: Persona[] = [
   {
     id: '4',
     name: 'Kelly',
-    program: 'Executive Education',
+    program: 'Supply Chain',
     ageRange: '50-60',
     careerStage: 'Senior Executive',
     avatar: '/lovable-uploads/d3399d19-9038-4dc2-9bd8-dc5a859bd0ac.png',
