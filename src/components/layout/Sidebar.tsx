@@ -35,12 +35,6 @@ export function Sidebar({ className }: SidebarProps) {
       icon: '💡',
       isActive: false
     },
-    {
-      name: 'Analytics',
-      href: '/analytics',
-      icon: '📊',
-      isActive: false
-    }
   ];
 
   const quickActions = [
@@ -71,15 +65,19 @@ export function Sidebar({ className }: SidebarProps) {
       <div className="p-6 border-b border-border">
         <div className="flex items-center justify-between">
           {!isCollapsed && (
-            <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-sm">M</span>
-              </div>
-              <div>
-                <h1 className="font-semibold text-foreground">MSU Persona</h1>
-                <p className="text-xs text-muted-foreground">Intelligence Platform</p>
-              </div>
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center overflow-hidden">
+              <img 
+                src="/lovable-uploads/89175e4f-021a-4be2-a013-b97ccb4af0c3.png" 
+                alt="MSU Logo" 
+                className="w-6 h-6 object-contain"
+              />
             </div>
+            <div>
+              <h1 className="font-semibold text-foreground">MSU Persona</h1>
+              <p className="text-xs text-muted-foreground">Intelligence Platform</p>
+            </div>
+          </div>
           )}
           <Button
             variant="ghost"
@@ -114,29 +112,6 @@ export function Sidebar({ className }: SidebarProps) {
           ))}
         </nav>
 
-        <Separator className="mx-4 my-4" />
-
-        {/* Quick Actions */}
-        {!isCollapsed && (
-          <div className="p-4 space-y-4">
-            <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
-              Quick Actions
-            </h3>
-            <div className="space-y-2">
-              {quickActions.map((action) => (
-                <Button
-                  key={action.name}
-                  variant="ghost"
-                  className="w-full justify-start space-x-3 text-muted-foreground hover:text-foreground hover:bg-muted/50"
-                  onClick={action.action}
-                >
-                  <span className="text-lg">{action.icon}</span>
-                  <span className="font-medium">{action.name}</span>
-                </Button>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
 
       {/* User Profile */}

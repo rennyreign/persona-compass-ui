@@ -37,6 +37,11 @@ export function PersonaGrid({ personas, className, onPersonaClick }: PersonaGrid
             <div className="flex items-start justify-between">
               <div className="flex items-center space-x-3">
                 <Avatar className="w-12 h-12 border-2 border-primary/20">
+                  <img 
+                    src={`https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face`}
+                    alt={persona.name}
+                    className="w-full h-full object-cover rounded-full"
+                  />
                   <AvatarFallback className="bg-primary/10 text-primary font-semibold">
                     {getInitials(persona.name)}
                   </AvatarFallback>
@@ -56,7 +61,7 @@ export function PersonaGrid({ personas, className, onPersonaClick }: PersonaGrid
 
             {/* Program & Tagline */}
             <div className="space-y-2">
-              <Badge variant="outline" className="bg-accent/10 text-accent border-accent/20">
+              <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">
                 {persona.program}
               </Badge>
               <p className="text-sm text-muted-foreground italic">

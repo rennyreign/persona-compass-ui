@@ -43,11 +43,11 @@ export function Dashboard({ className }: DashboardProps) {
           icon={<span className="text-2xl">👥</span>}
         />
         <KPICard
-          title="Active Campaigns"
-          value={kpis.activeCampaigns}
-          change={{ value: 8, period: "this week" }}
+          title="Application Rate"
+          value="18.5%"
+          change={{ value: 3.2, period: "vs last month" }}
           trend="up"
-          icon={<span className="text-2xl">📢</span>}
+          icon={<span className="text-2xl">📝</span>}
         />
         <KPICard
           title="Avg CPL"
@@ -57,36 +57,28 @@ export function Dashboard({ className }: DashboardProps) {
           icon={<span className="text-2xl">💰</span>}
         />
         <KPICard
-          title="AI Insights"
-          value={kpis.totalInsights}
-          change={{ value: 23, period: "this week" }}
+          title="Enrollment Rate"
+          value="12.3%"
+          change={{ value: 1.8, period: "vs last month" }}
           trend="up"
-          icon={<span className="text-2xl">🤖</span>}
+          icon={<span className="text-2xl">🎓</span>}
         />
       </div>
 
-      {/* Main Content Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Left Column - Personas */}
-        <div className="lg:col-span-2 space-y-6">
-          {/* Filter Tabs */}
-          <PersonaFilterTabs
-            personas={mockPersonas}
-            activeFilter={activeFilter}
-            onFilterChange={setActiveFilter}
-          />
-          
-          {/* Personas Grid */}
-          <PersonaGrid
-            personas={filteredPersonas}
-            onPersonaClick={handlePersonaClick}
-          />
-        </div>
-
-        {/* Right Column - Activity Feed */}
-        <div className="lg:col-span-1">
-          <ActivityFeed activities={mockActivities} />
-        </div>
+      {/* Main Content */}
+      <div className="space-y-6">
+        {/* Filter Tabs */}
+        <PersonaFilterTabs
+          personas={mockPersonas}
+          activeFilter={activeFilter}
+          onFilterChange={setActiveFilter}
+        />
+        
+        {/* Personas Grid */}
+        <PersonaGrid
+          personas={filteredPersonas}
+          onPersonaClick={handlePersonaClick}
+        />
       </div>
 
       {/* Performance Overview */}
