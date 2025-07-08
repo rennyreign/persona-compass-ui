@@ -103,6 +103,8 @@ export default function EditPersona() {
       });
       setVisualIdentityImages(prev => [...prev, ...newImages]);
     }
+    // Reset the input so the same files can be selected again
+    event.target.value = '';
   };
 
   const removeImage = (indexToRemove: number) => {
@@ -292,6 +294,8 @@ export default function EditPersona() {
                                 const imageUrl = URL.createObjectURL(file);
                                 handleInputChange("avatar", imageUrl);
                               }
+                              // Reset the input so the same file can be selected again
+                              e.target.value = '';
                             }}
                             className="hidden"
                           />
