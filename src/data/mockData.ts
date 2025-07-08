@@ -175,7 +175,7 @@ export const mockPersonas: Persona[] = [
     program: 'Management Strategy & Leadership',
     ageRange: '45-55',
     careerStage: 'Mid-Career Professional',
-    avatar: '/lovable-uploads/e790a73b-729c-4461-bda6-3bcefcc831d9.png',
+    avatar: '/lovable-uploads/24dd0e2e-244c-4d6b-b857-11531bc70aba.png',
     motivationalTagline: 'It\'s never too late to learn something new',
     goals: ['Skill diversification', 'Professional certification', 'Personal enrichment'],
     fears: ['Technology gaps', 'Ageism in workplace', 'Irrelevance in changing markets'],
