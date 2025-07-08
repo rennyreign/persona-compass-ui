@@ -27,6 +27,7 @@ export interface Persona {
     totalSpend: number;
     totalLeads: number;
   };
+  moodBoardImages: string[];
   isActive: boolean;
   createdAt: string;
 }
@@ -74,6 +75,7 @@ export const mockPersonas: Persona[] = [
     program: 'Computer Science',
     ageRange: '18-22',
     careerStage: 'Undergraduate',
+    avatar: 'https://images.unsplash.com/photo-1649972904349-6e44c42644a7?w=400&h=400&fit=crop&crop=face',
     motivationalTagline: 'Building tomorrow\'s tech solutions today',
     goals: ['Land FAANG internship', 'Master full-stack development', 'Build startup portfolio'],
     fears: ['Falling behind in rapidly evolving tech', 'Impostor syndrome', 'Job market saturation'],
@@ -96,6 +98,14 @@ export const mockPersonas: Persona[] = [
       totalSpend: 12500,
       totalLeads: 275
     },
+    moodBoardImages: [
+      'https://images.unsplash.com/photo-1649972904349-6e44c42644a7?w=400&h=400&fit=crop',
+      'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&h=400&fit=crop',
+      'https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?w=400&h=400&fit=crop',
+      'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop',
+      'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=400&h=400&fit=crop',
+      'https://images.unsplash.com/photo-1573497019236-17f8177b81e8?w=400&h=400&fit=crop'
+    ],
     isActive: true,
     createdAt: '2024-01-15'
   },
@@ -105,6 +115,7 @@ export const mockPersonas: Persona[] = [
     program: 'MBA',
     ageRange: '28-35',
     careerStage: 'Graduate/Professional',
+    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face',
     motivationalTagline: 'Transforming experience into leadership excellence',
     goals: ['Executive role transition', 'Network with industry leaders', 'Develop strategic thinking'],
     fears: ['Career stagnation', 'Age discrimination', 'Financial instability during transition'],
@@ -127,6 +138,14 @@ export const mockPersonas: Persona[] = [
       totalSpend: 15600,
       totalLeads: 199
     },
+    moodBoardImages: [
+      'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop',
+      'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400&fit=crop',
+      'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=400&fit=crop',
+      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop',
+      'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop',
+      'https://images.unsplash.com/photo-1528892952291-009c663ce843?w=400&h=400&fit=crop'
+    ],
     isActive: true,
     createdAt: '2024-02-03'
   },
@@ -136,6 +155,7 @@ export const mockPersonas: Persona[] = [
     program: 'Continuing Education',
     ageRange: '45-55',
     careerStage: 'Mid-Career Professional',
+    avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=400&h=400&fit=crop&crop=face',
     motivationalTagline: 'It\'s never too late to learn something new',
     goals: ['Skill diversification', 'Professional certification', 'Personal enrichment'],
     fears: ['Technology gaps', 'Ageism in workplace', 'Irrelevance in changing markets'],
@@ -158,6 +178,14 @@ export const mockPersonas: Persona[] = [
       totalSpend: 8900,
       totalLeads: 97
     },
+    moodBoardImages: [
+      'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=400&h=400&fit=crop',
+      'https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=400&h=400&fit=crop',
+      'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop',
+      'https://images.unsplash.com/photo-1554151228-14d9def656e4?w=400&h=400&fit=crop',
+      'https://images.unsplash.com/photo-1590086782792-42dd2350140d?w=400&h=400&fit=crop',
+      'https://images.unsplash.com/photo-1485178575877-1a13bf489dfe?w=400&h=400&fit=crop'
+    ],
     isActive: true,
     createdAt: '2024-01-28'
   }

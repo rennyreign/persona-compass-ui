@@ -1,16 +1,17 @@
 import { useState } from "react";
 import { useParams, Navigate } from "react-router-dom";
-import { ArrowLeft, Edit, Archive, TrendingUp, Target, Brain, User } from "lucide-react";
+import { ArrowLeft, Edit, Archive, TrendingUp, Target, Brain, User, Images } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { mockPersonas, mockInsights, Persona } from "@/data/mockData";
 import { PersonaPerformanceCharts } from "@/components/persona/PersonaPerformanceCharts";
 import { PersonaCampaigns } from "@/components/persona/PersonaCampaigns";
 import { PersonaInsights } from "@/components/persona/PersonaInsights";
+import { PersonaVisualIdentity } from "@/components/persona/PersonaVisualIdentity";
 import { cn } from "@/lib/utils";
 
 export default function PersonaProfile() {
@@ -64,9 +65,13 @@ export default function PersonaProfile() {
         <div className="max-w-7xl mx-auto px-6 py-8">
           <div className="flex items-start space-x-6">
             <Avatar className="w-24 h-24 border-4 border-background shadow-lg">
-              <AvatarFallback className="text-2xl font-semibold bg-primary text-primary-foreground">
-                {persona.name.split(' ').map(n => n[0]).join('')}
-              </AvatarFallback>
+              {persona.avatar ? (
+                <AvatarImage src={persona.avatar} alt={persona.name} />
+              ) : (
+                <AvatarFallback className="text-2xl font-semibold bg-primary text-primary-foreground">
+                  {persona.name.split(' ').map(n => n[0]).join('')}
+                </AvatarFallback>
+              )}
             </Avatar>
             
             <div className="flex-1 space-y-4">
@@ -115,10 +120,14 @@ export default function PersonaProfile() {
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-6 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4 lg:w-auto lg:grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5 lg:w-auto lg:grid-cols-5">
             <TabsTrigger value="details" className="flex items-center space-x-2">
               <User className="w-4 h-4" />
               <span>Details</span>
+            </TabsTrigger>
+            <TabsTrigger value="visual" className="flex items-center space-x-2">
+              <Images className="w-4 h-4" />
+              <span>Visual Identity</span>
             </TabsTrigger>
             <TabsTrigger value="performance" className="flex items-center space-x-2">
               <TrendingUp className="w-4 h-4" />
@@ -274,6 +283,13 @@ export default function PersonaProfile() {
                 </div>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          <TabsContent value="visual">
+            <PersonaVisualIdentity 
+              images={persona.moodBoardImages} 
+              personaName={persona.name}
+            />
           </TabsContent>
 
           <TabsContent value="performance">
