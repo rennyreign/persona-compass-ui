@@ -1,0 +1,297 @@
+export interface Persona {
+  id: string;
+  name: string;
+  program: string;
+  ageRange: string;
+  careerStage: string;
+  avatar?: string;
+  motivationalTagline: string;
+  goals: string[];
+  fears: string[];
+  motivations: string[];
+  channels: string[];
+  demographics: {
+    location: string;
+    income: string;
+    education: string;
+  };
+  psychographics: {
+    values: string[];
+    interests: string[];
+    lifestyle: string;
+  };
+  performance: {
+    cpl: number;
+    ctr: number;
+    conversionRate: number;
+    totalSpend: number;
+    totalLeads: number;
+  };
+  isActive: boolean;
+  createdAt: string;
+}
+
+export interface Campaign {
+  id: string;
+  personaId: string;
+  name: string;
+  channel: string;
+  spend: number;
+  clicks: number;
+  leads: number;
+  cta: string;
+  notes: string;
+  startDate: string;
+  endDate?: string;
+  status: 'active' | 'paused' | 'completed';
+}
+
+export interface Activity {
+  id: string;
+  type: 'persona_created' | 'campaign_launched' | 'insight_generated' | 'performance_alert';
+  title: string;
+  description: string;
+  timestamp: string;
+  personaId?: string;
+  campaignId?: string;
+}
+
+export interface Insight {
+  id: string;
+  personaId: string;
+  title: string;
+  content: string;
+  type: 'optimization' | 'opportunity' | 'warning' | 'trend';
+  generatedAt: string;
+  isGptGenerated: boolean;
+}
+
+// Mock Personas Data
+export const mockPersonas: Persona[] = [
+  {
+    id: '1',
+    name: 'Digital Native Dana',
+    program: 'Computer Science',
+    ageRange: '18-22',
+    careerStage: 'Undergraduate',
+    motivationalTagline: 'Building tomorrow\'s tech solutions today',
+    goals: ['Land FAANG internship', 'Master full-stack development', 'Build startup portfolio'],
+    fears: ['Falling behind in rapidly evolving tech', 'Impostor syndrome', 'Job market saturation'],
+    motivations: ['Innovation and creativity', 'High earning potential', 'Making global impact'],
+    channels: ['Instagram', 'TikTok', 'LinkedIn', 'Discord', 'YouTube'],
+    demographics: {
+      location: 'Urban/Suburban Michigan',
+      income: '$0-25K (family support)',
+      education: 'Current undergrad'
+    },
+    psychographics: {
+      values: ['Innovation', 'Efficiency', 'Authenticity'],
+      interests: ['Coding', 'Gaming', 'Entrepreneurship', 'Tech podcasts'],
+      lifestyle: 'Digital-first, highly connected'
+    },
+    performance: {
+      cpl: 45.50,
+      ctr: 3.2,
+      conversionRate: 12.5,
+      totalSpend: 12500,
+      totalLeads: 275
+    },
+    isActive: true,
+    createdAt: '2024-01-15'
+  },
+  {
+    id: '2',
+    name: 'Career Pivot Paul',
+    program: 'MBA',
+    ageRange: '28-35',
+    careerStage: 'Graduate/Professional',
+    motivationalTagline: 'Transforming experience into leadership excellence',
+    goals: ['Executive role transition', 'Network with industry leaders', 'Develop strategic thinking'],
+    fears: ['Career stagnation', 'Age discrimination', 'Financial instability during transition'],
+    motivations: ['Leadership impact', 'Financial growth', 'Work-life balance'],
+    channels: ['LinkedIn', 'Facebook', 'Email', 'Professional networks', 'Podcasts'],
+    demographics: {
+      location: 'Metro Detroit area',
+      income: '$75K-120K',
+      education: 'Bachelor\'s + work experience'
+    },
+    psychographics: {
+      values: ['Achievement', 'Stability', 'Growth'],
+      interests: ['Leadership books', 'Networking events', 'Golf', 'Investment'],
+      lifestyle: 'Time-conscious, goal-oriented'
+    },
+    performance: {
+      cpl: 78.25,
+      ctr: 2.8,
+      conversionRate: 8.5,
+      totalSpend: 15600,
+      totalLeads: 199
+    },
+    isActive: true,
+    createdAt: '2024-02-03'
+  },
+  {
+    id: '3',
+    name: 'Lifelong Learner Lisa',
+    program: 'Continuing Education',
+    ageRange: '45-55',
+    careerStage: 'Mid-Career Professional',
+    motivationalTagline: 'It\'s never too late to learn something new',
+    goals: ['Skill diversification', 'Professional certification', 'Personal enrichment'],
+    fears: ['Technology gaps', 'Ageism in workplace', 'Irrelevance in changing markets'],
+    motivations: ['Intellectual curiosity', 'Job security', 'Personal fulfillment'],
+    channels: ['Facebook', 'Email', 'YouTube', 'Professional associations', 'Traditional media'],
+    demographics: {
+      location: 'Small towns/Rural Michigan',
+      income: '$50K-85K',
+      education: 'Bachelor\'s degree'
+    },
+    psychographics: {
+      values: ['Learning', 'Tradition', 'Community'],
+      interests: ['Reading', 'Community involvement', 'Family activities', 'Travel'],
+      lifestyle: 'Balanced, community-focused'
+    },
+    performance: {
+      cpl: 92.10,
+      ctr: 1.9,
+      conversionRate: 15.2,
+      totalSpend: 8900,
+      totalLeads: 97
+    },
+    isActive: true,
+    createdAt: '2024-01-28'
+  }
+];
+
+// Mock Campaigns Data
+export const mockCampaigns: Campaign[] = [
+  {
+    id: '1',
+    personaId: '1',
+    name: 'CS Program - Social Media Blitz',
+    channel: 'Instagram',
+    spend: 2500,
+    clicks: 1250,
+    leads: 87,
+    cta: 'Code Your Future at MSU',
+    notes: 'High engagement on coding challenge posts',
+    startDate: '2024-03-01',
+    status: 'active'
+  },
+  {
+    id: '2',
+    personaId: '2',
+    name: 'MBA Leadership Summit',
+    channel: 'LinkedIn',
+    spend: 3200,
+    clicks: 890,
+    leads: 45,
+    cta: 'Lead the Change - MSU MBA',
+    notes: 'Strong response from finance professionals',
+    startDate: '2024-02-15',
+    endDate: '2024-03-15',
+    status: 'completed'
+  },
+  {
+    id: '3',
+    personaId: '3',
+    name: 'Continuing Ed - Community Focus',
+    channel: 'Facebook',
+    spend: 1800,
+    clicks: 720,
+    leads: 63,
+    cta: 'Never Stop Learning',
+    notes: 'Better performance in evening posts',
+    startDate: '2024-03-10',
+    status: 'active'
+  }
+];
+
+// Mock Activity Feed
+export const mockActivities: Activity[] = [
+  {
+    id: '1',
+    type: 'insight_generated',
+    title: 'New optimization insight for Digital Native Dana',
+    description: 'AI identified 23% improvement opportunity in TikTok ad timing',
+    timestamp: '2024-03-15T10:30:00Z',
+    personaId: '1'
+  },
+  {
+    id: '2',
+    type: 'campaign_launched',
+    title: 'MBA Leadership Summit campaign launched',
+    description: 'LinkedIn campaign targeting career pivot professionals',
+    timestamp: '2024-03-15T09:15:00Z',
+    personaId: '2',
+    campaignId: '2'
+  },
+  {
+    id: '3',
+    type: 'performance_alert',
+    title: 'CPL threshold exceeded for Lifelong Learner Lisa',
+    description: 'Facebook campaign CPL increased 15% above target',
+    timestamp: '2024-03-14T16:45:00Z',
+    personaId: '3'
+  },
+  {
+    id: '4',
+    type: 'persona_created',
+    title: 'New persona: Digital Native Dana',
+    description: 'AI-generated persona for Computer Science program',
+    timestamp: '2024-03-14T14:20:00Z',
+    personaId: '1'
+  }
+];
+
+// Mock Insights
+export const mockInsights: Insight[] = [
+  {
+    id: '1',
+    personaId: '1',
+    title: 'Optimize TikTok Ad Timing',
+    content: 'Data shows 23% higher engagement when posting between 6-8 PM EST. Consider shifting budget allocation to evening slots.',
+    type: 'optimization',
+    generatedAt: '2024-03-15T10:30:00Z',
+    isGptGenerated: true
+  },
+  {
+    id: '2',
+    personaId: '2',
+    title: 'LinkedIn Article Opportunity',
+    content: 'Career pivot professionals respond well to thought leadership content. Consider sponsored articles about industry transformation.',
+    type: 'opportunity',
+    generatedAt: '2024-03-14T11:15:00Z',
+    isGptGenerated: true
+  },
+  {
+    id: '3',
+    personaId: '3',
+    title: 'Budget Reallocation Warning',
+    content: 'Facebook CPL trending upward. Consider testing YouTube pre-roll ads for this demographic.',
+    type: 'warning',
+    generatedAt: '2024-03-13T15:22:00Z',
+    isGptGenerated: true
+  }
+];
+
+// KPI Calculations
+export const getKPIs = () => {
+  const totalPersonas = mockPersonas.length;
+  const activePersonas = mockPersonas.filter(p => p.isActive).length;
+  const activeCampaigns = mockCampaigns.filter(c => c.status === 'active').length;
+  const totalInsights = mockInsights.length;
+  const totalSpend = mockCampaigns.reduce((sum, c) => sum + c.spend, 0);
+  const totalLeads = mockCampaigns.reduce((sum, c) => sum + c.leads, 0);
+  const avgCPL = totalSpend / totalLeads;
+
+  return {
+    totalPersonas,
+    activePersonas,
+    activeCampaigns,
+    totalInsights,
+    totalSpend,
+    totalLeads,
+    avgCPL
+  };
+};
