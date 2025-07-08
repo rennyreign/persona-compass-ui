@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { TopHeader } from "@/components/layout/TopHeader";
 import { mockCampaigns, mockPersonas } from "@/data/mockData";
+import { CreateCampaignDialog } from "@/components/campaign/CreateCampaignDialog";
 
 export default function Campaigns() {
   const [selectedPersona, setSelectedPersona] = useState<string>("all");
@@ -74,10 +75,7 @@ export default function Campaigns() {
                     Manage and monitor all marketing campaigns across personas
                   </p>
                 </div>
-                <Button>
-                  <Plus className="w-4 h-4 mr-2" />
-                  Create Campaign
-                </Button>
+                <CreateCampaignDialog />
               </div>
             </div>
 

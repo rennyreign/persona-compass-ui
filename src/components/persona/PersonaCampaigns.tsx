@@ -5,6 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { ExternalLink, FileText } from "lucide-react";
 import { Link } from "react-router-dom";
 import { mockCampaigns } from "@/data/mockData";
+import { CreateCampaignDialog } from "@/components/campaign/CreateCampaignDialog";
 
 interface PersonaCampaignsProps {
   personaId: string;
@@ -90,18 +91,16 @@ export function PersonaCampaigns({ personaId }: PersonaCampaignsProps) {
                 Detailed performance metrics for all campaigns targeting this persona
               </CardDescription>
             </div>
-            <Button>
-              Create Campaign
-            </Button>
+            <CreateCampaignDialog />
           </div>
         </CardHeader>
         <CardContent>
           {campaigns.length === 0 ? (
             <div className="text-center py-8">
               <p className="text-muted-foreground">No campaigns found for this persona.</p>
-              <Button className="mt-4">
-                Create First Campaign
-              </Button>
+              <div className="mt-4">
+                <CreateCampaignDialog trigger={<Button>Create First Campaign</Button>} />
+              </div>
             </div>
           ) : (
             <Table>
