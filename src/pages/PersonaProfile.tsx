@@ -283,6 +283,26 @@ export default function PersonaProfile() {
                 </div>
               </CardContent>
             </Card>
+
+            {/* Program Requirements */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Program Requirements</CardTitle>
+                <CardDescription>
+                  What this persona needs from an educational program
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {persona.programNeeds.map((need, index) => (
+                    <div key={index} className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0" />
+                      <span className="text-sm text-foreground">{need}</span>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
           </TabsContent>
 
           <TabsContent value="visual">

@@ -20,6 +20,7 @@ export interface Persona {
     interests: string[];
     lifestyle: string;
   };
+  programNeeds: string[];
   performance: {
     cpl: number;
     ctr: number;
@@ -91,6 +92,14 @@ export const mockPersonas: Persona[] = [
       interests: ['Coding', 'Gaming', 'Entrepreneurship', 'Tech podcasts'],
       lifestyle: 'Digital-first, highly connected'
     },
+    programNeeds: [
+      'Async learning flexibility',
+      'Industry-relevant projects',
+      'Personal brand credibility',
+      'Tech stack diversity',
+      'Networking opportunities',
+      'Career placement support'
+    ],
     performance: {
       cpl: 45.50,
       ctr: 3.2,
@@ -131,6 +140,14 @@ export const mockPersonas: Persona[] = [
       interests: ['Leadership books', 'Networking events', 'Golf', 'Investment'],
       lifestyle: 'Time-conscious, goal-oriented'
     },
+    programNeeds: [
+      'Executive leadership training',
+      'Strategic thinking modules',
+      'Network access to C-suite',
+      'Flexible scheduling options',
+      'ROI measurement tools',
+      'Industry transformation insights'
+    ],
     performance: {
       cpl: 78.25,
       ctr: 2.8,
@@ -171,6 +188,14 @@ export const mockPersonas: Persona[] = [
       interests: ['Reading', 'Community involvement', 'Family activities', 'Travel'],
       lifestyle: 'Balanced, community-focused'
     },
+    programNeeds: [
+      'Self-paced learning options',
+      'Practical skill applications',
+      'Community support network',
+      'Cost-effective programs',
+      'Work-life balance consideration',
+      'Clear progression pathways'
+    ],
     performance: {
       cpl: 92.10,
       ctr: 1.9,
