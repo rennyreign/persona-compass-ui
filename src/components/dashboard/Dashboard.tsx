@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { Users, FileText, DollarSign, GraduationCap } from "lucide-react";
 import { KPICard } from "./KPICard";
 import { ActivityFeed } from "./ActivityFeed";
 import { PersonaFilterTabs } from "./PersonaFilterTabs";
@@ -40,28 +41,28 @@ export function Dashboard({ className }: DashboardProps) {
           value={kpis.totalPersonas}
           change={{ value: 12, period: "this month" }}
           trend="up"
-          icon={<span className="text-2xl">👥</span>}
+          icon={<Users className="w-6 h-6" />}
         />
         <KPICard
           title="Application Rate"
           value="18.5%"
           change={{ value: 3.2, period: "vs last month" }}
           trend="up"
-          icon={<span className="text-2xl">📝</span>}
+          icon={<FileText className="w-6 h-6" />}
         />
         <KPICard
           title="Avg CPL"
           value={`$${kpis.avgCPL.toFixed(2)}`}
           change={{ value: -5, period: "vs last month" }}
           trend="up"
-          icon={<span className="text-2xl">💰</span>}
+          icon={<DollarSign className="w-6 h-6" />}
         />
         <KPICard
           title="Enrollment Rate"
           value="12.3%"
           change={{ value: 1.8, period: "vs last month" }}
           trend="up"
-          icon={<span className="text-2xl">🎓</span>}
+          icon={<GraduationCap className="w-6 h-6" />}
         />
       </div>
 
