@@ -16,19 +16,19 @@ export function Sidebar({ className }: SidebarProps) {
       name: 'Dashboard',
       href: '/',
       icon: Home,
-      isActive: true
+      isActive: window.location.pathname === '/'
     },
     {
       name: 'Performance',
       href: '/performance',
       icon: Megaphone,
-      isActive: false
+      isActive: window.location.pathname === '/performance'
     },
     {
       name: 'Insights',
       href: '/insights',
       icon: Lightbulb,
-      isActive: false
+      isActive: window.location.pathname === '/insights'
     },
   ];
 
