@@ -115,12 +115,11 @@ export const mockPersonas: Persona[] = [
       totalLeads: 275
     },
     moodBoardImages: [
+      '/lovable-uploads/30655c8c-b40b-4fd0-8a4a-3b300a0ffd0f.png',
+      '/lovable-uploads/89175e4f-021a-4be2-a013-b97ccb4af0c3.png',
+      '/lovable-uploads/d3399d19-9038-4dc2-9bd8-dc5a859bd0ac.png',
       '/lovable-uploads/d84fb05f-879d-4d53-9840-0637944579b1.png',
-      'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&h=400&fit=crop',
-      'https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?w=400&h=400&fit=crop',
-      'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop',
-      'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=400&h=400&fit=crop',
-      'https://images.unsplash.com/photo-1573497019236-17f8177b81e8?w=400&h=400&fit=crop'
+      '/lovable-uploads/e790a73b-729c-4461-bda6-3bcefcc831d9.png'
     ],
     isActive: true,
     createdAt: '2024-01-15'
