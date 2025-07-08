@@ -37,7 +37,7 @@ export function PersonaGrid({ personas, className, onPersonaClick }: PersonaGrid
             {/* Hero Image */}
             <div className="aspect-video w-full overflow-hidden">
               <img 
-                src={`https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=200&fit=crop&crop=face`}
+                src={persona.avatar || `https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=200&fit=crop&crop=face`}
                 alt={persona.name}
                 className="w-full h-full object-cover"
               />

@@ -79,11 +79,11 @@ export interface CampaignPlan {
 export const mockPersonas: Persona[] = [
   {
     id: '1',
-    name: 'Digital Native Dana',
+    name: 'Matthew',
     program: 'Computer Science',
     ageRange: '18-22',
     careerStage: 'Undergraduate',
-    avatar: 'https://images.unsplash.com/photo-1649972904349-6e44c42644a7?w=400&h=400&fit=crop&crop=face',
+    avatar: '/lovable-uploads/d84fb05f-879d-4d53-9840-0637944579b1.png',
     motivationalTagline: 'Building tomorrow\'s tech solutions today',
     goals: ['Land FAANG internship', 'Master full-stack development', 'Build startup portfolio'],
     fears: ['Falling behind in rapidly evolving tech', 'Impostor syndrome', 'Job market saturation'],
@@ -115,7 +115,7 @@ export const mockPersonas: Persona[] = [
       totalLeads: 275
     },
     moodBoardImages: [
-      'https://images.unsplash.com/photo-1649972904349-6e44c42644a7?w=400&h=400&fit=crop',
+      '/lovable-uploads/d84fb05f-879d-4d53-9840-0637944579b1.png',
       'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&h=400&fit=crop',
       'https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?w=400&h=400&fit=crop',
       'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop',
@@ -127,11 +127,11 @@ export const mockPersonas: Persona[] = [
   },
   {
     id: '2',
-    name: 'Career Pivot Paul',
+    name: 'Liz',
     program: 'MBA',
     ageRange: '28-35',
     careerStage: 'Graduate/Professional',
-    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face',
+    avatar: '/lovable-uploads/30655c8c-b40b-4fd0-8a4a-3b300a0ffd0f.png',
     motivationalTagline: 'Transforming experience into leadership excellence',
     goals: ['Executive role transition', 'Network with industry leaders', 'Develop strategic thinking'],
     fears: ['Career stagnation', 'Age discrimination', 'Financial instability during transition'],
@@ -163,7 +163,7 @@ export const mockPersonas: Persona[] = [
       totalLeads: 199
     },
     moodBoardImages: [
-      'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop',
+      '/lovable-uploads/30655c8c-b40b-4fd0-8a4a-3b300a0ffd0f.png',
       'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400&fit=crop',
       'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=400&fit=crop',
       'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop',
@@ -175,11 +175,11 @@ export const mockPersonas: Persona[] = [
   },
   {
     id: '3',
-    name: 'Lifelong Learner Lisa',
+    name: 'Claire',
     program: 'Continuing Education',
     ageRange: '45-55',
     careerStage: 'Mid-Career Professional',
-    avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=400&h=400&fit=crop&crop=face',
+    avatar: '/lovable-uploads/e790a73b-729c-4461-bda6-3bcefcc831d9.png',
     motivationalTagline: 'It\'s never too late to learn something new',
     goals: ['Skill diversification', 'Professional certification', 'Personal enrichment'],
     fears: ['Technology gaps', 'Ageism in workplace', 'Irrelevance in changing markets'],
@@ -211,7 +211,7 @@ export const mockPersonas: Persona[] = [
       totalLeads: 97
     },
     moodBoardImages: [
-      'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=400&h=400&fit=crop',
+      '/lovable-uploads/e790a73b-729c-4461-bda6-3bcefcc831d9.png',
       'https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=400&h=400&fit=crop',
       'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop',
       'https://images.unsplash.com/photo-1554151228-14d9def656e4?w=400&h=400&fit=crop',
@@ -220,6 +220,54 @@ export const mockPersonas: Persona[] = [
     ],
     isActive: true,
     createdAt: '2024-01-28'
+  },
+  {
+    id: '4',
+    name: 'Kelly',
+    program: 'Executive Education',
+    ageRange: '50-60',
+    careerStage: 'Senior Executive',
+    avatar: '/lovable-uploads/d3399d19-9038-4dc2-9bd8-dc5a859bd0ac.png',
+    motivationalTagline: 'Leading with wisdom and vision',
+    goals: ['C-suite advancement', 'Board position preparation', 'Legacy building'],
+    fears: ['Industry disruption', 'Succession planning', 'Market volatility'],
+    motivations: ['Thought leadership', 'Industry influence', 'Organizational impact'],
+    channels: ['LinkedIn', 'Email', 'Industry publications', 'Executive networks', 'Conferences'],
+    demographics: {
+      location: 'Major metropolitan areas',
+      income: '$200K+',
+      education: 'Advanced degree + extensive experience'
+    },
+    psychographics: {
+      values: ['Excellence', 'Integrity', 'Innovation'],
+      interests: ['Strategic planning', 'Mentoring', 'Industry analysis', 'Executive coaching'],
+      lifestyle: 'High-performance, results-driven'
+    },
+    programNeeds: [
+      'Executive-level curriculum',
+      'Peer networking opportunities',
+      'Industry transformation insights',
+      'Leadership coaching',
+      'Strategic decision-making frameworks',
+      'Board readiness preparation'
+    ],
+    performance: {
+      cpl: 120.75,
+      ctr: 1.5,
+      conversionRate: 22.8,
+      totalSpend: 18200,
+      totalLeads: 151
+    },
+    moodBoardImages: [
+      '/lovable-uploads/d3399d19-9038-4dc2-9bd8-dc5a859bd0ac.png',
+      'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400&fit=crop',
+      'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=400&fit=crop',
+      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop',
+      'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop',
+      'https://images.unsplash.com/photo-1528892952291-009c663ce843?w=400&h=400&fit=crop'
+    ],
+    isActive: true,
+    createdAt: '2024-03-01'
   }
 ];
 
