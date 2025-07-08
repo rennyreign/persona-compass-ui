@@ -58,7 +58,7 @@ export function PersonaFilterTabs({ personas, activeFilter, onFilterChange, clas
             className={cn(
               "inline-flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200",
               activeFilter === program
-                ? "bg-accent text-accent-foreground shadow-sm"
+                ? "bg-green-100 text-green-800 border border-green-200 shadow-sm"
                 : "bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground"
             )}
           >
@@ -68,7 +68,7 @@ export function PersonaFilterTabs({ personas, activeFilter, onFilterChange, clas
               className={cn(
                 "ml-2 border-0",
                 activeFilter === program 
-                  ? "bg-accent-light/20 text-accent-foreground" 
+                  ? "bg-green-50 text-green-700" 
                   : "bg-background/80"
               )}
             >
