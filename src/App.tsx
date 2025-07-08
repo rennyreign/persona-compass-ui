@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import CreatePersona from "./pages/CreatePersona";
 import PersonaProfile from "./pages/PersonaProfile";
+import EditPersona from "./pages/EditPersona";
 import CampaignPlan from "./pages/CampaignPlan";
 import Campaigns from "./pages/Campaigns";
 import Performance from "./pages/Performance";
@@ -24,6 +25,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/create-persona" element={<CreatePersona />} />
           <Route path="/persona/:id" element={<PersonaProfile />} />
+          <Route path="/persona/:id/edit" element={<EditPersona />} />
           <Route path="/campaign/:campaignId" element={<CampaignPlan />} />
           <Route path="/campaigns" element={<Campaigns />} />
           <Route path="/performance" element={<Performance />} />
