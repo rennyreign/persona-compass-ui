@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { mockActivities } from "@/data/mockData";
 
@@ -113,10 +114,12 @@ export function TopHeader({ className }: TopHeaderProps) {
 
           {/* Quick Actions */}
           <div className="flex items-center space-x-2">
-            <Button size="sm" className="bg-primary hover:bg-primary-dark">
-              <span className="mr-2 text-primary-foreground">+</span>
-              Create Persona
-            </Button>
+            <Link to="/create-persona">
+              <Button size="sm" className="bg-primary hover:bg-primary-dark">
+                <span className="mr-2 text-primary-foreground">+</span>
+                Create Persona
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
