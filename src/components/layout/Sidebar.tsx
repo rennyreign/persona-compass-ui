@@ -104,7 +104,7 @@ export function Sidebar({ className }: SidebarProps) {
                   : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
               )}
             >
-              <span className="text-lg flex-shrink-0">{item.icon}</span>
+              <span className="text-lg flex-shrink-0 text-muted-foreground">{item.icon}</span>
               {!isCollapsed && (
                 <span className="font-medium">{item.name}</span>
               )}

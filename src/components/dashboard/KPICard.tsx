@@ -56,7 +56,7 @@ export function KPICard({ title, value, change, icon, trend = 'neutral', classNa
         </div>
         {icon && (
           <div className="p-3 bg-primary/10 rounded-xl">
-            <div className="w-6 h-6 text-primary">
+            <div className="w-6 h-6 text-muted-foreground">
               {icon}
             </div>
           </div>
