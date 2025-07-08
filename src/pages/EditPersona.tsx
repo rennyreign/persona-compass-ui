@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, Save, Upload } from "lucide-react";
+import { ArrowLeft, Save, Upload, X, Images } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -55,6 +55,10 @@ export default function EditPersona() {
     totalLeads: persona?.performance.totalLeads || 0,
   });
 
+  const [visualIdentityImages, setVisualIdentityImages] = useState<string[]>(
+    persona?.moodBoardImages || []
+  );
+
   if (!persona) {
     return (
       <div className="flex h-screen bg-background">
@@ -85,6 +89,24 @@ export default function EditPersona() {
 
   const handleInputChange = (field: string, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files) {
+      const newImages: string[] = [];
+      Array.from(files).forEach((file) => {
+        if (file.type.startsWith('image/')) {
+          const imageUrl = URL.createObjectURL(file);
+          newImages.push(imageUrl);
+        }
+      });
+      setVisualIdentityImages(prev => [...prev, ...newImages]);
+    }
+  };
+
+  const removeImage = (indexToRemove: number) => {
+    setVisualIdentityImages(prev => prev.filter((_, index) => index !== indexToRemove));
   };
 
   return (
@@ -130,8 +152,9 @@ export default function EditPersona() {
           <div className="max-w-7xl mx-auto px-6 py-8">
             <form onSubmit={handleSubmit} className="space-y-6">
               <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-                <TabsList className="grid w-full grid-cols-4">
+                <TabsList className="grid w-full grid-cols-5">
                   <TabsTrigger value="basic">Basic Info</TabsTrigger>
+                  <TabsTrigger value="visual">Visual Identity</TabsTrigger>
                   <TabsTrigger value="demographics">Demographics</TabsTrigger>
                   <TabsTrigger value="psychographics">Psychology</TabsTrigger>
                   <TabsTrigger value="performance">Performance</TabsTrigger>
@@ -266,6 +289,86 @@ export default function EditPersona() {
                       </CardContent>
                     </Card>
                   </div>
+                </TabsContent>
+
+                <TabsContent value="visual" className="space-y-6">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="flex items-center space-x-2">
+                        <Images className="w-5 h-5 text-primary" />
+                        <span>Visual Identity Images</span>
+                      </CardTitle>
+                      <CardDescription>Upload and manage mood board images for this persona</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-6">
+                      {/* Upload Area */}
+                      <div className="border-2 border-dashed border-border rounded-lg p-6 text-center">
+                        <Upload className="w-8 h-8 mx-auto text-muted-foreground mb-2" />
+                        <p className="text-sm text-muted-foreground mb-2">
+                          Upload images to create a visual mood board
+                        </p>
+                        <input
+                          type="file"
+                          id="visual-identity-upload"
+                          multiple
+                          accept="image/*"
+                          onChange={handleImageUpload}
+                          className="hidden"
+                        />
+                        <Button 
+                          type="button" 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => document.getElementById('visual-identity-upload')?.click()}
+                        >
+                          Choose Images
+                        </Button>
+                      </div>
+
+                      {/* Image Grid */}
+                      {visualIdentityImages.length > 0 && (
+                        <div>
+                          <h4 className="text-sm font-medium text-muted-foreground mb-3">
+                            Current Images ({visualIdentityImages.length})
+                          </h4>
+                          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                            {visualIdentityImages.map((imageUrl, index) => (
+                              <div
+                                key={index}
+                                className="relative group aspect-square overflow-hidden rounded-lg bg-muted border border-border"
+                              >
+                                <img
+                                  src={imageUrl}
+                                  alt={`Visual identity ${index + 1}`}
+                                  className="w-full h-full object-cover"
+                                />
+                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                  <Button
+                                    type="button"
+                                    variant="destructive"
+                                    size="sm"
+                                    onClick={() => removeImage(index)}
+                                    className="h-8 w-8 p-0"
+                                  >
+                                    <X className="w-4 h-4" />
+                                  </Button>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {visualIdentityImages.length === 0 && (
+                        <div className="text-center py-8">
+                          <Images className="w-12 h-12 mx-auto text-muted-foreground mb-2" />
+                          <p className="text-sm text-muted-foreground">
+                            No images uploaded yet. Add some images to create a visual mood board.
+                          </p>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
                 </TabsContent>
 
                 <TabsContent value="demographics" className="space-y-6">
