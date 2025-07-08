@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Link } from "react-router-dom";
+import { Bell, Search } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { mockActivities } from "@/data/mockData";
 
@@ -38,7 +39,7 @@ function NotificationPopover() {
     <Popover>
       <PopoverTrigger asChild>
         <Button variant="ghost" size="sm" className="relative hover:bg-muted/50">
-          <span className="text-lg text-muted-foreground">🔔</span>
+          <Bell className="w-4 h-4 text-muted-foreground" />
           <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 bg-destructive text-destructive-foreground text-xs flex items-center justify-center">
             {recentActivities.length}
           </Badge>
@@ -102,7 +103,7 @@ export function TopHeader({ className }: TopHeaderProps) {
               className="pl-10 bg-muted/50 border-0 focus:bg-background focus:ring-2 focus:ring-primary/20"
             />
             <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-              <span className="text-muted-foreground">🔍</span>
+            <Search className="w-4 h-4 text-muted-foreground" />
             </div>
           </div>
         </div>
