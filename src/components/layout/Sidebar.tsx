@@ -66,7 +66,7 @@ export function Sidebar({ className }: SidebarProps) {
         <div className="flex items-center justify-between">
           {!isCollapsed && (
           <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center overflow-hidden">
+            <div className="w-8 h-8 bg-muted rounded-lg flex items-center justify-center overflow-hidden">
               <img 
                 src="/lovable-uploads/89175e4f-021a-4be2-a013-b97ccb4af0c3.png" 
                 alt="MSU Logo" 
