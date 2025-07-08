@@ -39,7 +39,7 @@ export function PersonaGrid({ personas, className, onPersonaClick }: PersonaGrid
               <img 
                 src={persona.avatar || `https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=200&fit=crop&crop=face`}
                 alt={persona.name}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover object-[center_20%]"
               />
             </div>
             
