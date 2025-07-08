@@ -2,6 +2,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Link } from "react-router-dom";
 import { Persona } from "@/data/mockData";
 import { cn } from "@/lib/utils";
 
@@ -111,22 +112,24 @@ export function PersonaGrid({ personas, className, onPersonaClick }: PersonaGrid
       ))}
 
       {/* Add New Persona Card */}
-      <Card className="p-6 bg-card border-2 border-dashed border-muted-foreground/20 rounded-2xl hover:border-primary/40 hover:bg-primary/5 transition-all duration-200 cursor-pointer group">
-        <div className="flex flex-col items-center justify-center h-full min-h-[300px] space-y-4 text-center">
-          <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center group-hover:bg-primary/20 transition-colors duration-200">
-            <span className="text-2xl text-primary">+</span>
+      <Link to="/create-persona">
+        <Card className="p-6 bg-card border-2 border-dashed border-muted-foreground/20 rounded-2xl hover:border-primary/40 hover:bg-primary/5 transition-all duration-200 cursor-pointer group">
+          <div className="flex flex-col items-center justify-center h-full min-h-[300px] space-y-4 text-center">
+            <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center group-hover:bg-primary/20 transition-colors duration-200">
+              <span className="text-2xl text-primary">+</span>
+            </div>
+            <div className="space-y-2">
+              <h3 className="font-semibold text-foreground">Create New Persona</h3>
+              <p className="text-sm text-muted-foreground">
+                Add a new student persona to target with precision
+              </p>
+            </div>
+            <Button variant="outline" className="border-primary/40 hover:bg-primary hover:text-primary-foreground">
+              Get Started
+            </Button>
           </div>
-          <div className="space-y-2">
-            <h3 className="font-semibold text-foreground">Create New Persona</h3>
-            <p className="text-sm text-muted-foreground">
-              Add a new student persona to target with precision
-            </p>
-          </div>
-          <Button variant="outline" className="border-primary/40 hover:bg-primary hover:text-primary-foreground">
-            Get Started
-          </Button>
-        </div>
-      </Card>
+        </Card>
+      </Link>
     </div>
   );
 }
