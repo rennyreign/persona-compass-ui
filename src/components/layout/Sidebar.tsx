@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Home, Users, Megaphone, Lightbulb } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -14,25 +15,25 @@ export function Sidebar({ className }: SidebarProps) {
     {
       name: 'Dashboard',
       href: '/',
-      icon: '🏠',
+      icon: Home,
       isActive: true
     },
     {
       name: 'Personas',
       href: '/personas',
-      icon: '👥',
+      icon: Users,
       isActive: false
     },
     {
       name: 'Campaigns',
       href: '/campaigns',
-      icon: '📢',
+      icon: Megaphone,
       isActive: false
     },
     {
       name: 'Insights',
       href: '/insights',
-      icon: '💡',
+      icon: Lightbulb,
       isActive: false
     },
   ];
@@ -104,7 +105,7 @@ export function Sidebar({ className }: SidebarProps) {
                   : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
               )}
             >
-              <span className="text-lg flex-shrink-0 text-muted-foreground">{item.icon}</span>
+              <item.icon className="w-5 h-5 flex-shrink-0 text-primary" />
               {!isCollapsed && (
                 <span className="font-medium">{item.name}</span>
               )}
