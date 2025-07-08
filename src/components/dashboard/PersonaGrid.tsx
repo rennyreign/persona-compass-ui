@@ -32,33 +32,32 @@ export function PersonaGrid({ personas, className, onPersonaClick }: PersonaGrid
   return (
     <div className={cn("grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6", className)}>
       {personas.map((persona) => (
-        <Card key={persona.id} className="p-6 bg-card border-0 shadow-md rounded-2xl hover:shadow-lg transition-all duration-200 hover:-translate-y-1">
-          <div className="space-y-4">
-            {/* Header */}
-            <div className="flex items-start justify-between">
-              <div className="flex items-center space-x-3">
-                <Avatar className="w-12 h-12 border-2 border-primary/20">
-                  <img 
-                    src={`https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face`}
-                    alt={persona.name}
-                    className="w-full h-full object-cover rounded-full"
-                  />
-                  <AvatarFallback className="bg-primary/10 text-primary font-semibold">
-                    {getInitials(persona.name)}
-                  </AvatarFallback>
-                </Avatar>
+        <Card key={persona.id} className="bg-card border-0 shadow-md rounded-2xl hover:shadow-lg transition-all duration-200 hover:-translate-y-1 overflow-hidden">
+          <div className="space-y-0">
+            {/* Hero Image */}
+            <div className="aspect-video w-full overflow-hidden">
+              <img 
+                src={`https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=200&fit=crop&crop=face`}
+                alt={persona.name}
+                className="w-full h-full object-cover"
+              />
+            </div>
+            
+            {/* Content */}
+            <div className="p-6 space-y-4">
+              {/* Header */}
+              <div className="flex items-start justify-between">
                 <div>
                   <h3 className="font-semibold text-foreground">{persona.name}</h3>
                   <p className="text-sm text-muted-foreground">{persona.ageRange} • {persona.careerStage}</p>
                 </div>
+                <Badge 
+                  variant={persona.isActive ? "default" : "secondary"}
+                  className={persona.isActive ? "bg-success text-success-foreground" : ""}
+                >
+                  {persona.isActive ? "Active" : "Inactive"}
+                </Badge>
               </div>
-              <Badge 
-                variant={persona.isActive ? "default" : "secondary"}
-                className={persona.isActive ? "bg-success text-success-foreground" : ""}
-              >
-                {persona.isActive ? "Active" : "Inactive"}
-              </Badge>
-            </div>
 
             {/* Program & Tagline */}
             <div className="space-y-2">
@@ -99,14 +98,15 @@ export function PersonaGrid({ personas, className, onPersonaClick }: PersonaGrid
               </div>
             </div>
 
-            {/* Action Button */}
-            <Button 
-              variant="outline" 
-              className="w-full border-primary/20 hover:bg-primary hover:text-primary-foreground"
-              onClick={() => onPersonaClick?.(persona)}
-            >
-              View Profile
-            </Button>
+              {/* Action Button */}
+              <Button 
+                variant="outline" 
+                className="w-full border-primary/20 hover:bg-primary hover:text-primary-foreground"
+                onClick={() => onPersonaClick?.(persona)}
+              >
+                View Profile
+              </Button>
+            </div>
           </div>
         </Card>
       ))}
