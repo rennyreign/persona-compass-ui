@@ -12,6 +12,8 @@ import { PersonaPerformanceCharts } from "@/components/persona/PersonaPerformanc
 import { PersonaCampaigns } from "@/components/persona/PersonaCampaigns";
 import { PersonaInsights } from "@/components/persona/PersonaInsights";
 import { PersonaVisualIdentity } from "@/components/persona/PersonaVisualIdentity";
+import { Sidebar } from "@/components/layout/Sidebar";
+import { TopHeader } from "@/components/layout/TopHeader";
 import { cn } from "@/lib/utils";
 
 export default function PersonaProfile() {
@@ -27,98 +29,104 @@ export default function PersonaProfile() {
   const personaInsights = mockInsights.filter(insight => insight.personaId === persona.id);
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <div className="border-b border-border bg-card">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <Button 
-                variant="ghost" 
-                size="sm"
-                onClick={() => window.history.back()}
-                className="h-8 w-8 p-0"
-              >
-                <ArrowLeft className="w-4 h-4" />
-              </Button>
-              <div>
-                <h1 className="text-2xl font-semibold text-foreground">Persona Profile</h1>
-                <p className="text-sm text-muted-foreground">Detailed persona analytics and insights</p>
-              </div>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Button variant="outline" size="sm">
-                <Edit className="w-4 h-4 mr-2" />
-                Edit
-              </Button>
-              <Button variant="outline" size="sm">
-                <Archive className="w-4 h-4 mr-2" />
-                Archive
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Hero Banner */}
-      <div className="bg-gradient-to-r from-primary/10 via-primary/5 to-background border-b border-border">
-        <div className="max-w-7xl mx-auto px-6 py-8">
-          <div className="flex items-start space-x-6">
-            <Avatar className="w-24 h-24 border-4 border-background shadow-lg">
-              {persona.avatar ? (
-                <AvatarImage src={persona.avatar} alt={persona.name} />
-              ) : (
-                <AvatarFallback className="text-2xl font-semibold bg-primary text-primary-foreground">
-                  {persona.name.split(' ').map(n => n[0]).join('')}
-                </AvatarFallback>
-              )}
-            </Avatar>
-            
-            <div className="flex-1 space-y-4">
-              <div>
-                <h1 className="text-3xl font-bold text-foreground mb-2">{persona.name}</h1>
-                <p className="text-lg text-muted-foreground italic">{persona.motivationalTagline}</p>
-              </div>
-              
-              <div className="flex flex-wrap items-center gap-3">
-                <Badge variant="secondary" className="px-3 py-1">
-                  {persona.program}
-                </Badge>
-                <Badge variant="outline" className="px-3 py-1">
-                  {persona.ageRange} years
-                </Badge>
-                <Badge variant="outline" className="px-3 py-1">
-                  {persona.careerStage}
-                </Badge>
-                {persona.isActive && (
-                  <Badge className="px-3 py-1 bg-green-100 text-green-800 border-green-200">
-                    Active
-                  </Badge>
-                )}
-              </div>
-            </div>
-
-            {/* Quick Stats */}
-            <div className="hidden lg:flex space-x-6">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-foreground">${persona.performance.cpl.toFixed(0)}</div>
-                <div className="text-sm text-muted-foreground">CPL</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-foreground">{persona.performance.ctr}%</div>
-                <div className="text-sm text-muted-foreground">CTR</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-foreground">{persona.performance.totalLeads}</div>
-                <div className="text-sm text-muted-foreground">Total Leads</div>
+    <div className="flex h-screen bg-background">
+      <Sidebar />
+      
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <TopHeader />
+        
+        <div className="flex-1 overflow-auto">
+          {/* Header */}
+          <div className="border-b border-border bg-card">
+            <div className="max-w-7xl mx-auto px-6 py-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-4">
+                  <Button 
+                    variant="ghost" 
+                    size="sm"
+                    onClick={() => window.history.back()}
+                    className="h-8 w-8 p-0"
+                  >
+                    <ArrowLeft className="w-4 h-4" />
+                  </Button>
+                  <div>
+                    <h1 className="text-2xl font-semibold text-foreground">Persona Profile</h1>
+                    <p className="text-sm text-muted-foreground">Detailed persona analytics and insights</p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Button variant="outline" size="sm">
+                    <Edit className="w-4 h-4 mr-2" />
+                    Edit
+                  </Button>
+                  <Button variant="outline" size="sm">
+                    <Archive className="w-4 h-4 mr-2" />
+                    Archive
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
 
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-6 py-8">
+          {/* Hero Banner */}
+          <div className="bg-gradient-to-r from-primary/10 via-primary/5 to-background border-b border-border">
+            <div className="max-w-7xl mx-auto px-6 py-8">
+              <div className="flex items-start space-x-6">
+                <Avatar className="w-24 h-24 border-4 border-background shadow-lg">
+                  {persona.avatar ? (
+                    <AvatarImage src={persona.avatar} alt={persona.name} />
+                  ) : (
+                    <AvatarFallback className="text-2xl font-semibold bg-primary text-primary-foreground">
+                      {persona.name.split(' ').map(n => n[0]).join('')}
+                    </AvatarFallback>
+                  )}
+                </Avatar>
+                
+                <div className="flex-1 space-y-4">
+                  <div>
+                    <h1 className="text-3xl font-bold text-foreground mb-2">{persona.name}</h1>
+                    <p className="text-lg text-muted-foreground italic">{persona.motivationalTagline}</p>
+                  </div>
+                  
+                  <div className="flex flex-wrap items-center gap-3">
+                    <Badge variant="secondary" className="px-3 py-1">
+                      {persona.program}
+                    </Badge>
+                    <Badge variant="outline" className="px-3 py-1">
+                      {persona.ageRange} years
+                    </Badge>
+                    <Badge variant="outline" className="px-3 py-1">
+                      {persona.careerStage}
+                    </Badge>
+                    {persona.isActive && (
+                      <Badge className="px-3 py-1 bg-green-100 text-green-800 border-green-200">
+                        Active
+                      </Badge>
+                    )}
+                  </div>
+                </div>
+
+                {/* Quick Stats */}
+                <div className="hidden lg:flex space-x-6">
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-foreground">${persona.performance.cpl.toFixed(0)}</div>
+                    <div className="text-sm text-muted-foreground">CPL</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-foreground">{persona.performance.ctr}%</div>
+                    <div className="text-sm text-muted-foreground">CTR</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-foreground">{persona.performance.totalLeads}</div>
+                    <div className="text-sm text-muted-foreground">Total Leads</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Main Content */}
+          <div className="max-w-7xl mx-auto px-6 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           <TabsList className="grid w-full grid-cols-5 lg:w-auto lg:grid-cols-5">
             <TabsTrigger value="details" className="flex items-center space-x-2">
@@ -324,6 +332,8 @@ export default function PersonaProfile() {
             <PersonaInsights personaId={persona.id} insights={personaInsights} />
           </TabsContent>
         </Tabs>
+          </div>
+        </div>
       </div>
     </div>
   );

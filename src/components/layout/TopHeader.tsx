@@ -72,9 +72,11 @@ function NotificationPopover() {
           ))}
         </div>
         <div className="p-4 border-t border-border">
-          <Button variant="ghost" size="sm" className="w-full text-muted-foreground hover:text-foreground hover:bg-muted">
-            View All Insights
-          </Button>
+          <Link to="/insights">
+            <Button variant="ghost" size="sm" className="w-full text-muted-foreground hover:text-foreground hover:bg-muted">
+              View All Insights
+            </Button>
+          </Link>
         </div>
       </PopoverContent>
     </Popover>
