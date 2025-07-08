@@ -68,6 +68,13 @@ export interface Insight {
   isGptGenerated: boolean;
 }
 
+export interface CampaignPlan {
+  id: string;
+  campaignId: string;
+  markdownContent: string;
+  lastUpdated: string;
+}
+
 // Mock Personas Data
 export const mockPersonas: Persona[] = [
   {
@@ -325,6 +332,184 @@ export const mockInsights: Insight[] = [
     type: 'warning',
     generatedAt: '2024-03-13T15:22:00Z',
     isGptGenerated: true
+  }
+];
+
+// Mock Campaign Plans
+export const mockCampaignPlans: CampaignPlan[] = [
+  {
+    id: '1',
+    campaignId: '1',
+    lastUpdated: '2024-03-15T10:30:00Z',
+    markdownContent: `# Campaign Overview
+
+### **Why This Campaign, Why Now:**
+
+**Elevating Computer Science Education in a Digital-First World**
+
+The technology sector is experiencing unprecedented growth, with companies struggling to find qualified developers and computer scientists. Recent studies show a 35% increase in demand for software engineers, yet many students remain unaware of the opportunities available at MSU's Computer Science program. This campaign targets digitally native students who are already immersed in technology but need guidance on formal education pathways.
+
+### **Who Are We Marketing To and Why:**
+
+**Target Audience: Digital Native Students Seeking Career Foundation**
+
+We are targeting tech-savvy students aged 18-22 who spend significant time on social media platforms, particularly Instagram and TikTok. These students have grown up with technology but may not have considered formal computer science education as their path forward. They're looking for programs that feel relevant, cutting-edge, and aligned with their digital lifestyle.
+
+### **How The Program Helps:**
+
+**Industry-Relevant Skills:** The program teaches current programming languages and frameworks that students see in real-world applications and social media tech content.
+
+**Project-Based Learning:** Students build portfolios with projects they can showcase on their social media and professional profiles.
+
+**Networking Opportunities:** Access to MSU's tech alumni network and internship placement programs with major tech companies.
+
+### **What Are We Saying:**
+
+"Code Your Future at MSU - Where Innovation Meets Education"
+
+### **Why This Message Over Others:**
+
+This message resonates with the target audience's desire to be creators and innovators, not just consumers of technology. The phrase "Code Your Future" directly connects their current interest in technology with their future career prospects, while "Where Innovation Meets Education" positions MSU as a forward-thinking institution that understands the tech landscape.
+
+---
+
+# **Campaign Phases**
+
+### **Phase 1: Awareness Building Through Coding Challenges**
+
+- **Objective:** Generate awareness through engaging, shareable content that demonstrates the fun and creative aspects of coding.
+- **Implementation:** Daily coding challenges, tech trend explainers, and "day in the life" content from current CS students.
+
+### **Phase 2: Social Proof and Success Stories**
+
+- **Objective:** Build credibility by showcasing successful graduates and current student achievements.
+- **Implementation:** Alumni spotlight posts, student project showcases, and internship success stories.
+
+### **Phase 3: Direct Engagement and Community Building**
+
+- **Objective:** Create a community around prospective CS students and encourage application submissions.
+- **Implementation:** Live Q&A sessions, virtual campus tours, and exclusive Discord community for prospective students.
+
+### **Phase 4: Conversion and Application Support**
+
+- **Objective:** Convert engaged prospects into applications with personalized support and clear next steps.
+- **Implementation:** One-on-one virtual meetings with admissions counselors, application deadline reminders, and scholarship opportunity highlights.`
+  },
+  {
+    id: '2',
+    campaignId: '2',
+    lastUpdated: '2024-02-20T14:15:00Z',
+    markdownContent: `# Campaign Overview
+
+### **Why This Campaign, Why Now:**
+
+**Elevating Leadership Skills in a Changing Business Landscape**
+
+The post-pandemic business world has fundamentally shifted, requiring new leadership approaches and strategic thinking. Professionals with 5-15 years of experience are finding themselves at career crossroads, needing advanced business education to break through to executive levels. MSU's MBA program offers the strategic framework and network access these professionals need to make their next career leap.
+
+### **Who Are We Marketing To and Why:**
+
+**Target Audience: Mid-Career Professionals Seeking Executive Advancement**
+
+We are targeting professionals aged 28-35 who have established themselves in their current roles but are hitting advancement barriers without additional credentials. These individuals are results-driven, time-conscious, and looking for ROI on their educational investment. They're active on LinkedIn and consume business-focused content regularly.
+
+### **How The Program Helps:**
+
+**Strategic Leadership Framework:** Advanced coursework in strategy, finance, and organizational behavior that directly applies to current work challenges.
+
+**Executive Network Access:** Connection to MSU's extensive alumni network in C-suite positions across various industries.
+
+**Flexible Format:** Evening and weekend classes designed for working professionals, with hybrid online/in-person options.
+
+### **What Are We Saying:**
+
+"Lead the Change - Transform Your Career with MSU MBA"
+
+### **Why This Message Over Others:**
+
+This message positions the target audience as change agents rather than followers, appealing to their leadership aspirations. "Transform Your Career" directly addresses their primary motivation for pursuing an MBA, while the MSU brand adds credibility and prestige to their educational choice.
+
+---
+
+# **Campaign Phases**
+
+### **Phase 1: Leadership Summit Announcement**
+
+- **Objective:** Generate initial awareness and establish MSU as a thought leader in business education.
+- **Implementation:** Announce exclusive leadership summit featuring industry executives and MBA faculty.
+
+### **Phase 2: Executive Success Stories**
+
+- **Objective:** Build credibility through showcasing successful MBA alumni in leadership roles.
+- **Implementation:** LinkedIn article series featuring MBA graduates who made successful career transitions.
+
+### **Phase 3: Interactive Leadership Assessment**
+
+- **Objective:** Engage prospects with personalized content that demonstrates program value.
+- **Implementation:** Online leadership style assessment with personalized MBA curriculum recommendations.
+
+### **Phase 4: Direct Outreach and Consultation**
+
+- **Objective:** Convert qualified leads into applications through personalized engagement.
+- **Implementation:** One-on-one career consultation calls with MBA admissions team and faculty.`
+  },
+  {
+    id: '3',
+    campaignId: '3',
+    lastUpdated: '2024-03-12T16:45:00Z',
+    markdownContent: `# Campaign Overview
+
+### **Why This Campaign, Why Now:**
+
+**Supporting Lifelong Learning in an Evolving Job Market**
+
+The rapid pace of technological and industry change means that professionals must continuously update their skills to remain relevant. Many mid-career professionals feel overwhelmed by the pace of change and are looking for trusted educational institutions to guide their learning journey. MSU's continuing education programs provide the structure and credibility these learners need.
+
+### **Who Are We Marketing To and Why:**
+
+**Target Audience: Established Professionals Seeking Skill Enhancement**
+
+We are targeting professionals aged 45-55 who have established careers but recognize the need for skill updates to maintain their competitive edge. These individuals value tradition and trust, preferring established institutions over online-only alternatives. They're active on Facebook and respond well to community-focused messaging.
+
+### **How The Program Helps:**
+
+**Practical Skill Application:** Courses designed to provide immediately applicable skills that enhance current job performance.
+
+**Flexible Learning Options:** Self-paced and evening programs that accommodate busy professional schedules.
+
+**Community Support:** Study groups and networking opportunities with peers facing similar career challenges.
+
+### **What Are We Saying:**
+
+"Never Stop Learning - Advance Your Career with MSU Continuing Education"
+
+### **Why This Message Over Others:**
+
+This message validates the target audience's commitment to professional growth while positioning continuous learning as a career advancement strategy rather than a necessity born from job insecurity. The MSU brand provides the institutional credibility this audience values.
+
+---
+
+# **Campaign Phases**
+
+### **Phase 1: Community-Focused Awareness**
+
+- **Objective:** Build awareness within local professional communities and associations.
+- **Implementation:** Partnerships with local chambers of commerce and professional organizations for educational workshops.
+
+### **Phase 2: Success Story Sharing**
+
+- **Objective:** Demonstrate program value through relatable peer success stories.
+- **Implementation:** Video testimonials from program graduates showing career advancement and skill application.
+
+### **Phase 3: Interactive Skill Assessment**
+
+- **Objective:** Engage prospects with personalized learning recommendations.
+- **Implementation:** Online skill gap assessment with customized continuing education pathway recommendations.
+
+### **Phase 4: Personal Consultation and Enrollment**
+
+- **Objective:** Provide personalized guidance to convert prospects into enrolled students.
+- **Implementation:** Individual consultations with academic advisors to create personalized learning plans.`
   }
 ];
 

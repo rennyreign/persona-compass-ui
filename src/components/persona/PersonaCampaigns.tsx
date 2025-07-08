@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ExternalLink, Play, Pause, MoreHorizontal } from "lucide-react";
+import { Link } from "react-router-dom";
 import { mockCampaigns } from "@/data/mockData";
 
 interface PersonaCampaignsProps {
@@ -122,7 +123,12 @@ export function PersonaCampaigns({ personaId }: PersonaCampaignsProps) {
                   <TableRow key={campaign.id}>
                     <TableCell>
                       <div>
-                        <div className="font-medium text-foreground">{campaign.name}</div>
+                        <Link 
+                          to={`/campaign/${campaign.id}`}
+                          className="font-medium text-foreground hover:text-primary hover:underline transition-colors"
+                        >
+                          {campaign.name}
+                        </Link>
                         <div className="text-sm text-muted-foreground">{campaign.cta}</div>
                       </div>
                     </TableCell>
