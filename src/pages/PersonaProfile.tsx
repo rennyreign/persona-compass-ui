@@ -74,7 +74,11 @@ export default function PersonaProfile() {
               <div className="flex items-start space-x-6">
                 <Avatar className="w-24 h-24 border-4 border-background shadow-lg">
                   {persona.avatar ? (
-                    <AvatarImage src={persona.avatar} alt={persona.name} />
+                    <AvatarImage 
+                      src={persona.avatar} 
+                      alt={persona.name} 
+                      className="object-cover object-center"
+                    />
                   ) : (
                     <AvatarFallback className="text-2xl font-semibold bg-primary text-primary-foreground">
                       {persona.name.split(' ').map(n => n[0]).join('')}
