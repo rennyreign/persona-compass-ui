@@ -218,7 +218,7 @@ export const mockPersonas: Persona[] = [
       'https://images.unsplash.com/photo-1590086782792-42dd2350140d?w=400&h=400&fit=crop',
       'https://images.unsplash.com/photo-1485178575877-1a13bf489dfe?w=400&h=400&fit=crop'
     ],
-    isActive: true,
+    isActive: false,
     createdAt: '2024-01-28'
   },
   {
