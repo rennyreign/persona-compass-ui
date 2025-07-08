@@ -220,7 +220,7 @@ export const mockPersonas: Persona[] = [
     program: 'Supply Chain',
     ageRange: '50-60',
     careerStage: 'Senior Executive',
-    avatar: '/lovable-uploads/d3399d19-9038-4dc2-9bd8-dc5a859bd0ac.png',
+    avatar: '/lovable-uploads/4341c6c4-9c16-40ac-891a-84356888cd98.png',
     motivationalTagline: 'Leading with wisdom and vision',
     goals: ['C-suite advancement', 'Board position preparation', 'Legacy building'],
     fears: ['Industry disruption', 'Succession planning', 'Market volatility'],
