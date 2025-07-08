@@ -2,7 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { ExternalLink, Play, Pause, MoreHorizontal } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import { Link } from "react-router-dom";
 import { mockCampaigns } from "@/data/mockData";
 
@@ -125,7 +125,7 @@ export function PersonaCampaigns({ personaId }: PersonaCampaignsProps) {
                       <div>
                         <Link 
                           to={`/campaign/${campaign.id}`}
-                          className="font-medium text-foreground hover:text-primary hover:underline transition-colors"
+                          className="font-medium text-foreground hover:text-green-600 hover:underline transition-colors"
                         >
                           {campaign.name}
                         </Link>
@@ -152,23 +152,15 @@ export function PersonaCampaigns({ personaId }: PersonaCampaignsProps) {
                       {formatDate(campaign.startDate)}
                     </TableCell>
                     <TableCell>
-                      <div className="flex items-center space-x-1">
-                        {campaign.status === 'active' ? (
-                          <Button variant="ghost" size="sm">
-                            <Pause className="w-4 h-4" />
-                          </Button>
-                        ) : (
-                          <Button variant="ghost" size="sm">
-                            <Play className="w-4 h-4" />
-                          </Button>
-                        )}
-                        <Button variant="ghost" size="sm">
+                      <Link to={`/campaign/${campaign.id}`}>
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className="hover:bg-green-50 hover:text-green-600"
+                        >
                           <ExternalLink className="w-4 h-4" />
                         </Button>
-                        <Button variant="ghost" size="sm">
-                          <MoreHorizontal className="w-4 h-4" />
-                        </Button>
-                      </div>
+                      </Link>
                     </TableCell>
                   </TableRow>
                 ))}

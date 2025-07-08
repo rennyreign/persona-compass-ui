@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import CreatePersona from "./pages/CreatePersona";
 import PersonaProfile from "./pages/PersonaProfile";
 import CampaignPlan from "./pages/CampaignPlan";
+import Campaigns from "./pages/Campaigns";
 import Performance from "./pages/Performance";
 import Insights from "./pages/Insights";
 import NotFound from "./pages/NotFound";
@@ -24,6 +25,7 @@ const App = () => (
           <Route path="/create-persona" element={<CreatePersona />} />
           <Route path="/persona/:id" element={<PersonaProfile />} />
           <Route path="/campaign/:campaignId" element={<CampaignPlan />} />
+          <Route path="/campaigns" element={<Campaigns />} />
           <Route path="/performance" element={<Performance />} />
           <Route path="/insights" element={<Insights />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
