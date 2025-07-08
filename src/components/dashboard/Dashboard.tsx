@@ -1,5 +1,7 @@
 import { useState, useMemo } from "react";
-import { Users, FileText, DollarSign, GraduationCap } from "lucide-react";
+import { Users, FileText, DollarSign, GraduationCap, Plus } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 import { KPICard } from "./KPICard";
 import { ActivityFeed } from "./ActivityFeed";
 import { PersonaFilterTabs } from "./PersonaFilterTabs";
@@ -67,6 +69,20 @@ export function Dashboard({ className }: DashboardProps) {
 
       {/* Main Content */}
       <div className="space-y-6">
+        {/* Header with Create Button */}
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-2xl font-semibold text-foreground">Personas</h2>
+            <p className="text-muted-foreground">Manage your marketing personas</p>
+          </div>
+          <Link to="/create-persona">
+            <Button>
+              <Plus className="w-4 h-4 mr-2" />
+              Create Persona
+            </Button>
+          </Link>
+        </div>
+
         {/* Filter Tabs */}
         <PersonaFilterTabs
           personas={mockPersonas}
