@@ -29,7 +29,7 @@ export function PersonaGrid({ personas, className, onPersonaClick }: PersonaGrid
   };
 
   return (
-    <div className={cn("grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6", className)}>
+    <div className={cn("grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6", className)}>
       {personas.map((persona) => (
         <Card key={persona.id} className="p-6 bg-card border-0 shadow-md rounded-2xl hover:shadow-lg transition-all duration-200 hover:-translate-y-1">
           <div className="space-y-4">
