@@ -45,7 +45,7 @@ export default function PersonaProfile() {
                   <Button 
                     variant="ghost" 
                     size="sm"
-                    onClick={() => window.history.back()}
+                    onClick={() => navigate("/")}
                     className="h-8 w-8 p-0"
                   >
                     <ArrowLeft className="w-4 h-4" />
