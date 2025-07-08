@@ -28,8 +28,7 @@ export function Dashboard({ className }: DashboardProps) {
   }, [activeFilter]);
 
   const handlePersonaClick = (persona: Persona) => {
-    console.log('Navigate to persona profile:', persona.id);
-    // TODO: Navigate to persona profile page
+    window.location.href = `/persona/${persona.id}`;
   };
 
   return (
