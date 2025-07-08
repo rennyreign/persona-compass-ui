@@ -5,14 +5,14 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Link } from "react-router-dom";
 import { Bell, Search } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { mockActivities } from "@/data/mockData";
+import { mockInsights } from "@/data/mockData";
 
 interface TopHeaderProps {
   className?: string;
 }
 
 function NotificationPopover() {
-  const recentActivities = mockActivities.slice(0, 5);
+  const recentInsights = mockInsights.slice(0, 5);
 
   const formatTimestamp = (timestamp: string) => {
     const date = new Date(timestamp);
@@ -25,13 +25,13 @@ function NotificationPopover() {
     return `${diffInDays}d ago`;
   };
 
-  const getActivityIcon = (type: string) => {
+  const getInsightIcon = (type: string) => {
     switch (type) {
-      case 'persona_created': return '👤';
-      case 'campaign_launched': return '🚀';
-      case 'insight_generated': return '💡';
-      case 'performance_alert': return '⚠️';
-      default: return '📊';
+      case 'optimization': return '📈';
+      case 'opportunity': return '💡';
+      case 'warning': return '⚠️';
+      case 'trend': return '📊';
+      default: return '🔍';
     }
   };
 
@@ -41,30 +41,30 @@ function NotificationPopover() {
         <Button variant="ghost" size="sm" className="relative hover:bg-muted/50">
           <Bell className="w-4 h-4 text-muted-foreground" />
           <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 bg-destructive text-destructive-foreground text-xs flex items-center justify-center">
-            {recentActivities.length}
+            {recentInsights.length}
           </Badge>
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-80 p-0" align="end">
         <div className="p-4 border-b border-border">
-          <h3 className="font-semibold text-foreground">Recent Activity</h3>
+          <h3 className="font-semibold text-foreground">Recent Insights</h3>
         </div>
         <div className="max-h-96 overflow-y-auto">
-          {recentActivities.map((activity) => (
-            <div key={activity.id} className="p-4 border-b border-border/50 last:border-b-0 hover:bg-muted/30 transition-colors">
+          {recentInsights.map((insight) => (
+            <div key={insight.id} className="p-4 border-b border-border/50 last:border-b-0 hover:bg-muted/30 transition-colors">
               <div className="flex items-start space-x-3">
                 <div className="flex-shrink-0 w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center text-sm">
-                  {getActivityIcon(activity.type)}
+                  {getInsightIcon(insight.type)}
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-foreground truncate">
-                    {activity.title}
+                    {insight.title}
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
+                    {insight.content}
                   </p>
                   <p className="text-xs text-muted-foreground mt-1">
-                    {activity.description}
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    {formatTimestamp(activity.timestamp)}
+                    {formatTimestamp(insight.generatedAt)}
                   </p>
                 </div>
               </div>
@@ -72,8 +72,8 @@ function NotificationPopover() {
           ))}
         </div>
         <div className="p-4 border-t border-border">
-          <Button variant="ghost" size="sm" className="w-full text-primary hover:text-primary-dark">
-            View All Activity
+          <Button variant="ghost" size="sm" className="w-full text-muted-foreground hover:text-foreground hover:bg-muted">
+            View All Insights
           </Button>
         </div>
       </PopoverContent>
