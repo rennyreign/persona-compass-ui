@@ -549,6 +549,20 @@ export default function CreatePersona() {
         <div className="max-w-4xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
+              <a href="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
+                <div className="w-8 h-8 bg-muted rounded-lg flex items-center justify-center overflow-hidden">
+                  <img 
+                    src="/lovable-uploads/89175e4f-021a-4be2-a013-b97ccb4af0c3.png" 
+                    alt="MSU Logo" 
+                    className="w-6 h-6 object-contain"
+                  />
+                </div>
+                <div>
+                  <div className="text-sm font-medium text-foreground">MSU Persona</div>
+                  <div className="text-xs text-muted-foreground">Intelligence Platform</div>
+                </div>
+              </a>
+              <div className="w-px h-6 bg-border"></div>
               <Button 
                 variant="ghost" 
                 size="sm"

@@ -44,9 +44,27 @@ const Performance = () => {
       {/* Header */}
       <div className="border-b border-border bg-card">
         <div className="max-w-7xl mx-auto px-6 py-6">
-          <div>
-            <h1 className="text-3xl font-bold text-foreground">Performance Dashboard</h1>
-            <p className="text-muted-foreground mt-2">Global blended metrics across all personas</p>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <a href="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
+                <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center overflow-hidden">
+                  <img 
+                    src="/lovable-uploads/89175e4f-021a-4be2-a013-b97ccb4af0c3.png" 
+                    alt="MSU Logo" 
+                    className="w-8 h-8 object-contain"
+                  />
+                </div>
+                <div>
+                  <div className="text-sm font-medium text-foreground">MSU Persona</div>
+                  <div className="text-xs text-muted-foreground">Intelligence Platform</div>
+                </div>
+              </a>
+              <div className="w-px h-8 bg-border"></div>
+              <div>
+                <h1 className="text-3xl font-bold text-foreground">Performance Dashboard</h1>
+                <p className="text-muted-foreground mt-1">Global blended metrics across all personas</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>

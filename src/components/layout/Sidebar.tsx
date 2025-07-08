@@ -19,12 +19,6 @@ export function Sidebar({ className }: SidebarProps) {
       isActive: true
     },
     {
-      name: 'Personas',
-      href: '/personas',
-      icon: Users,
-      isActive: false
-    },
-    {
       name: 'Performance',
       href: '/performance',
       icon: Megaphone,
@@ -66,7 +60,7 @@ export function Sidebar({ className }: SidebarProps) {
       <div className="p-6 border-b border-border">
         <div className="flex items-center justify-between">
           {!isCollapsed && (
-          <div className="flex items-center space-x-3">
+           <a href="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
             <div className="w-8 h-8 bg-muted rounded-lg flex items-center justify-center overflow-hidden">
               <img 
                 src="/lovable-uploads/89175e4f-021a-4be2-a013-b97ccb4af0c3.png" 
@@ -78,7 +72,7 @@ export function Sidebar({ className }: SidebarProps) {
               <h1 className="font-semibold text-foreground">MSU Persona</h1>
               <p className="text-xs text-muted-foreground">Intelligence Platform</p>
             </div>
-          </div>
+          </a>
           )}
           <Button
             variant="ghost"
