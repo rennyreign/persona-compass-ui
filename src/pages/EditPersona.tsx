@@ -282,7 +282,26 @@ export default function EditPersona() {
                           <p className="text-sm text-muted-foreground">
                             Upload new avatar image
                           </p>
-                          <Button type="button" variant="outline" size="sm" className="mt-2">
+                          <input
+                            type="file"
+                            id="avatar-upload"
+                            accept="image/*"
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (file) {
+                                const imageUrl = URL.createObjectURL(file);
+                                handleInputChange("avatar", imageUrl);
+                              }
+                            }}
+                            className="hidden"
+                          />
+                          <Button 
+                            type="button" 
+                            variant="outline" 
+                            size="sm" 
+                            className="mt-2"
+                            onClick={() => document.getElementById('avatar-upload')?.click()}
+                          >
                             Choose File
                           </Button>
                         </div>
