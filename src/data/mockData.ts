@@ -129,7 +129,7 @@ export const mockPersonas: Persona[] = [
     program: 'Healthcare',
     ageRange: '28-35',
     careerStage: 'Graduate/Professional',
-    avatar: '/lovable-uploads/30655c8c-b40b-4fd0-8a4a-3b300a0ffd0f.png',
+    avatar: '/lovable-uploads/b2066a20-4b27-4c30-918a-51a383522bb5.png',
     motivationalTagline: 'Transforming experience into leadership excellence',
     goals: ['Executive role transition', 'Network with industry leaders', 'Develop strategic thinking'],
     fears: ['Career stagnation', 'Age discrimination', 'Financial instability during transition'],
@@ -161,12 +161,9 @@ export const mockPersonas: Persona[] = [
       totalLeads: 199
     },
     moodBoardImages: [
-      '/lovable-uploads/30655c8c-b40b-4fd0-8a4a-3b300a0ffd0f.png',
-      'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400&fit=crop',
-      'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=400&fit=crop',
-      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop',
-      'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop',
-      'https://images.unsplash.com/photo-1528892952291-009c663ce843?w=400&h=400&fit=crop'
+      '/lovable-uploads/959dae80-1c83-44a7-a3a1-46d8f0c7225d.png',
+      '/lovable-uploads/b2066a20-4b27-4c30-918a-51a383522bb5.png',
+      '/lovable-uploads/20aa43f2-2351-4939-93db-0c4fac48c91a.png'
     ],
     isActive: true,
     createdAt: '2024-02-03'
