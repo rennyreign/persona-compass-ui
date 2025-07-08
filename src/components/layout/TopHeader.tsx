@@ -114,12 +114,7 @@ export function TopHeader({ className }: TopHeaderProps) {
 
           {/* Quick Actions */}
           <div className="flex items-center space-x-2">
-            <Link to="/create-persona">
-              <Button size="sm" className="bg-primary hover:bg-primary-dark">
-                <span className="mr-2 text-primary-foreground">+</span>
-                Create Persona
-              </Button>
-            </Link>
+            {/* Button removed as requested */}
           </div>
         </div>
       </div>
