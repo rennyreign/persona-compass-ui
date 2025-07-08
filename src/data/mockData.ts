@@ -129,7 +129,7 @@ export const mockPersonas: Persona[] = [
     program: 'Healthcare',
     ageRange: '28-35',
     careerStage: 'Graduate/Professional',
-    avatar: '/lovable-uploads/b2066a20-4b27-4c30-918a-51a383522bb5.png',
+    avatar: '/lovable-uploads/a3668f73-99ce-4727-ae09-712fc0960627.png',
     motivationalTagline: 'Transforming experience into leadership excellence',
     goals: ['Executive role transition', 'Network with industry leaders', 'Develop strategic thinking'],
     fears: ['Career stagnation', 'Age discrimination', 'Financial instability during transition'],
