@@ -2,7 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, FileText } from "lucide-react";
 import { Link } from "react-router-dom";
 import { mockCampaigns } from "@/data/mockData";
 
@@ -176,8 +176,18 @@ export function PersonaCampaigns({ personaId }: PersonaCampaignsProps) {
           {campaigns.map((campaign) => (
             <Card key={campaign.id}>
               <CardHeader>
-                <CardTitle className="text-base">{campaign.name}</CardTitle>
-                <CardDescription>{campaign.channel} Campaign</CardDescription>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle className="text-base">{campaign.name}</CardTitle>
+                    <CardDescription>{campaign.channel} Campaign</CardDescription>
+                  </div>
+                  <Link to={`/campaign/${campaign.id}`}>
+                    <Button variant="outline" size="sm" className="hover:bg-green-50 hover:text-green-600">
+                      <FileText className="w-4 h-4 mr-2" />
+                      View Plan
+                    </Button>
+                  </Link>
+                </div>
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground">{campaign.notes}</p>
