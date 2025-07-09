@@ -78,52 +78,6 @@ export interface CampaignPlan {
 // Mock Personas Data
 export const mockPersonas: Persona[] = [
   {
-    id: '1',
-    name: 'Matthew',
-    program: 'Supply Chain',
-    ageRange: '34-45',
-    careerStage: 'Mid-Career Professional',
-    avatar: '/lovable-uploads/d84fb05f-879d-4d53-9840-0637944579b1.png',
-    motivationalTagline: 'Building tomorrow\'s tech solutions today',
-    goals: ['Land FAANG internship', 'Master full-stack development', 'Build startup portfolio'],
-    fears: ['Falling behind in rapidly evolving tech', 'Impostor syndrome', 'Job market saturation'],
-    motivations: ['Innovation and creativity', 'High earning potential', 'Making global impact'],
-    channels: ['Instagram', 'TikTok', 'LinkedIn', 'Discord', 'YouTube'],
-    demographics: {
-      location: 'Urban/Suburban Michigan',
-      income: '$0-25K (family support)',
-      education: 'Current undergrad'
-    },
-    psychographics: {
-      values: ['Innovation', 'Efficiency', 'Authenticity'],
-      interests: ['Coding', 'Gaming', 'Entrepreneurship', 'Tech podcasts'],
-      lifestyle: 'Digital-first, highly connected'
-    },
-    programNeeds: [
-      'Async learning flexibility',
-      'Industry-relevant projects',
-      'Personal brand credibility',
-      'Tech stack diversity',
-      'Networking opportunities',
-      'Career placement support'
-    ],
-    performance: {
-      cpl: 45.50,
-      ctr: 3.2,
-      conversionRate: 12.5,
-      totalSpend: 12500,
-      totalLeads: 275
-    },
-    moodBoardImages: [
-      '/lovable-uploads/7c1b2453-e7b0-4e31-ab62-900114b973ac.png',
-      '/lovable-uploads/1b34ec87-603e-411a-ba2f-ddce2e6887e7.png',
-      '/lovable-uploads/e7a40ff2-a28c-4f5e-a2f4-64d58660aa7d.png',
-      '/lovable-uploads/526bac4b-876d-4930-87a3-a35b7eb4293d.png'
-    ],
-    isActive: true,
-    createdAt: '2024-01-15'
-  },
-  {
     id: '2',
     name: 'Liz',
     program: 'Healthcare',
@@ -213,6 +167,52 @@ export const mockPersonas: Persona[] = [
     ],
     isActive: false,
     createdAt: '2024-01-28'
+  },
+  {
+    id: '1',
+    name: 'Matthew',
+    program: 'Supply Chain',
+    ageRange: '34-45',
+    careerStage: 'Mid-Career Professional',
+    avatar: '/lovable-uploads/d84fb05f-879d-4d53-9840-0637944579b1.png',
+    motivationalTagline: 'Building tomorrow\'s tech solutions today',
+    goals: ['Land FAANG internship', 'Master full-stack development', 'Build startup portfolio'],
+    fears: ['Falling behind in rapidly evolving tech', 'Impostor syndrome', 'Job market saturation'],
+    motivations: ['Innovation and creativity', 'High earning potential', 'Making global impact'],
+    channels: ['Instagram', 'TikTok', 'LinkedIn', 'Discord', 'YouTube'],
+    demographics: {
+      location: 'Urban/Suburban Michigan',
+      income: '$0-25K (family support)',
+      education: 'Current undergrad'
+    },
+    psychographics: {
+      values: ['Innovation', 'Efficiency', 'Authenticity'],
+      interests: ['Coding', 'Gaming', 'Entrepreneurship', 'Tech podcasts'],
+      lifestyle: 'Digital-first, highly connected'
+    },
+    programNeeds: [
+      'Async learning flexibility',
+      'Industry-relevant projects',
+      'Personal brand credibility',
+      'Tech stack diversity',
+      'Networking opportunities',
+      'Career placement support'
+    ],
+    performance: {
+      cpl: 45.50,
+      ctr: 3.2,
+      conversionRate: 12.5,
+      totalSpend: 12500,
+      totalLeads: 275
+    },
+    moodBoardImages: [
+      '/lovable-uploads/7c1b2453-e7b0-4e31-ab62-900114b973ac.png',
+      '/lovable-uploads/1b34ec87-603e-411a-ba2f-ddce2e6887e7.png',
+      '/lovable-uploads/e7a40ff2-a28c-4f5e-a2f4-64d58660aa7d.png',
+      '/lovable-uploads/526bac4b-876d-4930-87a3-a35b7eb4293d.png'
+    ],
+    isActive: true,
+    createdAt: '2024-01-15'
   },
   {
     id: '4',
