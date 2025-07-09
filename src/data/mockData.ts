@@ -391,6 +391,59 @@ export const mockCampaigns: Campaign[] = [
     notes: 'Better performance in evening posts',
     startDate: '2024-03-10',
     status: 'active'
+  },
+  {
+    id: '4',
+    personaId: '6',
+    name: 'Executive Leadership Program',
+    channel: 'LinkedIn',
+    spend: 4200,
+    clicks: 1150,
+    leads: 78,
+    cta: 'Executive Excellence Starts Here',
+    notes: 'High engagement from C-suite executives',
+    startDate: '2024-02-20',
+    status: 'active'
+  },
+  {
+    id: '5',
+    personaId: '4',
+    name: 'Supply Chain Innovation Summit',
+    channel: 'Email',
+    spend: 2800,
+    clicks: 890,
+    leads: 112,
+    cta: 'Transform Supply Chain Operations',
+    notes: 'Strong email open rates among industry professionals',
+    startDate: '2024-01-15',
+    endDate: '2024-02-28',
+    status: 'completed'
+  },
+  {
+    id: '6',
+    personaId: '5',
+    name: 'Data Analytics Mastery Series',
+    channel: 'LinkedIn',
+    spend: 3500,
+    clicks: 1400,
+    leads: 95,
+    cta: 'Master Data, Drive Decisions',
+    notes: 'High engagement on technical content posts',
+    startDate: '2024-03-05',
+    status: 'active'
+  },
+  {
+    id: '7',
+    personaId: '2',
+    name: 'Healthcare Leadership Excellence',
+    channel: 'Industry Publications',
+    spend: 5200,
+    clicks: 650,
+    leads: 134,
+    cta: 'Lead Healthcare Innovation',
+    notes: 'Premium placement in medical journals driving quality leads',
+    startDate: '2024-02-01',
+    status: 'active'
   }
 ];
 
@@ -637,6 +690,238 @@ This message validates the target audience's commitment to professional growth w
 
 - **Objective:** Provide personalized guidance to convert prospects into enrolled students.
 - **Implementation:** Individual consultations with academic advisors to create personalized learning plans.`
+  },
+  {
+    id: '4',
+    campaignId: '4',
+    lastUpdated: '2024-02-25T11:20:00Z',
+    markdownContent: `# Campaign Overview
+
+### **Why This Campaign, Why Now:**
+
+**Executive Leadership Development in a Competitive Market**
+
+The current business environment demands exceptional executive leadership skills. Organizations are seeking leaders who can navigate complexity, drive innovation, and deliver results in uncertain times. This campaign targets high-performing mid-career professionals who are positioned for executive advancement but need the strategic framework and network access to make the transition successfully.
+
+### **Who Are We Marketing To and Why:**
+
+**Target Audience: High-Potential Mid-Career Professionals**
+
+We are targeting professionals aged 28-35 with demonstrated leadership potential and career momentum who are seeking executive-level advancement. These individuals have achieved success in their current roles but recognize they need advanced business education and strategic thinking skills to reach C-suite positions.
+
+### **How The Program Helps:**
+
+**Executive Strategy Framework:** Advanced coursework in strategic leadership, organizational transformation, and executive decision-making.
+
+**C-Suite Network Access:** Direct connection to MSU's executive alumni network and board-level professionals.
+
+**Leadership Coaching:** Personalized executive coaching and mentorship programs.
+
+### **What Are We Saying:**
+
+"Executive Excellence Starts Here - MSU Executive Leadership Program"
+
+### **Why This Message Over Others:**
+
+This message positions the program as the definitive pathway to executive success, appealing to ambitious professionals who expect excellence and results. The emphasis on "starts here" creates urgency while the MSU brand provides credibility and prestige.
+
+---
+
+# **Campaign Phases**
+
+### **Phase 1: Executive Thought Leadership**
+
+- **Objective:** Establish program credibility through executive-level content and insights.
+- **Implementation:** LinkedIn thought leadership articles, executive roundtables, and C-suite trend analysis.
+
+### **Phase 2: Success Story Showcase**
+
+- **Objective:** Demonstrate program impact through alumni executive achievements.
+- **Implementation:** Case studies of alumni who achieved C-suite positions, executive promotion announcements.
+
+### **Phase 3: Executive Assessment**
+
+- **Objective:** Engage prospects with personalized executive readiness evaluation.
+- **Implementation:** Comprehensive leadership assessment with personalized development recommendations.
+
+### **Phase 4: Executive Consultation**
+
+- **Objective:** Convert qualified prospects through high-touch, personalized engagement.
+- **Implementation:** One-on-one strategic career consultations with executive faculty and successful alumni.`
+  },
+  {
+    id: '5',
+    campaignId: '5',
+    lastUpdated: '2024-02-10T09:30:00Z',
+    markdownContent: `# Campaign Overview
+
+### **Why This Campaign, Why Now:**
+
+**Supply Chain Transformation in a Post-Pandemic World**
+
+Global supply chains have been fundamentally disrupted, creating both challenges and opportunities for supply chain professionals. Organizations are investing heavily in supply chain innovation, resilience, and technology adoption. This campaign targets senior supply chain executives who need advanced education to lead their organizations through this transformation.
+
+### **Who Are We Marketing To and Why:**
+
+**Target Audience: Senior Supply Chain Executives**
+
+We are targeting supply chain leaders aged 50-60 with extensive industry experience who are responsible for organizational supply chain strategy and transformation. These executives recognize that traditional approaches are no longer sufficient and seek advanced education to drive innovation and competitive advantage.
+
+### **How The Program Helps:**
+
+**Supply Chain Innovation:** Cutting-edge curriculum covering AI, automation, and digital supply chain technologies.
+
+**Strategic Transformation:** Frameworks for leading organizational change and supply chain redesign.
+
+**Executive Peer Network:** Access to supply chain leaders across industries facing similar challenges.
+
+### **What Are We Saying:**
+
+"Transform Supply Chain Operations - Lead the Future of Logistics"
+
+### **Why This Message Over Others:**
+
+This message positions executives as transformation leaders rather than operators, appealing to their strategic mindset and leadership responsibilities. The focus on "leading the future" resonates with senior executives who must drive innovation and competitive advantage.
+
+---
+
+# **Campaign Phases**
+
+### **Phase 1: Industry Disruption Analysis**
+
+- **Objective:** Establish thought leadership in supply chain transformation trends.
+- **Implementation:** Industry reports, webinar series on supply chain innovation, executive briefings.
+
+### **Phase 2: Innovation Case Studies**
+
+- **Objective:** Demonstrate program relevance through real-world transformation examples.
+- **Implementation:** Case studies of successful supply chain transformations, alumni innovation stories.
+
+### **Phase 3: Strategic Assessment**
+
+- **Objective:** Engage executives with supply chain maturity and innovation readiness evaluation.
+- **Implementation:** Comprehensive supply chain assessment with transformation roadmap recommendations.
+
+### **Phase 4: Executive Summit**
+
+- **Objective:** Convert prospects through exclusive executive networking and consultation.
+- **Implementation:** Invitation-only supply chain executive summit with program faculty and industry leaders.`
+  },
+  {
+    id: '6',
+    campaignId: '6',
+    lastUpdated: '2024-03-08T14:45:00Z',
+    markdownContent: `# Campaign Overview
+
+### **Why This Campaign, Why Now:**
+
+**Data Analytics Mastery in the Age of AI**
+
+Organizations are drowning in data but struggling to extract actionable insights. The rise of AI and machine learning has created unprecedented opportunities for data professionals who can bridge the gap between technical capabilities and business impact. This campaign targets data professionals who want to advance their careers by mastering advanced analytics and leading data-driven transformation.
+
+### **Who Are We Marketing To and Why:**
+
+**Target Audience: Data Professionals Seeking Leadership Advancement**
+
+We are targeting data analysts and scientists aged 28-32 with solid technical skills who want to transition into leadership roles. These professionals understand data and analytics but need business acumen and strategic thinking skills to drive organizational impact and advance to senior positions.
+
+### **How The Program Helps:**
+
+**Advanced Analytics:** Cutting-edge techniques in machine learning, AI implementation, and predictive modeling.
+
+**Business Strategy Integration:** Framework for translating data insights into business strategy and decision-making.
+
+**Leadership Development:** Skills for leading data teams and driving organizational data maturity.
+
+### **What Are We Saying:**
+
+"Master Data, Drive Decisions - Advance Your Analytics Career"
+
+### **Why This Message Over Others:**
+
+This message connects technical mastery with business impact, appealing to data professionals who want to move beyond pure technical roles into strategic leadership. The emphasis on "driving decisions" positions them as business leaders rather than just technical specialists.
+
+---
+
+# **Campaign Phases**
+
+### **Phase 1: Technical Thought Leadership**
+
+- **Objective:** Establish credibility through advanced analytics content and insights.
+- **Implementation:** Technical blog posts, data science trend analysis, AI implementation case studies.
+
+### **Phase 2: Career Advancement Stories**
+
+- **Objective:** Demonstrate program impact through alumni career progression examples.
+- **Implementation:** Success stories of data professionals who advanced to leadership roles, salary progression data.
+
+### **Phase 3: Skills Assessment**
+
+- **Objective:** Engage prospects with personalized analytics skills and career readiness evaluation.
+- **Implementation:** Comprehensive analytics skills assessment with career advancement recommendations.
+
+### **Phase 4: Technical Consultation**
+
+- **Objective:** Convert prospects through expert consultation on career advancement strategy.
+- **Implementation:** One-on-one consultations with faculty and industry data leaders about career growth pathways.`
+  },
+  {
+    id: '7',
+    campaignId: '7',
+    lastUpdated: '2024-02-05T16:20:00Z',
+    markdownContent: `# Campaign Overview
+
+### **Why This Campaign, Why Now:**
+
+**Healthcare Leadership in a Transforming Industry**
+
+The healthcare industry is undergoing unprecedented transformation driven by technology, regulatory changes, and evolving patient expectations. Healthcare organizations need leaders who can navigate this complexity while maintaining focus on patient outcomes and operational excellence. This campaign targets healthcare professionals who are positioned for leadership advancement in this dynamic environment.
+
+### **Who Are We Marketing To and Why:**
+
+**Target Audience: Healthcare Professionals Seeking Executive Leadership**
+
+We are targeting healthcare professionals aged 25-34 with clinical or operational experience who are ready to transition into healthcare leadership roles. These professionals understand healthcare operations but need business acumen and strategic leadership skills to drive organizational transformation and patient care innovation.
+
+### **How The Program Helps:**
+
+**Healthcare Strategy:** Specialized curriculum in healthcare economics, policy, and strategic planning.
+
+**Innovation Leadership:** Framework for driving innovation while maintaining regulatory compliance and patient safety.
+
+**Healthcare Network:** Access to healthcare executives and leaders across the industry.
+
+### **What Are We Saying:**
+
+"Lead Healthcare Innovation - Transform Patient Care Through Leadership"
+
+### **Why This Message Over Others:**
+
+This message connects leadership advancement with the healthcare professional's core mission of improving patient care. The emphasis on "innovation" and "transformation" appeals to forward-thinking healthcare professionals who want to drive positive change in the industry.
+
+---
+
+# **Campaign Phases**
+
+### **Phase 1: Healthcare Leadership Insights**
+
+- **Objective:** Establish thought leadership in healthcare transformation and innovation.
+- **Implementation:** Healthcare trend analysis, policy impact studies, innovation case studies.
+
+### **Phase 2: Leadership Success Stories**
+
+- **Objective:** Demonstrate program impact through healthcare alumni achievements.
+- **Implementation:** Stories of healthcare professionals who advanced to executive roles, patient care improvement examples.
+
+### **Phase 3: Leadership Assessment**
+
+- **Objective:** Engage prospects with healthcare leadership readiness evaluation.
+- **Implementation:** Healthcare leadership assessment with personalized development recommendations.
+
+### **Phase 4: Healthcare Executive Consultation**
+
+- **Objective:** Convert prospects through expert consultation with healthcare leaders.
+- **Implementation:** One-on-one consultations with healthcare executives and program faculty about career advancement opportunities.`
   }
 ];
 
