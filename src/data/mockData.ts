@@ -116,8 +116,7 @@ export const mockPersonas: Persona[] = [
     },
     moodBoardImages: [
       '/lovable-uploads/ef28c6de-2741-4c99-99f4-b0a87bb954f8.png',
-      '/lovable-uploads/f15c1638-fd9e-400d-9454-cf7ac5201953.png',
-      '/lovable-uploads/30655c8c-b40b-4fd0-8a4a-3b300a0ffd0f.png'
+      '/lovable-uploads/f15c1638-fd9e-400d-9454-cf7ac5201953.png'
     ],
     isActive: true,
     createdAt: '2024-03-12'
