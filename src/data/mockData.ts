@@ -258,6 +258,51 @@ export const mockPersonas: Persona[] = [
     ],
     isActive: true,
     createdAt: '2024-03-01'
+  },
+  {
+    id: '5',
+    name: 'Ravi',
+    program: 'Data Analytics',
+    ageRange: '28-32',
+    careerStage: 'Early-Mid Career Professional',
+    avatar: '/lovable-uploads/7bf9f918-7338-4cd7-aadd-277d74ae073e.png',
+    motivationalTagline: 'Data-driven decisions for business success',
+    goals: ['Master advanced analytics', 'Lead data science teams', 'Drive business impact through insights'],
+    fears: ['Technology obsolescence', 'Career plateau', 'Imposter syndrome in leadership'],
+    motivations: ['Problem-solving impact', 'Career advancement', 'Technical mastery'],
+    channels: ['LinkedIn', 'GitHub', 'Reddit', 'Medium', 'YouTube'],
+    demographics: {
+      location: 'Metro Detroit area',
+      income: '$85K-115K',
+      education: 'Bachelor\'s in Engineering/Math'
+    },
+    psychographics: {
+      values: ['Innovation', 'Analytical thinking', 'Continuous learning'],
+      interests: ['Machine learning', 'Data visualization', 'Tech conferences', 'Open source projects'],
+      lifestyle: 'Tech-savvy, career-focused'
+    },
+    programNeeds: [
+      'Advanced statistical methods',
+      'Business intelligence tools',
+      'Leadership development',
+      'Industry case studies',
+      'Networking with data professionals',
+      'Hands-on project experience'
+    ],
+    performance: {
+      cpl: 67.25,
+      ctr: 2.8,
+      conversionRate: 18.5,
+      totalSpend: 14500,
+      totalLeads: 216
+    },
+    moodBoardImages: [
+      '/lovable-uploads/d3399d19-9038-4dc2-9bd8-dc5a859bd0ac.png',
+      '/lovable-uploads/89175e4f-021a-4be2-a013-b97ccb4af0c3.png',
+      '/lovable-uploads/959dae80-1c83-44a7-a3a1-46d8f0c7225d.png'
+    ],
+    isActive: true,
+    createdAt: '2024-03-10'
   }
 ];
 
