@@ -78,6 +78,51 @@ export interface CampaignPlan {
 // Mock Personas Data
 export const mockPersonas: Persona[] = [
   {
+    id: '6',
+    name: 'Justin',
+    program: 'Business Administration',
+    ageRange: '28-35',
+    careerStage: 'Mid-Career Professional',
+    avatar: '/lovable-uploads/ef28c6de-2741-4c99-99f4-b0a87bb954f8.png',
+    motivationalTagline: 'Strategic thinking meets operational excellence',
+    goals: ['C-suite advancement', 'MBA completion', 'Build executive network'],
+    fears: ['Being passed over for promotion', 'Industry disruption', 'Work-life balance challenges'],
+    motivations: ['Leadership responsibility', 'Financial success', 'Team development'],
+    channels: ['LinkedIn', 'Email', 'Harvard Business Review', 'Industry conferences', 'Podcasts'],
+    demographics: {
+      location: 'Metro Detroit area',
+      income: '$95K-140K',
+      education: 'Bachelor\'s in Business/Finance'
+    },
+    psychographics: {
+      values: ['Excellence', 'Strategic thinking', 'Team success'],
+      interests: ['Business strategy', 'Leadership development', 'Executive coaching', 'Golf'],
+      lifestyle: 'Professional, goal-driven, relationship-focused'
+    },
+    programNeeds: [
+      'Executive MBA curriculum',
+      'Strategic leadership training',
+      'Financial analysis mastery',
+      'Change management skills',
+      'Executive networking access',
+      'Industry case study analysis'
+    ],
+    performance: {
+      cpl: 72.80,
+      ctr: 3.1,
+      conversionRate: 16.8,
+      totalSpend: 16200,
+      totalLeads: 222
+    },
+    moodBoardImages: [
+      '/lovable-uploads/ef28c6de-2741-4c99-99f4-b0a87bb954f8.png',
+      '/lovable-uploads/f15c1638-fd9e-400d-9454-cf7ac5201953.png',
+      '/lovable-uploads/30655c8c-b40b-4fd0-8a4a-3b300a0ffd0f.png'
+    ],
+    isActive: true,
+    createdAt: '2024-03-12'
+  },
+  {
     id: '2',
     name: 'Liz',
     program: 'Healthcare',
