@@ -14,7 +14,226 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      campaign_performance: {
+        Row: {
+          campaign_id: string
+          clicks: number | null
+          conversion_rate: number | null
+          conversions: number | null
+          cpc: number | null
+          cpm: number | null
+          created_at: string
+          ctr: number | null
+          date: string
+          id: string
+          impressions: number | null
+          roas: number | null
+          spend: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          campaign_id: string
+          clicks?: number | null
+          conversion_rate?: number | null
+          conversions?: number | null
+          cpc?: number | null
+          cpm?: number | null
+          created_at?: string
+          ctr?: number | null
+          date: string
+          id?: string
+          impressions?: number | null
+          roas?: number | null
+          spend?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          campaign_id?: string
+          clicks?: number | null
+          conversion_rate?: number | null
+          conversions?: number | null
+          cpc?: number | null
+          cpm?: number | null
+          created_at?: string
+          ctr?: number | null
+          date?: string
+          id?: string
+          impressions?: number | null
+          roas?: number | null
+          spend?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "campaign_performance_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "campaigns"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      campaigns: {
+        Row: {
+          budget: number | null
+          campaign_type: string | null
+          channels: string[] | null
+          created_at: string
+          creative_assets: string[] | null
+          description: string | null
+          end_date: string | null
+          id: string
+          objectives: string[] | null
+          persona_id: string
+          start_date: string | null
+          status: string | null
+          target_metrics: string[] | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          budget?: number | null
+          campaign_type?: string | null
+          channels?: string[] | null
+          created_at?: string
+          creative_assets?: string[] | null
+          description?: string | null
+          end_date?: string | null
+          id?: string
+          objectives?: string[] | null
+          persona_id: string
+          start_date?: string | null
+          status?: string | null
+          target_metrics?: string[] | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          budget?: number | null
+          campaign_type?: string | null
+          channels?: string[] | null
+          created_at?: string
+          creative_assets?: string[] | null
+          description?: string | null
+          end_date?: string | null
+          id?: string
+          objectives?: string[] | null
+          persona_id?: string
+          start_date?: string | null
+          status?: string | null
+          target_metrics?: string[] | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "campaigns_persona_id_fkey"
+            columns: ["persona_id"]
+            isOneToOne: false
+            referencedRelation: "personas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      personas: {
+        Row: {
+          age_range: string | null
+          avatar_url: string | null
+          created_at: string
+          description: string | null
+          education_level: string | null
+          goals: string[] | null
+          id: string
+          income_range: string | null
+          industry: string | null
+          location: string | null
+          name: string
+          occupation: string | null
+          pain_points: string[] | null
+          personality_traits: string[] | null
+          preferred_channels: string[] | null
+          updated_at: string
+          user_id: string
+          values: string[] | null
+        }
+        Insert: {
+          age_range?: string | null
+          avatar_url?: string | null
+          created_at?: string
+          description?: string | null
+          education_level?: string | null
+          goals?: string[] | null
+          id?: string
+          income_range?: string | null
+          industry?: string | null
+          location?: string | null
+          name: string
+          occupation?: string | null
+          pain_points?: string[] | null
+          personality_traits?: string[] | null
+          preferred_channels?: string[] | null
+          updated_at?: string
+          user_id: string
+          values?: string[] | null
+        }
+        Update: {
+          age_range?: string | null
+          avatar_url?: string | null
+          created_at?: string
+          description?: string | null
+          education_level?: string | null
+          goals?: string[] | null
+          id?: string
+          income_range?: string | null
+          industry?: string | null
+          location?: string | null
+          name?: string
+          occupation?: string | null
+          pain_points?: string[] | null
+          personality_traits?: string[] | null
+          preferred_channels?: string[] | null
+          updated_at?: string
+          user_id?: string
+          values?: string[] | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          email: string | null
+          full_name: string | null
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
