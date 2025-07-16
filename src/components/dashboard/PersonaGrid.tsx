@@ -53,7 +53,10 @@ export function PersonaGrid({ personas, className, onPersonaClick }: PersonaGrid
                 </div>
                 <Badge 
                   variant={persona.isActive ? "default" : "secondary"}
-                  className={persona.isActive ? "bg-success text-success-foreground" : ""}
+                  className={persona.isActive 
+                    ? "bg-secondary text-white hover:bg-secondary/90" 
+                    : "bg-accent text-white hover:bg-accent/90"
+                  }
                 >
                   {persona.isActive ? "Active" : "Inactive"}
                 </Badge>
