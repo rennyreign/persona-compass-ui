@@ -10,6 +10,8 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface PersonaFormData {
   // Basic Info
@@ -78,8 +80,10 @@ export default function CreatePersona() {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<PersonaFormData>(initialFormData);
   const [newItem, setNewItem] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { user } = useAuth();
 
   const updateFormData = (field: keyof PersonaFormData, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -110,14 +114,70 @@ export default function CreatePersona() {
     }
   };
 
-  const handleSubmit = () => {
-    // For now, just log the data - would integrate with Supabase for actual storage
-    console.log("Creating persona:", formData);
-    toast({
-      title: "Persona Created!",
-      description: `${formData.name} has been successfully created.`,
-    });
-    navigate("/");
+  const handleSubmit = async () => {
+    if (!user) {
+      toast({
+        title: "Error",
+        description: "You must be logged in to create a persona.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+    
+    try {
+      // Get user's organization
+      const { data: userRole } = await supabase
+        .from('user_roles')
+        .select('organization_id')
+        .eq('user_id', user.id)
+        .single();
+
+      // Prepare persona data for database
+      const personaData = {
+        user_id: user.id,
+        organization_id: userRole?.organization_id || null,
+        name: formData.name,
+        age_range: formData.ageRange,
+        occupation: formData.careerStage,
+        industry: formData.program,
+        education_level: formData.education,
+        income_range: formData.income,
+        location: formData.location,
+        personality_traits: formData.values.concat(formData.interests),
+        values: formData.values,
+        goals: formData.goals,
+        pain_points: formData.fears,
+        preferred_channels: formData.channels,
+        avatar_url: formData.avatar || null,
+        description: `${formData.motivationalTagline}\n\nLifestyle: ${formData.lifestyle}\n\nMotivations: ${formData.motivations.join(', ')}\n\nProgram Needs: ${formData.programNeeds.join(', ')}`
+      };
+
+      const { error } = await supabase
+        .from('personas')
+        .insert([personaData]);
+
+      if (error) {
+        throw error;
+      }
+
+      toast({
+        title: "Persona Created!",
+        description: `${formData.name} has been successfully created and saved to the database.`,
+      });
+      
+      navigate("/");
+    } catch (error) {
+      console.error('Error creating persona:', error);
+      toast({
+        title: "Error",
+        description: "Failed to create persona. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const renderStepContent = () => {
@@ -639,9 +699,18 @@ export default function CreatePersona() {
           </Button>
           
           {currentStep === steps.length ? (
-            <Button onClick={handleSubmit}>
-              <Check className="w-4 h-4 mr-2" />
-              Create Persona
+            <Button onClick={handleSubmit} disabled={isSubmitting}>
+              {isSubmitting ? (
+                <>
+                  <div className="w-4 h-4 mr-2 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin" />
+                  Creating...
+                </>
+              ) : (
+                <>
+                  <Check className="w-4 h-4 mr-2" />
+                  Create Persona
+                </>
+              )}
             </Button>
           ) : (
             <Button onClick={nextStep}>
