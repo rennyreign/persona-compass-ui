@@ -27,6 +27,7 @@ export type Database = {
           date: string
           id: string
           impressions: number | null
+          organization_id: string | null
           roas: number | null
           spend: number | null
           updated_at: string
@@ -44,6 +45,7 @@ export type Database = {
           date: string
           id?: string
           impressions?: number | null
+          organization_id?: string | null
           roas?: number | null
           spend?: number | null
           updated_at?: string
@@ -61,6 +63,7 @@ export type Database = {
           date?: string
           id?: string
           impressions?: number | null
+          organization_id?: string | null
           roas?: number | null
           spend?: number | null
           updated_at?: string
@@ -72,6 +75,13 @@ export type Database = {
             columns: ["campaign_id"]
             isOneToOne: false
             referencedRelation: "campaigns"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "campaign_performance_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
             referencedColumns: ["id"]
           },
         ]
@@ -87,6 +97,7 @@ export type Database = {
           end_date: string | null
           id: string
           objectives: string[] | null
+          organization_id: string | null
           persona_id: string
           start_date: string | null
           status: string | null
@@ -105,6 +116,7 @@ export type Database = {
           end_date?: string | null
           id?: string
           objectives?: string[] | null
+          organization_id?: string | null
           persona_id: string
           start_date?: string | null
           status?: string | null
@@ -123,6 +135,7 @@ export type Database = {
           end_date?: string | null
           id?: string
           objectives?: string[] | null
+          organization_id?: string | null
           persona_id?: string
           start_date?: string | null
           status?: string | null
@@ -133,6 +146,13 @@ export type Database = {
         }
         Relationships: [
           {
+            foreignKeyName: "campaigns_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "campaigns"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "campaigns_persona_id_fkey"
             columns: ["persona_id"]
             isOneToOne: false
@@ -140,6 +160,48 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      organizations: {
+        Row: {
+          created_at: string
+          domain: string | null
+          id: string
+          is_active: boolean | null
+          logo_url: string | null
+          name: string
+          primary_color: string | null
+          secondary_color: string | null
+          settings: Json | null
+          subdomain: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          domain?: string | null
+          id?: string
+          is_active?: boolean | null
+          logo_url?: string | null
+          name: string
+          primary_color?: string | null
+          secondary_color?: string | null
+          settings?: Json | null
+          subdomain?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          domain?: string | null
+          id?: string
+          is_active?: boolean | null
+          logo_url?: string | null
+          name?: string
+          primary_color?: string | null
+          secondary_color?: string | null
+          settings?: Json | null
+          subdomain?: string | null
+          updated_at?: string
+        }
+        Relationships: []
       }
       personas: {
         Row: {
@@ -155,6 +217,7 @@ export type Database = {
           location: string | null
           name: string
           occupation: string | null
+          organization_id: string | null
           pain_points: string[] | null
           personality_traits: string[] | null
           preferred_channels: string[] | null
@@ -175,6 +238,7 @@ export type Database = {
           location?: string | null
           name: string
           occupation?: string | null
+          organization_id?: string | null
           pain_points?: string[] | null
           personality_traits?: string[] | null
           preferred_channels?: string[] | null
@@ -195,6 +259,7 @@ export type Database = {
           location?: string | null
           name?: string
           occupation?: string | null
+          organization_id?: string | null
           pain_points?: string[] | null
           personality_traits?: string[] | null
           preferred_channels?: string[] | null
@@ -202,7 +267,15 @@ export type Database = {
           user_id?: string
           values?: string[] | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "personas_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
@@ -211,6 +284,7 @@ export type Database = {
           email: string | null
           full_name: string | null
           id: string
+          organization_id: string | null
           updated_at: string
           user_id: string
         }
@@ -220,6 +294,7 @@ export type Database = {
           email?: string | null
           full_name?: string | null
           id?: string
+          organization_id?: string | null
           updated_at?: string
           user_id: string
         }
@@ -229,17 +304,68 @@ export type Database = {
           email?: string | null
           full_name?: string | null
           id?: string
+          organization_id?: string | null
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "profiles_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          organization_id: string | null
+          role: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          organization_id?: string | null
+          role: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          organization_id?: string | null
+          role?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_roles_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_user_organization_role: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          organization_id: string
+          organization_name: string
+          role: string
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never
