@@ -3,6 +3,7 @@ import { Home, Users, Megaphone, Lightbulb, Target } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { BiskLogo } from "@/components/ui/bisk-logo";
 
 interface SidebarProps {
   className?: string;
@@ -65,19 +66,9 @@ export function Sidebar({ className }: SidebarProps) {
       {/* Header */}
       <div className="p-6 border-b border-border">
         <div className="flex items-center justify-between">
-          {!isCollapsed && (
-           <a href="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
-            <div className="w-8 h-8 bg-muted rounded-lg flex items-center justify-center overflow-hidden">
-              <img 
-                src="/lovable-uploads/89175e4f-021a-4be2-a013-b97ccb4af0c3.png" 
-                alt="MSU Logo" 
-                className="w-6 h-6 object-contain"
-              />
-            </div>
-            <div>
-              <h1 className="font-semibold text-foreground">MSU Persona</h1>
-              <p className="text-xs text-muted-foreground">Intelligence Platform</p>
-            </div>
+           {!isCollapsed && (
+           <a href="/" className="hover:opacity-80 transition-opacity">
+            <BiskLogo />
           </a>
           )}
           <Button
@@ -125,10 +116,10 @@ export function Sidebar({ className }: SidebarProps) {
             <span className="text-primary-foreground font-semibold text-sm">U</span>
           </div>
           {!isCollapsed && (
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-foreground truncate">Marketing Team</p>
-              <p className="text-xs text-muted-foreground truncate">team@msu.edu</p>
-            </div>
+             <div className="flex-1 min-w-0">
+               <p className="text-sm font-medium text-foreground truncate">Bisk Team</p>
+               <p className="text-xs text-muted-foreground truncate">admin@bisk.com</p>
+             </div>
           )}
         </div>
       </div>

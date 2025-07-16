@@ -17,22 +17,22 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    /* MSU Brand Colors */
-    --primary: 162 59% 19%; /* MSU Green #18453B */
+    /* Bisk Brand Colors */
+    --primary: 210 45% 17%; /* Navy Grey #253746 */
     --primary-foreground: 0 0% 98%;
-    --primary-light: 162 45% 35%;
-    --primary-dark: 162 70% 15%;
+    --primary-light: 210 45% 25%;
+    --primary-dark: 210 45% 12%;
 
-    --secondary: 220 14% 96%;
-    --secondary-foreground: 162 59% 19%;
+    --secondary: 206 60% 53%; /* Atlas Blue #3291d9 */
+    --secondary-foreground: 0 0% 98%;
 
-    --muted: 220 14% 96%;
-    --muted-foreground: 215 16% 47%;
+    --muted: 210 17% 82%;
+    --muted-foreground: 210 19% 35%; /* Bisk Grey #455461 */
 
-    /* Interactive Indigo Accents */
-    --accent: 239 84% 67%;
+    /* Bisk Red Accent */
+    --accent: 347 84% 57%; /* Amarynth #e40046 */
     --accent-foreground: 0 0% 98%;
-    --accent-light: 239 84% 80%;
+    --accent-light: 347 84% 70%;
 
     /* Success & Status Colors */
     --success: 142 76% 36%;
