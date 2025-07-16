@@ -29,7 +29,7 @@ export function PersonaFilterTabs({ personas, activeFilter, onFilterChange, clas
           >
             <span className="flex items-center space-x-2">
               <span>All Personas</span>
-              <Badge variant="secondary" className="ml-2 bg-background/80">
+              <Badge variant="secondary" className="ml-2 bg-muted text-muted-foreground">
                 {getFilterCount('all')}
               </Badge>
             </span>
@@ -41,7 +41,7 @@ export function PersonaFilterTabs({ personas, activeFilter, onFilterChange, clas
           >
             <span className="flex items-center space-x-2">
               <span>Active</span>
-              <Badge variant="secondary" className="ml-2 bg-background/80">
+              <Badge variant="secondary" className="ml-2 bg-muted text-muted-foreground">
                 {getFilterCount('active')}
               </Badge>
             </span>
@@ -69,7 +69,7 @@ export function PersonaFilterTabs({ personas, activeFilter, onFilterChange, clas
                 "ml-2 border-0",
                 activeFilter === program 
                   ? "bg-green-50 text-green-700" 
-                  : "bg-background/80"
+                  : "bg-muted text-muted-foreground"
               )}
             >
               {getFilterCount(program)}
