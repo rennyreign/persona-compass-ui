@@ -35,7 +35,7 @@ export function PersonaFilterTabs({ personas, availablePrograms, activeFilter, o
   return (
     <div className={cn("space-y-4", className)}>
       {/* Status Filter Pills */}
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2 bg-muted/50 p-3 rounded-xl">
         <button
           onClick={() => onStatusFilterChange('all')}
           className={cn(
@@ -106,21 +106,6 @@ export function PersonaFilterTabs({ personas, availablePrograms, activeFilter, o
         </button>
       </div>
 
-      <Tabs value={activeFilter} onValueChange={onFilterChange} className="w-full">
-        <TabsList className="grid w-full grid-cols-1 lg:flex lg:w-auto bg-muted/50 p-1 h-auto rounded-xl">
-          <TabsTrigger 
-            value="all" 
-            className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-lg px-4 py-2"
-          >
-            <span className="flex items-center space-x-2">
-              <span>All Personas</span>
-              <Badge variant="secondary" className="ml-2 bg-muted text-muted-foreground">
-                {getFilterCount('all')}
-              </Badge>
-            </span>
-          </TabsTrigger>
-        </TabsList>
-      </Tabs>
 
       {/* Program Filter Pills */}
       <div className="flex flex-wrap gap-2">
