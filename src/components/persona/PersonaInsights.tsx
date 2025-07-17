@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Brain, Lightbulb, TrendingUp, AlertTriangle, Sparkles } from "lucide-react";
-import { Insight } from "@/data/mockData";
+import { Insight } from "@/types/persona";
 
 interface PersonaInsightsProps {
   personaId: string;
@@ -195,7 +195,7 @@ export function PersonaInsights({ personaId, insights }: PersonaInsightsProps) {
                           {insight.title}
                         </CardTitle>
                         <CardDescription className="mt-1">
-                          {formatDate(insight.generatedAt)}
+                          {formatDate(insight.generated_at)}
                         </CardDescription>
                       </div>
                     </div>
@@ -211,7 +211,7 @@ export function PersonaInsights({ personaId, insights }: PersonaInsightsProps) {
                       >
                         {insight.type}
                       </Badge>
-                      {insight.isGptGenerated && (
+                      {insight.is_gpt_generated && (
                         <Badge variant="secondary" className="text-xs">
                           AI
                         </Badge>

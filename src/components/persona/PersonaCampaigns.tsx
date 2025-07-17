@@ -1,18 +1,41 @@
+import { useState, useEffect } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ExternalLink, FileText } from "lucide-react";
 import { Link } from "react-router-dom";
-import { mockCampaigns } from "@/data/mockData";
 import { CreateCampaignDialog } from "@/components/campaign/CreateCampaignDialog";
+import { Campaign } from "@/types/persona";
+import { supabase } from "@/integrations/supabase/client";
 
 interface PersonaCampaignsProps {
   personaId: string;
 }
 
 export function PersonaCampaigns({ personaId }: PersonaCampaignsProps) {
-  const campaigns = mockCampaigns.filter(campaign => campaign.personaId === personaId);
+  const [campaigns, setCampaigns] = useState<Campaign[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCampaigns = async () => {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from('campaigns')
+        .select('*')
+        .eq('persona_id', personaId)
+        .order('created_at', { ascending: false });
+        
+      if (error) {
+        console.error('Error fetching campaigns:', error);
+      } else {
+        setCampaigns(data || []);
+      }
+      setLoading(false);
+    };
+
+    fetchCampaigns();
+  }, [personaId]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -27,7 +50,8 @@ export function PersonaCampaigns({ personaId }: PersonaCampaignsProps) {
     }
   };
 
-  const formatCurrency = (amount: number) => {
+  const formatCurrency = (amount: number | null) => {
+    if (!amount) return '$0';
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
@@ -35,13 +59,22 @@ export function PersonaCampaigns({ personaId }: PersonaCampaignsProps) {
     }).format(amount);
   };
 
-  const formatDate = (dateString: string) => {
+  const formatDate = (dateString: string | null) => {
+    if (!dateString) return 'N/A';
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
       day: 'numeric',
     });
   };
+
+  if (loading) {
+    return (
+      <div className="text-center py-8">
+        <p className="text-muted-foreground">Loading campaigns...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -60,22 +93,22 @@ export function PersonaCampaigns({ personaId }: PersonaCampaignsProps) {
         
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Total Spend</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">Total Budget</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-foreground">
-              {formatCurrency(campaigns.reduce((sum, c) => sum + c.spend, 0))}
+              {formatCurrency(campaigns.reduce((sum, c) => sum + (c.budget || 0), 0))}
             </div>
           </CardContent>
         </Card>
         
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Total Leads</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">Active Campaigns</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-foreground">
-              {campaigns.reduce((sum, c) => sum + c.leads, 0)}
+              {campaigns.filter(c => c.status === 'active').length}
             </div>
           </CardContent>
         </Card>
@@ -107,12 +140,10 @@ export function PersonaCampaigns({ personaId }: PersonaCampaignsProps) {
               <TableHeader>
                 <TableRow>
                   <TableHead>Campaign</TableHead>
-                  <TableHead>Channel</TableHead>
+                  <TableHead>Type</TableHead>
                   <TableHead>Status</TableHead>
-                  <TableHead>Spend</TableHead>
-                  <TableHead>Clicks</TableHead>
-                  <TableHead>Leads</TableHead>
-                  <TableHead>CPL</TableHead>
+                  <TableHead>Budget</TableHead>
+                  <TableHead>Channels</TableHead>
                   <TableHead>Start Date</TableHead>
                   <TableHead className="w-[100px]">Actions</TableHead>
                 </TableRow>
@@ -126,13 +157,13 @@ export function PersonaCampaigns({ personaId }: PersonaCampaignsProps) {
                           to={`/campaign/${campaign.id}`}
                           className="font-medium text-foreground hover:text-green-600 hover:underline transition-colors"
                         >
-                          {campaign.name}
+                          {campaign.title}
                         </Link>
-                        <div className="text-sm text-muted-foreground">{campaign.cta}</div>
+                        <div className="text-sm text-muted-foreground">{campaign.description}</div>
                       </div>
                     </TableCell>
                     <TableCell>
-                      <Badge variant="outline">{campaign.channel}</Badge>
+                      <Badge variant="outline">{campaign.campaign_type || 'General'}</Badge>
                     </TableCell>
                     <TableCell>
                       <Badge className={getStatusColor(campaign.status)}>
@@ -140,15 +171,24 @@ export function PersonaCampaigns({ personaId }: PersonaCampaignsProps) {
                       </Badge>
                     </TableCell>
                     <TableCell className="font-medium">
-                      {formatCurrency(campaign.spend)}
+                      {formatCurrency(campaign.budget)}
                     </TableCell>
-                    <TableCell>{campaign.clicks.toLocaleString()}</TableCell>
-                    <TableCell>{campaign.leads}</TableCell>
                     <TableCell>
-                      {formatCurrency(campaign.spend / campaign.leads)}
+                      <div className="flex flex-wrap gap-1">
+                        {campaign.channels?.slice(0, 2).map((channel, index) => (
+                          <Badge key={index} variant="outline" className="text-xs">
+                            {channel}
+                          </Badge>
+                        ))}
+                        {campaign.channels && campaign.channels.length > 2 && (
+                          <Badge variant="outline" className="text-xs">
+                            +{campaign.channels.length - 2}
+                          </Badge>
+                        )}
+                      </div>
                     </TableCell>
                     <TableCell className="text-muted-foreground">
-                      {formatDate(campaign.startDate)}
+                      {formatDate(campaign.start_date)}
                     </TableCell>
                     <TableCell>
                       <Link to={`/campaign/${campaign.id}`}>
@@ -169,32 +209,6 @@ export function PersonaCampaigns({ personaId }: PersonaCampaignsProps) {
         </CardContent>
       </Card>
 
-      {/* Campaign Notes */}
-      {campaigns.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {campaigns.map((campaign) => (
-            <Card key={campaign.id}>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <CardTitle className="text-base">{campaign.name}</CardTitle>
-                    <CardDescription>{campaign.channel} Campaign</CardDescription>
-                  </div>
-                  <Link to={`/campaign/${campaign.id}`}>
-                    <Button variant="outline" size="sm" className="hover:bg-green-50 hover:text-green-600">
-                      <FileText className="w-4 h-4 mr-2" />
-                      View Plan
-                    </Button>
-                  </Link>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">{campaign.notes}</p>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      )}
     </div>
   );
 }

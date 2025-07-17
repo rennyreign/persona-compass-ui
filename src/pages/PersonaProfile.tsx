@@ -13,55 +13,82 @@ import { PersonaVisualIdentity } from "@/components/persona/PersonaVisualIdentit
 import { Sidebar } from "@/components/layout/Sidebar";
 import { TopHeader } from "@/components/layout/TopHeader";
 import { supabase } from "@/integrations/supabase/client";
+import { Persona, Insight } from "@/types/persona";
+import { toast } from "@/hooks/use-toast";
 
-interface Persona {
-  id: string;
-  name: string;
-  description: string | null;
-  age_range: string | null;
-  occupation: string | null;
-  education_level: string | null;
-  location: string | null;
-  income_range: string | null;
-  industry: string | null;
-  goals: string[] | null;
-  pain_points: string[] | null;
-  personality_traits: string[] | null;
-  values: string[] | null;
-  preferred_channels: string[] | null;
-  program_category: string | null;
-  avatar_url: string | null;
-}
 
 export default function PersonaProfile() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("details");
   const [persona, setPersona] = useState<Persona | null>(null);
+  const [insights, setInsights] = useState<Insight[]>([]);
   const [loading, setLoading] = useState(true);
   
   useEffect(() => {
-    const fetchPersona = async () => {
+    const fetchData = async () => {
       if (!id) return;
       
       setLoading(true);
-      const { data, error } = await supabase
+      
+      // Fetch persona data
+      const { data: personaData, error: personaError } = await supabase
         .from('personas')
         .select('*')
         .eq('id', id)
         .maybeSingle();
         
-      if (error) {
-        console.error('Error fetching persona:', error);
+      if (personaError) {
+        console.error('Error fetching persona:', personaError);
         setPersona(null);
-      } else {
-        setPersona(data);
+        setLoading(false);
+        return;
       }
+      
+      setPersona(personaData);
+      
+      // Fetch insights for this persona
+      const { data: insightsData, error: insightsError } = await supabase
+        .from('insights')
+        .select('*')
+        .eq('persona_id', id)
+        .order('generated_at', { ascending: false });
+        
+      if (insightsError) {
+        console.error('Error fetching insights:', insightsError);
+      } else {
+        setInsights((insightsData || []) as Insight[]);
+      }
+      
       setLoading(false);
     };
     
-    fetchPersona();
+    fetchData();
   }, [id]);
+
+  const handleArchivePersona = async () => {
+    if (!persona) return;
+    
+    const { error } = await supabase
+      .from('personas')
+      .update({ status: persona.status === 'active' ? 'archived' : 'active' })
+      .eq('id', persona.id);
+      
+    if (error) {
+      console.error('Error updating persona status:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update persona status",
+        variant: "destructive",
+      });
+    } else {
+      setPersona(prev => prev ? { ...prev, status: prev.status === 'active' ? 'archived' : 'active' } : null);
+      toast({
+        title: "Success",
+        description: `Persona ${persona.status === 'active' ? 'archived' : 'activated'} successfully`,
+      });
+    }
+  };
   
   if (loading) {
     return (
@@ -114,9 +141,9 @@ export default function PersonaProfile() {
                     <Edit className="w-4 h-4 mr-2" />
                     Edit
                   </Button>
-                  <Button variant="outline" size="sm">
+                  <Button variant="outline" size="sm" onClick={handleArchivePersona}>
                     <Archive className="w-4 h-4 mr-2" />
-                    Archive
+                    {persona.status === 'active' ? 'Archive' : 'Activate'}
                   </Button>
                 </div>
               </div>
@@ -163,8 +190,12 @@ export default function PersonaProfile() {
                         {persona.occupation}
                       </Badge>
                     )}
-                    <Badge className="px-3 py-1 bg-green-100 text-green-800 border-green-200">
-                      Active
+                    <Badge className={`px-3 py-1 ${
+                      persona.status === 'active' 
+                        ? 'bg-green-100 text-green-800 border-green-200' 
+                        : 'bg-gray-100 text-gray-800 border-gray-200'
+                    }`}>
+                      {persona.status === 'active' ? 'Active' : 'Archived'}
                     </Badge>
                   </div>
                 </div>
@@ -362,15 +393,13 @@ export default function PersonaProfile() {
 
           <TabsContent value="visual">
             <PersonaVisualIdentity 
-              images={[]} 
+              images={persona.visual_identity_images || []} 
               personaName={persona.name}
             />
           </TabsContent>
 
           <TabsContent value="performance">
-            <div className="text-center py-8">
-              <p className="text-muted-foreground">Performance data coming soon...</p>
-            </div>
+            <PersonaPerformanceCharts personaId={persona.id} />
           </TabsContent>
 
           <TabsContent value="campaigns">
@@ -378,9 +407,7 @@ export default function PersonaProfile() {
           </TabsContent>
 
           <TabsContent value="insights">
-            <div className="text-center py-8">
-              <p className="text-muted-foreground">Insights coming soon...</p>
-            </div>
+            <PersonaInsights personaId={persona.id} insights={insights} />
           </TabsContent>
         </Tabs>
           </div>

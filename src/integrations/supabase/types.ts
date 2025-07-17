@@ -161,6 +161,56 @@ export type Database = {
           },
         ]
       }
+      insights: {
+        Row: {
+          content: string
+          created_at: string | null
+          generated_at: string | null
+          id: string
+          is_gpt_generated: boolean | null
+          organization_id: string | null
+          persona_id: string
+          title: string
+          type: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          generated_at?: string | null
+          id?: string
+          is_gpt_generated?: boolean | null
+          organization_id?: string | null
+          persona_id: string
+          title: string
+          type: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          generated_at?: string | null
+          id?: string
+          is_gpt_generated?: boolean | null
+          organization_id?: string | null
+          persona_id?: string
+          title?: string
+          type?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "insights_persona_id_fkey"
+            columns: ["persona_id"]
+            isOneToOne: false
+            referencedRelation: "personas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       organizations: {
         Row: {
           created_at: string
@@ -226,6 +276,7 @@ export type Database = {
           updated_at: string
           user_id: string
           values: string[] | null
+          visual_identity_images: string[] | null
         }
         Insert: {
           age_range?: string | null
@@ -249,6 +300,7 @@ export type Database = {
           updated_at?: string
           user_id: string
           values?: string[] | null
+          visual_identity_images?: string[] | null
         }
         Update: {
           age_range?: string | null
@@ -272,6 +324,7 @@ export type Database = {
           updated_at?: string
           user_id?: string
           values?: string[] | null
+          visual_identity_images?: string[] | null
         }
         Relationships: [
           {

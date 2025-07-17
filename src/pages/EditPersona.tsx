@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft, Save, Upload, X, Images } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -9,10 +9,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { mockPersonas } from "@/data/mockData";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { TopHeader } from "@/components/layout/TopHeader";
 import { toast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { Persona } from "@/types/persona";
 
 const programOptions = [
   "Supply Chain",
@@ -33,31 +34,93 @@ export default function EditPersona() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("basic");
-  
-  const persona = mockPersonas.find(p => p.id === id);
+  const [persona, setPersona] = useState<Persona | null>(null);
+  const [loading, setLoading] = useState(true);
   
   const [formData, setFormData] = useState({
-    name: persona?.name || "",
-    program: persona?.program || "",
-    ageRange: persona?.ageRange || "",
-    careerStage: persona?.careerStage || "",
-    avatar: persona?.avatar || "",
-    motivationalTagline: persona?.motivationalTagline || "",
-    isActive: persona?.isActive || true,
-    location: persona?.demographics.location || "",
-    income: persona?.demographics.income || "",
-    education: persona?.demographics.education || "",
-    lifestyle: persona?.psychographics.lifestyle || "",
-    cpl: persona?.performance.cpl || 0,
-    ctr: persona?.performance.ctr || 0,
-    conversionRate: persona?.performance.conversionRate || 0,
-    totalSpend: persona?.performance.totalSpend || 0,
-    totalLeads: persona?.performance.totalLeads || 0,
+    name: "",
+    description: "",
+    program_category: "",
+    age_range: "",
+    occupation: "",
+    avatar_url: "",
+    status: "active",
+    location: "",
+    income_range: "",
+    education_level: "",
+    industry: "",
+    personality_traits: [] as string[],
+    values: [] as string[],
+    goals: [] as string[],
+    pain_points: [] as string[],
+    preferred_channels: [] as string[],
   });
 
-  const [visualIdentityImages, setVisualIdentityImages] = useState<string[]>(
-    persona?.moodBoardImages || []
-  );
+  const [visualIdentityImages, setVisualIdentityImages] = useState<string[]>([]);
+
+  useEffect(() => {
+    const fetchPersona = async () => {
+      if (!id) return;
+      
+      setLoading(true);
+      const { data, error } = await supabase
+        .from('personas')
+        .select('*')
+        .eq('id', id)
+        .maybeSingle();
+        
+      if (error) {
+        console.error('Error fetching persona:', error);
+        navigate('/');
+        return;
+      }
+      
+      if (!data) {
+        navigate('/');
+        return;
+      }
+      
+      setPersona(data);
+      setFormData({
+        name: data.name || "",
+        description: data.description || "",
+        program_category: data.program_category || "",
+        age_range: data.age_range || "",
+        occupation: data.occupation || "",
+        avatar_url: data.avatar_url || "",
+        status: data.status || "active",
+        location: data.location || "",
+        income_range: data.income_range || "",
+        education_level: data.education_level || "",
+        industry: data.industry || "",
+        personality_traits: data.personality_traits || [],
+        values: data.values || [],
+        goals: data.goals || [],
+        pain_points: data.pain_points || [],
+        preferred_channels: data.preferred_channels || [],
+      });
+      setVisualIdentityImages(data.visual_identity_images || []);
+      setLoading(false);
+    };
+
+    fetchPersona();
+  }, [id, navigate]);
+
+  if (loading) {
+    return (
+      <div className="flex h-screen bg-background">
+        <Sidebar />
+        <div className="flex-1 flex flex-col overflow-hidden">
+          <TopHeader />
+          <div className="flex-1 flex items-center justify-center">
+            <div className="text-center">
+              <div className="text-lg text-muted-foreground">Loading persona...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (!persona) {
     return (
@@ -77,14 +140,48 @@ export default function EditPersona() {
     );
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form data:", formData);
-    toast({
-      title: "Success",
-      description: "Persona updated successfully!",
-    });
-    navigate(`/persona/${id}`);
+    
+    if (!persona) return;
+    
+    const { error } = await supabase
+      .from('personas')
+      .update({
+        name: formData.name,
+        description: formData.description,
+        program_category: formData.program_category,
+        age_range: formData.age_range,
+        occupation: formData.occupation,
+        avatar_url: formData.avatar_url,
+        status: formData.status,
+        location: formData.location,
+        income_range: formData.income_range,
+        education_level: formData.education_level,
+        industry: formData.industry,
+        personality_traits: formData.personality_traits,
+        values: formData.values,
+        goals: formData.goals,
+        pain_points: formData.pain_points,
+        preferred_channels: formData.preferred_channels,
+        visual_identity_images: visualIdentityImages,
+      })
+      .eq('id', persona.id);
+      
+    if (error) {
+      console.error('Error updating persona:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update persona",
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Success",
+        description: "Persona updated successfully!",
+      });
+      navigate(`/persona/${id}`);
+    }
   };
 
   const handleInputChange = (field: string, value: any) => {
@@ -181,10 +278,10 @@ export default function EditPersona() {
                         </div>
 
                         <div>
-                          <Label htmlFor="program">Program</Label>
+                          <Label htmlFor="program_category">Program Category</Label>
                           <Select
-                            value={formData.program}
-                            onValueChange={(value) => handleInputChange("program", value)}
+                            value={formData.program_category}
+                            onValueChange={(value) => handleInputChange("program_category", value)}
                           >
                             <SelectTrigger>
                               <SelectValue placeholder="Select program" />
@@ -200,10 +297,10 @@ export default function EditPersona() {
                         </div>
 
                         <div>
-                          <Label htmlFor="ageRange">Age Range</Label>
+                          <Label htmlFor="age_range">Age Range</Label>
                           <Select
-                            value={formData.ageRange}
-                            onValueChange={(value) => handleInputChange("ageRange", value)}
+                            value={formData.age_range}
+                            onValueChange={(value) => handleInputChange("age_range", value)}
                           >
                             <SelectTrigger>
                               <SelectValue placeholder="Select age range" />
@@ -219,46 +316,13 @@ export default function EditPersona() {
                         </div>
 
                         <div>
-                          <Label htmlFor="careerStage">Career Stage</Label>
-                          <Select
-                            value={formData.careerStage}
-                            onValueChange={(value) => handleInputChange("careerStage", value)}
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select career stage" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {careerStageOptions.map((stage) => (
-                                <SelectItem key={stage} value={stage}>
-                                  {stage}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
-
-                        <div>
-                          <Label htmlFor="motivationalTagline">Motivational Tagline</Label>
+                          <Label htmlFor="description">Description</Label>
                           <Textarea
-                            id="motivationalTagline"
-                            value={formData.motivationalTagline}
-                            onChange={(e) => handleInputChange("motivationalTagline", e.target.value)}
-                            placeholder="Enter a motivational tagline"
+                            id="description"
+                            value={formData.description}
+                            onChange={(e) => handleInputChange("description", e.target.value)}
+                            placeholder="Enter persona description"
                             rows={3}
-                          />
-                        </div>
-
-                        <div className="flex items-center justify-between">
-                          <div className="space-y-0.5">
-                            <Label htmlFor="isActive">Active Status</Label>
-                            <p className="text-sm text-muted-foreground">
-                              Whether this persona is currently active
-                            </p>
-                          </div>
-                          <Switch
-                            id="isActive"
-                            checked={formData.isActive}
-                            onCheckedChange={(checked) => handleInputChange("isActive", checked)}
                           />
                         </div>
                       </CardContent>
@@ -271,11 +335,11 @@ export default function EditPersona() {
                       </CardHeader>
                       <CardContent className="space-y-4">
                         <div>
-                          <Label htmlFor="avatar">Avatar URL</Label>
+                          <Label htmlFor="avatar_url">Avatar URL</Label>
                           <Input
-                            id="avatar"
-                            value={formData.avatar}
-                            onChange={(e) => handleInputChange("avatar", e.target.value)}
+                            id="avatar_url"
+                            value={formData.avatar_url}
+                            onChange={(e) => handleInputChange("avatar_url", e.target.value)}
                             placeholder="Enter avatar image URL"
                           />
                         </div>
@@ -413,21 +477,21 @@ export default function EditPersona() {
                         </div>
 
                         <div>
-                          <Label htmlFor="income">Income Range</Label>
+                          <Label htmlFor="income_range">Income Range</Label>
                           <Input
-                            id="income"
-                            value={formData.income}
-                            onChange={(e) => handleInputChange("income", e.target.value)}
+                            id="income_range"
+                            value={formData.income_range}
+                            onChange={(e) => handleInputChange("income_range", e.target.value)}
                             placeholder="Enter income range"
                           />
                         </div>
 
                         <div>
-                          <Label htmlFor="education">Education Level</Label>
+                          <Label htmlFor="education_level">Education Level</Label>
                           <Input
-                            id="education"
-                            value={formData.education}
-                            onChange={(e) => handleInputChange("education", e.target.value)}
+                            id="education_level"
+                            value={formData.education_level}
+                            onChange={(e) => handleInputChange("education_level", e.target.value)}
                             placeholder="Enter education level"
                           />
                         </div>
@@ -439,42 +503,13 @@ export default function EditPersona() {
                 <TabsContent value="psychographics" className="space-y-6">
                   <Card>
                     <CardHeader>
-                      <CardTitle>Lifestyle & Psychology</CardTitle>
-                      <CardDescription>Psychological attributes and behavioral patterns</CardDescription>
+                      <CardTitle>Psychological Attributes</CardTitle>
+                      <CardDescription>Values, traits, and behavioral patterns</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
-                      <div>
-                        <Label htmlFor="lifestyle">Lifestyle</Label>
-                        <Textarea
-                          id="lifestyle"
-                          value={formData.lifestyle}
-                          onChange={(e) => handleInputChange("lifestyle", e.target.value)}
-                          placeholder="Describe the persona's lifestyle"
-                          rows={4}
-                        />
-                      </div>
-                      
-                      <div className="space-y-3">
-                        <h4 className="text-sm font-medium text-muted-foreground">Current Values</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {persona.psychographics.values.map((value, index) => (
-                            <span key={index} className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-secondary text-secondary-foreground">
-                              {value}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div className="space-y-3">
-                        <h4 className="text-sm font-medium text-muted-foreground">Current Interests</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {persona.psychographics.interests.map((interest, index) => (
-                            <span key={index} className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-secondary text-secondary-foreground">
-                              {interest}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
+                      <p className="text-sm text-muted-foreground">
+                        Edit personality traits, values, goals, and pain points for this persona.
+                      </p>
                     </CardContent>
                   </Card>
                 </TabsContent>
@@ -482,64 +517,13 @@ export default function EditPersona() {
                 <TabsContent value="performance" className="space-y-6">
                   <Card>
                     <CardHeader>
-                      <CardTitle>Performance Metrics</CardTitle>
-                      <CardDescription>Campaign performance data</CardDescription>
+                      <CardTitle>Performance Overview</CardTitle>
+                      <CardDescription>View campaign performance data in the main profile</CardDescription>
                     </CardHeader>
-                    <CardContent className="space-y-4">
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-                        <div>
-                          <Label htmlFor="cpl">CPL (Cost Per Lead)</Label>
-                          <Input
-                            id="cpl"
-                            type="number"
-                            step="0.01"
-                            value={formData.cpl}
-                            onChange={(e) => handleInputChange("cpl", parseFloat(e.target.value) || 0)}
-                          />
-                        </div>
-
-                        <div>
-                          <Label htmlFor="ctr">CTR (%)</Label>
-                          <Input
-                            id="ctr"
-                            type="number"
-                            step="0.1"
-                            value={formData.ctr}
-                            onChange={(e) => handleInputChange("ctr", parseFloat(e.target.value) || 0)}
-                          />
-                        </div>
-
-                        <div>
-                          <Label htmlFor="conversionRate">Conversion Rate (%)</Label>
-                          <Input
-                            id="conversionRate"
-                            type="number"
-                            step="0.1"
-                            value={formData.conversionRate}
-                            onChange={(e) => handleInputChange("conversionRate", parseFloat(e.target.value) || 0)}
-                          />
-                        </div>
-
-                        <div>
-                          <Label htmlFor="totalSpend">Total Spend</Label>
-                          <Input
-                            id="totalSpend"
-                            type="number"
-                            value={formData.totalSpend}
-                            onChange={(e) => handleInputChange("totalSpend", parseInt(e.target.value) || 0)}
-                          />
-                        </div>
-
-                        <div>
-                          <Label htmlFor="totalLeads">Total Leads</Label>
-                          <Input
-                            id="totalLeads"
-                            type="number"
-                            value={formData.totalLeads}
-                            onChange={(e) => handleInputChange("totalLeads", parseInt(e.target.value) || 0)}
-                          />
-                        </div>
-                      </div>
+                    <CardContent>
+                      <p className="text-sm text-muted-foreground">
+                        Performance metrics are automatically calculated from campaign data.
+                      </p>
                     </CardContent>
                   </Card>
                 </TabsContent>
