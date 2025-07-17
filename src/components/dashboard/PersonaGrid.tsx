@@ -3,8 +3,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Link } from "react-router-dom";
-import { Persona } from "@/data/mockData";
 import { cn } from "@/lib/utils";
+import { Persona } from "@/types/persona";
 
 interface PersonaGridProps {
   personas: Persona[];
@@ -37,7 +37,7 @@ export function PersonaGrid({ personas, className, onPersonaClick }: PersonaGrid
             {/* Hero Image */}
             <div className="aspect-video w-full overflow-hidden">
               <img 
-                src={persona.avatar || `https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=200&fit=crop&crop=face`}
+                src={persona.avatar_url || `https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=200&fit=crop&crop=face`}
                 alt={persona.name}
                 className="w-full h-full object-cover object-[center_20%]"
               />
@@ -49,57 +49,57 @@ export function PersonaGrid({ personas, className, onPersonaClick }: PersonaGrid
               <div className="flex items-start justify-between">
                 <div>
                   <h3 className="font-semibold text-foreground">{persona.name}</h3>
-                  <p className="text-sm text-muted-foreground">{persona.ageRange} • {persona.careerStage}</p>
+                  <p className="text-sm text-muted-foreground">{persona.age_range} • {persona.occupation}</p>
                 </div>
-                <Badge 
-                  variant={persona.isActive ? "default" : "secondary"}
-                  className={persona.isActive 
-                    ? "bg-secondary text-white hover:bg-secondary/90" 
-                    : "bg-accent text-white hover:bg-accent/90"
-                  }
-                >
-                  {persona.isActive ? "Active" : "Inactive"}
+                <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">
+                  {persona.organization?.name || 'University'}
                 </Badge>
               </div>
 
-            {/* Program & Tagline */}
+            {/* Program & Description */}
             <div className="space-y-2">
-              <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">
-                {persona.program}
-              </Badge>
-              <p className="text-sm text-muted-foreground italic">
-                "{persona.motivationalTagline}"
-              </p>
+              {persona.program_category && (
+                <Badge variant="outline" className="bg-secondary/10 text-secondary border-secondary/20">
+                  {persona.program_category}
+                </Badge>
+              )}
+              {persona.description && (
+                <p className="text-sm text-muted-foreground line-clamp-2">
+                  {persona.description}
+                </p>
+              )}
             </div>
 
-            {/* Performance Metrics */}
+            {/* Details */}
             <div className="grid grid-cols-2 gap-4 p-4 bg-muted/30 rounded-xl">
               <div className="text-center">
-                <p className="text-lg font-semibold text-foreground">{formatCPL(persona.performance.cpl)}</p>
-                <p className="text-xs text-muted-foreground">CPL</p>
+                <p className="text-sm font-medium text-foreground">{persona.industry || 'N/A'}</p>
+                <p className="text-xs text-muted-foreground">Industry</p>
               </div>
               <div className="text-center">
-                <p className="text-lg font-semibold text-foreground">{formatCTR(persona.performance.ctr)}</p>
-                <p className="text-xs text-muted-foreground">CTR</p>
+                <p className="text-sm font-medium text-foreground">{persona.education_level || 'N/A'}</p>
+                <p className="text-xs text-muted-foreground">Education</p>
               </div>
             </div>
 
             {/* Channels */}
-            <div className="space-y-2">
-              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Active Channels</p>
-              <div className="flex flex-wrap gap-1">
-                {persona.channels.slice(0, 3).map((channel) => (
-                  <Badge key={channel} variant="secondary" className="text-xs bg-secondary/60">
-                    {channel}
-                  </Badge>
-                ))}
-                {persona.channels.length > 3 && (
-                  <Badge variant="secondary" className="text-xs bg-secondary/60">
-                    +{persona.channels.length - 3}
-                  </Badge>
-                )}
+            {persona.preferred_channels && persona.preferred_channels.length > 0 && (
+              <div className="space-y-2">
+                <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Preferred Channels</p>
+                <div className="flex flex-wrap gap-1">
+                  {persona.preferred_channels.slice(0, 3).map((channel) => (
+                    <Badge key={channel} variant="secondary" className="text-xs bg-secondary/60">
+                      {channel}
+                    </Badge>
+                  ))}
+                  {persona.preferred_channels.length > 3 && (
+                    <Badge variant="secondary" className="text-xs bg-secondary/60">
+                      +{persona.preferred_channels.length - 3}
+                    </Badge>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
 
               {/* Action Button */}
               <Button 

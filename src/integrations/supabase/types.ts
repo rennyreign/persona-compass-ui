@@ -221,6 +221,7 @@ export type Database = {
           pain_points: string[] | null
           personality_traits: string[] | null
           preferred_channels: string[] | null
+          program_category: string | null
           updated_at: string
           user_id: string
           values: string[] | null
@@ -242,6 +243,7 @@ export type Database = {
           pain_points?: string[] | null
           personality_traits?: string[] | null
           preferred_channels?: string[] | null
+          program_category?: string | null
           updated_at?: string
           user_id: string
           values?: string[] | null
@@ -263,6 +265,7 @@ export type Database = {
           pain_points?: string[] | null
           personality_traits?: string[] | null
           preferred_channels?: string[] | null
+          program_category?: string | null
           updated_at?: string
           user_id?: string
           values?: string[] | null
