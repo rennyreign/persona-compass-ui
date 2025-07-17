@@ -71,22 +71,22 @@ export default function PersonaProfile() {
     
     const { error } = await supabase
       .from('personas')
-      .update({ status: persona.status === 'active' ? 'inactive' : 'active' })
+      .delete()
       .eq('id', persona.id);
       
     if (error) {
-      console.error('Error updating persona status:', error);
+      console.error('Error deleting persona:', error);
       toast({
         title: "Error",
-        description: "Failed to update persona status",
+        description: "Failed to delete persona",
         variant: "destructive",
       });
     } else {
-      setPersona(prev => prev ? { ...prev, status: prev.status === 'active' ? 'inactive' : 'active' } : null);
       toast({
         title: "Success",
-        description: `Persona ${persona.status === 'active' ? 'archived' : 'activated'} successfully`,
+        description: "Persona deleted successfully",
       });
+      navigate("/");
     }
   };
   
