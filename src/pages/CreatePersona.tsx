@@ -79,7 +79,11 @@ const steps = [
 export default function CreatePersona() {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<PersonaFormData>(initialFormData);
-  const [newItem, setNewItem] = useState("");
+  const [newValueItem, setNewValueItem] = useState("");
+  const [newInterestItem, setNewInterestItem] = useState("");
+  const [newGoalItem, setNewGoalItem] = useState("");
+  const [newPainPointItem, setNewPainPointItem] = useState("");
+  const [newChannelItem, setNewChannelItem] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -93,7 +97,34 @@ export default function CreatePersona() {
     if (item.trim()) {
       const currentArray = formData[field] as string[];
       updateFormData(field, [...currentArray, item.trim()]);
-      setNewItem("");
+      
+      // Clear the appropriate input field
+      switch (field) {
+        case 'values':
+          setNewValueItem("");
+          break;
+        case 'interests':
+          setNewInterestItem("");
+          break;
+        case 'goals':
+          setNewGoalItem("");
+          break;
+        case 'fears':
+          setNewPainPointItem("");
+          break;
+        case 'motivations':
+          setNewPainPointItem("");
+          break;
+        case 'channels':
+          setNewChannelItem("");
+          break;
+        case 'programNeeds':
+          setNewChannelItem("");
+          break;
+        case 'moodBoardImages':
+          setNewChannelItem("");
+          break;
+      }
     }
   };
 
@@ -324,12 +355,12 @@ export default function CreatePersona() {
               </div>
               <div className="flex gap-2">
                 <Input
-                  value={newItem}
-                  onChange={(e) => setNewItem(e.target.value)}
+                  value={newValueItem}
+                  onChange={(e) => setNewValueItem(e.target.value)}
                   placeholder="Add a core value"
-                  onKeyPress={(e) => e.key === "Enter" && addArrayItem("values", newItem)}
+                  onKeyPress={(e) => e.key === "Enter" && addArrayItem("values", newValueItem)}
                 />
-                <Button type="button" onClick={() => addArrayItem("values", newItem)}>
+                <Button type="button" onClick={() => addArrayItem("values", newValueItem)}>
                   <Plus className="w-4 h-4" />
                 </Button>
               </div>
@@ -347,12 +378,12 @@ export default function CreatePersona() {
               </div>
               <div className="flex gap-2">
                 <Input
-                  value={newItem}
-                  onChange={(e) => setNewItem(e.target.value)}
+                  value={newInterestItem}
+                  onChange={(e) => setNewInterestItem(e.target.value)}
                   placeholder="Add an interest"
-                  onKeyPress={(e) => e.key === "Enter" && addArrayItem("interests", newItem)}
+                  onKeyPress={(e) => e.key === "Enter" && addArrayItem("interests", newInterestItem)}
                 />
-                <Button type="button" onClick={() => addArrayItem("interests", newItem)}>
+                <Button type="button" onClick={() => addArrayItem("interests", newInterestItem)}>
                   <Plus className="w-4 h-4" />
                 </Button>
               </div>
@@ -385,12 +416,12 @@ export default function CreatePersona() {
               </div>
               <div className="flex gap-2">
                 <Input
-                  value={newItem}
-                  onChange={(e) => setNewItem(e.target.value)}
+                  value={newGoalItem}
+                  onChange={(e) => setNewGoalItem(e.target.value)}
                   placeholder="Add a goal"
-                  onKeyPress={(e) => e.key === "Enter" && addArrayItem("goals", newItem)}
+                  onKeyPress={(e) => e.key === "Enter" && addArrayItem("goals", newGoalItem)}
                 />
-                <Button type="button" onClick={() => addArrayItem("goals", newItem)}>
+                <Button type="button" onClick={() => addArrayItem("goals", newGoalItem)}>
                   <Plus className="w-4 h-4" />
                 </Button>
               </div>
@@ -408,12 +439,12 @@ export default function CreatePersona() {
               </div>
               <div className="flex gap-2">
                 <Input
-                  value={newItem}
-                  onChange={(e) => setNewItem(e.target.value)}
+                  value={newPainPointItem}
+                  onChange={(e) => setNewPainPointItem(e.target.value)}
                   placeholder="Add a fear"
-                  onKeyPress={(e) => e.key === "Enter" && addArrayItem("fears", newItem)}
+                  onKeyPress={(e) => e.key === "Enter" && addArrayItem("fears", newPainPointItem)}
                 />
-                <Button type="button" onClick={() => addArrayItem("fears", newItem)}>
+                <Button type="button" onClick={() => addArrayItem("fears", newPainPointItem)}>
                   <Plus className="w-4 h-4" />
                 </Button>
               </div>
@@ -431,12 +462,12 @@ export default function CreatePersona() {
               </div>
               <div className="flex gap-2">
                 <Input
-                  value={newItem}
-                  onChange={(e) => setNewItem(e.target.value)}
+                  value={newPainPointItem}
+                  onChange={(e) => setNewPainPointItem(e.target.value)}
                   placeholder="Add a motivation"
-                  onKeyPress={(e) => e.key === "Enter" && addArrayItem("motivations", newItem)}
+                  onKeyPress={(e) => e.key === "Enter" && addArrayItem("motivations", newPainPointItem)}
                 />
-                <Button type="button" onClick={() => addArrayItem("motivations", newItem)}>
+                <Button type="button" onClick={() => addArrayItem("motivations", newPainPointItem)}>
                   <Plus className="w-4 h-4" />
                 </Button>
               </div>
@@ -459,12 +490,12 @@ export default function CreatePersona() {
               </div>
               <div className="flex gap-2">
                 <Input
-                  value={newItem}
-                  onChange={(e) => setNewItem(e.target.value)}
+                  value={newChannelItem}
+                  onChange={(e) => setNewChannelItem(e.target.value)}
                   placeholder="Add a communication channel"
-                  onKeyPress={(e) => e.key === "Enter" && addArrayItem("channels", newItem)}
+                  onKeyPress={(e) => e.key === "Enter" && addArrayItem("channels", newChannelItem)}
                 />
-                <Button type="button" onClick={() => addArrayItem("channels", newItem)}>
+                <Button type="button" onClick={() => addArrayItem("channels", newChannelItem)}>
                   <Plus className="w-4 h-4" />
                 </Button>
               </div>
@@ -482,12 +513,12 @@ export default function CreatePersona() {
               </div>
               <div className="flex gap-2">
                 <Input
-                  value={newItem}
-                  onChange={(e) => setNewItem(e.target.value)}
+                  value={newChannelItem}
+                  onChange={(e) => setNewChannelItem(e.target.value)}
                   placeholder="Add a program requirement"
-                  onKeyPress={(e) => e.key === "Enter" && addArrayItem("programNeeds", newItem)}
+                  onKeyPress={(e) => e.key === "Enter" && addArrayItem("programNeeds", newChannelItem)}
                 />
-                <Button type="button" onClick={() => addArrayItem("programNeeds", newItem)}>
+                <Button type="button" onClick={() => addArrayItem("programNeeds", newChannelItem)}>
                   <Plus className="w-4 h-4" />
                 </Button>
               </div>
@@ -527,12 +558,12 @@ export default function CreatePersona() {
               </div>
               <div className="flex gap-2">
                 <Input
-                  value={newItem}
-                  onChange={(e) => setNewItem(e.target.value)}
+                  value={newChannelItem}
+                  onChange={(e) => setNewChannelItem(e.target.value)}
                   placeholder="Add image URL"
-                  onKeyPress={(e) => e.key === "Enter" && addArrayItem("moodBoardImages", newItem)}
+                  onKeyPress={(e) => e.key === "Enter" && addArrayItem("moodBoardImages", newChannelItem)}
                 />
-                <Button type="button" onClick={() => addArrayItem("moodBoardImages", newItem)}>
+                <Button type="button" onClick={() => addArrayItem("moodBoardImages", newChannelItem)}>
                   <Plus className="w-4 h-4" />
                 </Button>
               </div>
