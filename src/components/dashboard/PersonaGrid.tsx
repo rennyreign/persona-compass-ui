@@ -13,6 +13,7 @@ interface PersonaGridProps {
 }
 
 export function PersonaGrid({ personas, className, onPersonaClick }: PersonaGridProps) {
+  console.log('PersonaGrid rendered with personas:', personas.length, personas);
   const getInitials = (name: string) => {
     return name
       .split(' ')

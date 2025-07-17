@@ -56,8 +56,12 @@ export function Dashboard({ className }: DashboardProps) {
   // Fetch personas
   useEffect(() => {
     const fetchPersonas = async () => {
-      if (!user) return;
+      if (!user) {
+        console.log('No user, skipping persona fetch');
+        return;
+      }
 
+      console.log('Fetching personas for user:', user.id, 'Role:', userRole, 'Selected org:', selectedOrganization);
       setLoading(true);
       let query = supabase
         .from('personas')
@@ -66,17 +70,23 @@ export function Dashboard({ className }: DashboardProps) {
           organization:organizations(id, name, subdomain)
         `);
 
+      console.log('Building query...');
+      
       // If not bisk_admin or specific organization selected, filter appropriately
       if (userRole !== 'bisk_admin') {
-        // Regular users see only their organization's personas
+        console.log('User is not bisk_admin, filtering by user_id');
         query = query.eq('user_id', user.id);
       } else if (selectedOrganization !== 'all') {
-        // bisk_admin filtering by specific organization
+        console.log('bisk_admin filtering by organization:', selectedOrganization);
         query = query.eq('organization_id', selectedOrganization);
+      } else {
+        console.log('bisk_admin viewing all personas');
       }
 
       const { data, error } = await query;
       console.log('Fetched personas:', data, 'Error:', error);
+      console.log('Personas count:', data?.length || 0);
+      
       if (error) {
         console.error('Error fetching personas:', error);
       } else {
@@ -87,7 +97,10 @@ export function Dashboard({ className }: DashboardProps) {
     };
 
     if (user && userRole !== null) {
+      console.log('Triggering persona fetch - User:', !!user, 'UserRole:', userRole);
       fetchPersonas();
+    } else {
+      console.log('Not fetching personas - User:', !!user, 'UserRole:', userRole);
     }
   }, [user, userRole, selectedOrganization]);
 
