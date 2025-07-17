@@ -643,13 +643,13 @@ export default function CreatePersona() {
               <a href="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
                 <div className="w-8 h-8 bg-muted rounded-lg flex items-center justify-center overflow-hidden">
                   <img 
-                    src="/lovable-uploads/89175e4f-021a-4be2-a013-b97ccb4af0c3.png" 
-                    alt="MSU Logo" 
+                    src="/lovable-uploads/72598817-6ce0-4807-97ff-e9d4efa363cf.png" 
+                    alt="Bisk Logo" 
                     className="w-6 h-6 object-contain"
                   />
                 </div>
                 <div>
-                  <div className="text-sm font-medium text-foreground">MSU Persona</div>
+                  <div className="text-sm font-medium text-foreground">Bisk Persona</div>
                   <div className="text-xs text-muted-foreground">Intelligence Platform</div>
                 </div>
               </a>
