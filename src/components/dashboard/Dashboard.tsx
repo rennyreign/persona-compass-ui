@@ -27,7 +27,11 @@ export function Dashboard({ className }: DashboardProps) {
   // Fetch user role and organizations
   useEffect(() => {
     const fetchUserRole = async () => {
-      if (!user) return;
+      console.log('Current user:', user);
+      if (!user) {
+        console.log('No user found, skipping role fetch');
+        return;
+      }
       
       const { data } = await supabase.rpc('get_user_organization_role');
       if (data && data.length > 0) {
