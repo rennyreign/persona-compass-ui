@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { KPICard } from "./KPICard";
-import { ActivityFeed } from "./ActivityFeed";
 import { PersonaFilterTabs } from "./PersonaFilterTabs";
 import { PersonaGrid } from "./PersonaGrid";
 import { supabase } from "@/integrations/supabase/client";
