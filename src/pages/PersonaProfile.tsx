@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, Navigate, useNavigate } from "react-router-dom";
 import { ArrowLeft, Edit, Archive, TrendingUp, Target, Brain, User, Images } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -6,28 +6,82 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Separator } from "@/components/ui/separator";
-import { mockPersonas, mockInsights, Persona } from "@/data/mockData";
 import { PersonaPerformanceCharts } from "@/components/persona/PersonaPerformanceCharts";
 import { PersonaCampaigns } from "@/components/persona/PersonaCampaigns";
 import { PersonaInsights } from "@/components/persona/PersonaInsights";
 import { PersonaVisualIdentity } from "@/components/persona/PersonaVisualIdentity";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { TopHeader } from "@/components/layout/TopHeader";
-import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
+
+interface Persona {
+  id: string;
+  name: string;
+  description: string | null;
+  age_range: string | null;
+  occupation: string | null;
+  education_level: string | null;
+  location: string | null;
+  income_range: string | null;
+  industry: string | null;
+  goals: string[] | null;
+  pain_points: string[] | null;
+  personality_traits: string[] | null;
+  values: string[] | null;
+  preferred_channels: string[] | null;
+  program_category: string | null;
+  avatar_url: string | null;
+}
 
 export default function PersonaProfile() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("details");
+  const [persona, setPersona] = useState<Persona | null>(null);
+  const [loading, setLoading] = useState(true);
   
-  const persona = mockPersonas.find(p => p.id === id);
+  useEffect(() => {
+    const fetchPersona = async () => {
+      if (!id) return;
+      
+      setLoading(true);
+      const { data, error } = await supabase
+        .from('personas')
+        .select('*')
+        .eq('id', id)
+        .maybeSingle();
+        
+      if (error) {
+        console.error('Error fetching persona:', error);
+        setPersona(null);
+      } else {
+        setPersona(data);
+      }
+      setLoading(false);
+    };
+    
+    fetchPersona();
+  }, [id]);
+  
+  if (loading) {
+    return (
+      <div className="flex h-screen bg-background">
+        <Sidebar />
+        <div className="flex-1 flex flex-col overflow-hidden">
+          <TopHeader />
+          <div className="flex-1 flex items-center justify-center">
+            <div className="text-center">
+              <div className="text-lg text-muted-foreground">Loading persona...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
   
   if (!persona) {
     return <Navigate to="/404" replace />;
   }
-
-  const personaInsights = mockInsights.filter(insight => insight.personaId === persona.id);
 
   return (
     <div className="flex h-screen bg-background">
@@ -74,9 +128,9 @@ export default function PersonaProfile() {
             <div className="max-w-7xl mx-auto px-6 py-8">
               <div className="flex items-start space-x-6">
                 <Avatar className="w-24 h-24 border-4 border-background shadow-lg">
-                  {persona.avatar ? (
+                  {persona.avatar_url ? (
                     <AvatarImage 
-                      src={persona.avatar} 
+                      src={persona.avatar_url} 
                       alt={persona.name} 
                       className="object-cover object-center"
                     />
@@ -90,39 +144,43 @@ export default function PersonaProfile() {
                 <div className="flex-1 space-y-4">
                   <div>
                     <h1 className="text-3xl font-bold text-foreground mb-2">{persona.name}</h1>
-                    <p className="text-lg text-muted-foreground italic">{persona.motivationalTagline}</p>
+                    <p className="text-lg text-muted-foreground italic">{persona.description || "No description available"}</p>
                   </div>
                   
                   <div className="flex flex-wrap items-center gap-3">
-                    <Badge variant="secondary" className="px-3 py-1">
-                      {persona.program}
-                    </Badge>
-                    <Badge variant="outline" className="px-3 py-1">
-                      {persona.ageRange} years
-                    </Badge>
-                    <Badge variant="outline" className="px-3 py-1">
-                      {persona.careerStage}
-                    </Badge>
-                    {persona.isActive && (
-                      <Badge className="px-3 py-1 bg-green-100 text-green-800 border-green-200">
-                        Active
+                    {persona.program_category && (
+                      <Badge variant="secondary" className="px-3 py-1">
+                        {persona.program_category}
                       </Badge>
                     )}
+                    {persona.age_range && (
+                      <Badge variant="outline" className="px-3 py-1">
+                        {persona.age_range} years
+                      </Badge>
+                    )}
+                    {persona.occupation && (
+                      <Badge variant="outline" className="px-3 py-1">
+                        {persona.occupation}
+                      </Badge>
+                    )}
+                    <Badge className="px-3 py-1 bg-green-100 text-green-800 border-green-200">
+                      Active
+                    </Badge>
                   </div>
                 </div>
 
-                {/* Quick Stats */}
+                {/* Quick Stats - Placeholder for now */}
                 <div className="hidden lg:flex space-x-6">
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-foreground">${persona.performance.cpl.toFixed(0)}</div>
+                    <div className="text-2xl font-bold text-foreground">$45</div>
                     <div className="text-sm text-muted-foreground">CPL</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-foreground">{persona.performance.ctr}%</div>
+                    <div className="text-2xl font-bold text-foreground">3.2%</div>
                     <div className="text-sm text-muted-foreground">CTR</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-foreground">{persona.performance.totalLeads}</div>
+                    <div className="text-2xl font-bold text-foreground">156</div>
                     <div className="text-sm text-muted-foreground">Total Leads</div>
                   </div>
                 </div>
@@ -173,15 +231,19 @@ export default function PersonaProfile() {
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="text-sm font-medium text-muted-foreground">Location</label>
-                      <p className="text-sm text-foreground mt-1">{persona.demographics.location}</p>
+                      <p className="text-sm text-foreground mt-1">{persona.location || "Not specified"}</p>
                     </div>
                     <div>
                       <label className="text-sm font-medium text-muted-foreground">Income Range</label>
-                      <p className="text-sm text-foreground mt-1">{persona.demographics.income}</p>
+                      <p className="text-sm text-foreground mt-1">{persona.income_range || "Not specified"}</p>
                     </div>
                     <div className="col-span-2">
                       <label className="text-sm font-medium text-muted-foreground">Education Level</label>
-                      <p className="text-sm text-foreground mt-1">{persona.demographics.education}</p>
+                      <p className="text-sm text-foreground mt-1">{persona.education_level || "Not specified"}</p>
+                    </div>
+                    <div className="col-span-2">
+                      <label className="text-sm font-medium text-muted-foreground">Industry</label>
+                      <p className="text-sm text-foreground mt-1">{persona.industry || "Not specified"}</p>
                     </div>
                   </div>
                 </CardContent>
@@ -202,77 +264,73 @@ export default function PersonaProfile() {
                   <div>
                     <label className="text-sm font-medium text-muted-foreground">Core Values</label>
                     <div className="flex flex-wrap gap-2 mt-2">
-                      {persona.psychographics.values.map((value, index) => (
-                        <Badge key={index} variant="outline" className="text-xs">
-                          {value}
-                        </Badge>
-                      ))}
+                      {persona.values && persona.values.length > 0 ? (
+                        persona.values.map((value, index) => (
+                          <Badge key={index} variant="outline" className="text-xs">
+                            {value}
+                          </Badge>
+                        ))
+                      ) : (
+                        <p className="text-sm text-muted-foreground">No values specified</p>
+                      )}
                     </div>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-muted-foreground">Interests</label>
+                    <label className="text-sm font-medium text-muted-foreground">Personality Traits</label>
                     <div className="flex flex-wrap gap-2 mt-2">
-                      {persona.psychographics.interests.map((interest, index) => (
-                        <Badge key={index} variant="secondary" className="text-xs">
-                          {interest}
-                        </Badge>
-                      ))}
+                      {persona.personality_traits && persona.personality_traits.length > 0 ? (
+                        persona.personality_traits.map((trait, index) => (
+                          <Badge key={index} variant="secondary" className="text-xs">
+                            {trait}
+                          </Badge>
+                        ))
+                      ) : (
+                        <p className="text-sm text-muted-foreground">No personality traits specified</p>
+                      )}
                     </div>
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium text-muted-foreground">Lifestyle</label>
-                    <p className="text-sm text-foreground mt-1">{persona.psychographics.lifestyle}</p>
                   </div>
                 </CardContent>
               </Card>
             </div>
 
-            {/* Goals, Fears, Motivations */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Goals and Pain Points */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <Card>
                 <CardHeader>
                   <CardTitle className="text-green-600">Goals</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <ul className="space-y-2">
-                    {persona.goals.map((goal, index) => (
-                      <li key={index} className="text-sm text-foreground flex items-start space-x-2">
-                        <span className="text-green-500 mt-0.5">•</span>
-                        <span>{goal}</span>
-                      </li>
-                    ))}
+                    {persona.goals && persona.goals.length > 0 ? (
+                      persona.goals.map((goal, index) => (
+                        <li key={index} className="text-sm text-foreground flex items-start space-x-2">
+                          <span className="text-green-500 mt-0.5">•</span>
+                          <span>{goal}</span>
+                        </li>
+                      ))
+                    ) : (
+                      <li className="text-sm text-muted-foreground">No goals specified</li>
+                    )}
                   </ul>
                 </CardContent>
               </Card>
 
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-red-600">Fears</CardTitle>
+                  <CardTitle className="text-red-600">Pain Points</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <ul className="space-y-2">
-                    {persona.fears.map((fear, index) => (
-                      <li key={index} className="text-sm text-foreground flex items-start space-x-2">
-                        <span className="text-red-500 mt-0.5">•</span>
-                        <span>{fear}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-blue-600">Motivations</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-2">
-                    {persona.motivations.map((motivation, index) => (
-                      <li key={index} className="text-sm text-foreground flex items-start space-x-2">
-                        <span className="text-blue-500 mt-0.5">•</span>
-                        <span>{motivation}</span>
-                      </li>
-                    ))}
+                    {persona.pain_points && persona.pain_points.length > 0 ? (
+                      persona.pain_points.map((painPoint, index) => (
+                        <li key={index} className="text-sm text-foreground flex items-start space-x-2">
+                          <span className="text-red-500 mt-0.5">•</span>
+                          <span>{painPoint}</span>
+                        </li>
+                      ))
+                    ) : (
+                      <li className="text-sm text-muted-foreground">No pain points specified</li>
+                    )}
                   </ul>
                 </CardContent>
               </Card>
@@ -288,31 +346,15 @@ export default function PersonaProfile() {
               </CardHeader>
               <CardContent>
                 <div className="flex flex-wrap gap-3">
-                  {persona.channels.map((channel, index) => (
-                    <Badge key={index} variant="outline" className="px-3 py-1">
-                      {channel}
-                    </Badge>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Program Requirements */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Program Requirements</CardTitle>
-                <CardDescription>
-                  What this persona needs from an educational program
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {persona.programNeeds.map((need, index) => (
-                    <div key={index} className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0" />
-                      <span className="text-sm text-foreground">{need}</span>
-                    </div>
-                  ))}
+                  {persona.preferred_channels && persona.preferred_channels.length > 0 ? (
+                    persona.preferred_channels.map((channel, index) => (
+                      <Badge key={index} variant="outline" className="px-3 py-1">
+                        {channel}
+                      </Badge>
+                    ))
+                  ) : (
+                    <p className="text-sm text-muted-foreground">No preferred channels specified</p>
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -320,13 +362,15 @@ export default function PersonaProfile() {
 
           <TabsContent value="visual">
             <PersonaVisualIdentity 
-              images={persona.moodBoardImages} 
+              images={[]} 
               personaName={persona.name}
             />
           </TabsContent>
 
           <TabsContent value="performance">
-            <PersonaPerformanceCharts persona={persona} />
+            <div className="text-center py-8">
+              <p className="text-muted-foreground">Performance data coming soon...</p>
+            </div>
           </TabsContent>
 
           <TabsContent value="campaigns">
@@ -334,7 +378,9 @@ export default function PersonaProfile() {
           </TabsContent>
 
           <TabsContent value="insights">
-            <PersonaInsights personaId={persona.id} insights={personaInsights} />
+            <div className="text-center py-8">
+              <p className="text-muted-foreground">Insights coming soon...</p>
+            </div>
           </TabsContent>
         </Tabs>
           </div>

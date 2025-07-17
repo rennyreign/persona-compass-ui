@@ -361,6 +361,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      check_user_role: {
+        Args: { _user_id: string; _role: string }
+        Returns: boolean
+      }
       get_user_organization_role: {
         Args: Record<PropertyKey, never>
         Returns: {
