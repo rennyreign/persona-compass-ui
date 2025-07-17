@@ -72,9 +72,11 @@ export function Dashboard({ className }: DashboardProps) {
       }
 
       const { data, error } = await query;
+      console.log('Fetched personas:', data, 'Error:', error);
       if (error) {
         console.error('Error fetching personas:', error);
       } else {
+        console.log('Setting personas:', data || []);
         setPersonas(data || []);
       }
       setLoading(false);
