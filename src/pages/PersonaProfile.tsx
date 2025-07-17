@@ -71,7 +71,7 @@ export default function PersonaProfile() {
     
     const { error } = await supabase
       .from('personas')
-      .update({ status: persona.status === 'active' ? 'archived' : 'active' })
+      .update({ status: persona.status === 'active' ? 'inactive' : 'active' })
       .eq('id', persona.id);
       
     if (error) {
@@ -82,7 +82,7 @@ export default function PersonaProfile() {
         variant: "destructive",
       });
     } else {
-      setPersona(prev => prev ? { ...prev, status: prev.status === 'active' ? 'archived' : 'active' } : null);
+      setPersona(prev => prev ? { ...prev, status: prev.status === 'active' ? 'inactive' : 'active' } : null);
       toast({
         title: "Success",
         description: `Persona ${persona.status === 'active' ? 'archived' : 'activated'} successfully`,
