@@ -222,6 +222,7 @@ export type Database = {
           personality_traits: string[] | null
           preferred_channels: string[] | null
           program_category: string | null
+          status: string | null
           updated_at: string
           user_id: string
           values: string[] | null
@@ -244,6 +245,7 @@ export type Database = {
           personality_traits?: string[] | null
           preferred_channels?: string[] | null
           program_category?: string | null
+          status?: string | null
           updated_at?: string
           user_id: string
           values?: string[] | null
@@ -266,6 +268,7 @@ export type Database = {
           personality_traits?: string[] | null
           preferred_channels?: string[] | null
           program_category?: string | null
+          status?: string | null
           updated_at?: string
           user_id?: string
           values?: string[] | null

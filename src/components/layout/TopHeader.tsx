@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -15,7 +16,13 @@ interface TopHeaderProps {
 }
 
 function NotificationPopover() {
+  const [hasUnreadNotifications, setHasUnreadNotifications] = useState(true);
   const recentInsights = mockInsights.slice(0, 5);
+
+  const handlePopoverOpen = () => {
+    // Mark notifications as read when popover opens
+    setHasUnreadNotifications(false);
+  };
 
   const formatTimestamp = (timestamp: string) => {
     const date = new Date(timestamp);
@@ -39,13 +46,15 @@ function NotificationPopover() {
   };
 
   return (
-    <Popover>
+    <Popover onOpenChange={(open) => open && handlePopoverOpen()}>
       <PopoverTrigger asChild>
         <Button variant="ghost" size="sm" className="relative hover:bg-muted/50">
           <Bell className="w-4 h-4 text-muted-foreground" />
-          <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 bg-destructive text-destructive-foreground text-xs flex items-center justify-center">
-            {recentInsights.length}
-          </Badge>
+          {hasUnreadNotifications && (
+            <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 bg-destructive text-destructive-foreground text-xs flex items-center justify-center">
+              {recentInsights.length}
+            </Badge>
+          )}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-80 p-0" align="end">

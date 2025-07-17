@@ -15,6 +15,7 @@ export type Persona = {
   description: string | null;
   program_category: string | null;
   avatar_url: string | null;
+  status: string;
   organization_id: string | null;
   user_id: string;
   created_at: string;

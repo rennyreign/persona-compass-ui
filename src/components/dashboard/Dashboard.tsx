@@ -1,11 +1,12 @@
 import { useState, useMemo, useEffect } from "react";
-import { Users, FileText, DollarSign, GraduationCap, Plus } from "lucide-react";
+import { Users, FileText, DollarSign, GraduationCap, Plus, Building } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { KPICard } from "./KPICard";
 import { PersonaFilterTabs } from "./PersonaFilterTabs";
 import { PersonaGrid } from "./PersonaGrid";
+import { CreateUniversityDialog } from "./CreateUniversityDialog";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
@@ -17,11 +18,13 @@ interface DashboardProps {
 
 export function Dashboard({ className }: DashboardProps) {
   const [activeFilter, setActiveFilter] = useState('all');
+  const [statusFilter, setStatusFilter] = useState('all');
   const [selectedOrganization, setSelectedOrganization] = useState<string>('all');
   const [personas, setPersonas] = useState<Persona[]>([]);
   const [organizations, setOrganizations] = useState<Organization[]>([]);
   const [userRole, setUserRole] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showCreateUniversity, setShowCreateUniversity] = useState(false);
   const { user } = useAuth();
 
   // Fetch user role and organizations
@@ -105,11 +108,20 @@ export function Dashboard({ className }: DashboardProps) {
   }, [user, userRole, selectedOrganization]);
 
   const filteredPersonas = useMemo(() => {
-    if (activeFilter === 'all') {
-      return personas;
+    let filtered = personas;
+    
+    // Apply status filter
+    if (statusFilter !== 'all') {
+      filtered = filtered.filter(p => p.status === statusFilter);
     }
-    return personas.filter(p => p.program_category === activeFilter);
-  }, [personas, activeFilter]);
+    
+    // Apply program category filter
+    if (activeFilter !== 'all') {
+      filtered = filtered.filter(p => p.program_category === activeFilter);
+    }
+    
+    return filtered;
+  }, [personas, activeFilter, statusFilter]);
 
   // Get unique program categories for current filtered personas
   const availablePrograms = useMemo(() => {
@@ -197,6 +209,14 @@ export function Dashboard({ className }: DashboardProps) {
               </Select>
             )}
             
+            {/* Create University Button - Only for bisk_admin */}
+            {userRole === 'bisk_admin' && (
+              <Button variant="outline" onClick={() => setShowCreateUniversity(true)}>
+                <Building className="w-4 h-4 mr-2" />
+                Create University
+              </Button>
+            )}
+            
             <Link to="/create-persona">
               <Button>
                 <Plus className="w-4 h-4 mr-2" />
@@ -212,6 +232,8 @@ export function Dashboard({ className }: DashboardProps) {
           availablePrograms={availablePrograms}
           activeFilter={activeFilter}
           onFilterChange={setActiveFilter}
+          statusFilter={statusFilter}
+          onStatusFilterChange={setStatusFilter}
         />
         
         {/* Personas Grid */}
@@ -227,6 +249,25 @@ export function Dashboard({ className }: DashboardProps) {
         )}
       </div>
 
+      {/* Create University Dialog */}
+      {showCreateUniversity && (
+        <CreateUniversityDialog
+          open={showCreateUniversity}
+          onOpenChange={setShowCreateUniversity}
+          onUniversityCreated={() => {
+            // Refresh organizations list
+            if (userRole === 'bisk_admin') {
+              supabase
+                .from('organizations')
+                .select('id, name, subdomain')
+                .order('name')
+                .then(({ data }) => {
+                  if (data) setOrganizations(data);
+                });
+            }
+          }}
+        />
+      )}
     </div>
   );
 }
