@@ -20,7 +20,7 @@ SELECT
   END as campaign_type,
   CASE 
     WHEN ROW_NUMBER() OVER (PARTITION BY p.user_id ORDER BY p.created_at) = 1 THEN 'active'
-    WHEN ROW_NUMBER() OVER (PARTITION BY p.user_id ORDER BY p.created_at) = 2 THEN 'planning'
+    WHEN ROW_NUMBER() OVER (PARTITION BY p.user_id ORDER BY p.created_at) = 2 THEN 'paused'
     ELSE 'draft'
   END as status,
   CASE 

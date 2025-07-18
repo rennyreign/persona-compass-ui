@@ -191,15 +191,28 @@ export function PersonaCampaigns({ personaId }: PersonaCampaignsProps) {
                       {formatDate(campaign.start_date)}
                     </TableCell>
                     <TableCell>
-                      <Link to={`/campaign/${campaign.id}`}>
-                        <Button 
-                          variant="ghost" 
-                          size="sm" 
-                          className="hover:bg-green-50 hover:text-green-600"
-                        >
-                          <ExternalLink className="w-4 h-4" />
-                        </Button>
-                      </Link>
+                      <div className="flex gap-1">
+                        <Link to={`/campaign/${campaign.id}`}>
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            className="hover:bg-green-50 hover:text-green-600"
+                            title="View Campaign"
+                          >
+                            <ExternalLink className="w-4 h-4" />
+                          </Button>
+                        </Link>
+                        <Link to={`/campaign/${campaign.id}/plan`}>
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            className="hover:bg-blue-50 hover:text-blue-600"
+                            title="View Campaign Plan"
+                          >
+                            <FileText className="w-4 h-4" />
+                          </Button>
+                        </Link>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}
