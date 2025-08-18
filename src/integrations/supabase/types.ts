@@ -7,13 +7,82 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instanciate createClient with right options
+  // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: "12.2.3 (519615d)"
   }
   public: {
     Tables: {
+      ab_experiments: {
+        Row: {
+          confidence_level: number | null
+          created_at: string
+          description: string | null
+          end_date: string | null
+          hypothesis: string | null
+          id: string
+          name: string
+          organization_id: string | null
+          persona_id: string
+          results: Json | null
+          sample_size_target: number | null
+          start_date: string | null
+          statistical_significance: boolean | null
+          status: string | null
+          test_metric: string
+          updated_at: string
+          user_id: string
+          variant_a_description: string
+          variant_b_description: string
+          winner_variant: string | null
+        }
+        Insert: {
+          confidence_level?: number | null
+          created_at?: string
+          description?: string | null
+          end_date?: string | null
+          hypothesis?: string | null
+          id?: string
+          name: string
+          organization_id?: string | null
+          persona_id: string
+          results?: Json | null
+          sample_size_target?: number | null
+          start_date?: string | null
+          statistical_significance?: boolean | null
+          status?: string | null
+          test_metric: string
+          updated_at?: string
+          user_id: string
+          variant_a_description: string
+          variant_b_description: string
+          winner_variant?: string | null
+        }
+        Update: {
+          confidence_level?: number | null
+          created_at?: string
+          description?: string | null
+          end_date?: string | null
+          hypothesis?: string | null
+          id?: string
+          name?: string
+          organization_id?: string | null
+          persona_id?: string
+          results?: Json | null
+          sample_size_target?: number | null
+          start_date?: string | null
+          statistical_significance?: boolean | null
+          status?: string | null
+          test_metric?: string
+          updated_at?: string
+          user_id?: string
+          variant_a_description?: string
+          variant_b_description?: string
+          winner_variant?: string | null
+        }
+        Relationships: []
+      }
       campaign_performance: {
         Row: {
           campaign_id: string
@@ -88,6 +157,7 @@ export type Database = {
       }
       campaigns: {
         Row: {
+          attribution_score: number | null
           budget: number | null
           campaign_type: string | null
           channels: string[] | null
@@ -95,10 +165,16 @@ export type Database = {
           creative_assets: string[] | null
           description: string | null
           end_date: string | null
+          expected_cpl: number | null
+          expected_ctr: number | null
+          experiment_id: string | null
+          experiment_variant: string | null
           id: string
+          messaging_variant: string | null
           objectives: string[] | null
           organization_id: string | null
           persona_id: string
+          persona_traits_tested: string[] | null
           start_date: string | null
           status: string | null
           target_metrics: string[] | null
@@ -107,6 +183,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          attribution_score?: number | null
           budget?: number | null
           campaign_type?: string | null
           channels?: string[] | null
@@ -114,10 +191,16 @@ export type Database = {
           creative_assets?: string[] | null
           description?: string | null
           end_date?: string | null
+          expected_cpl?: number | null
+          expected_ctr?: number | null
+          experiment_id?: string | null
+          experiment_variant?: string | null
           id?: string
+          messaging_variant?: string | null
           objectives?: string[] | null
           organization_id?: string | null
           persona_id: string
+          persona_traits_tested?: string[] | null
           start_date?: string | null
           status?: string | null
           target_metrics?: string[] | null
@@ -126,6 +209,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          attribution_score?: number | null
           budget?: number | null
           campaign_type?: string | null
           channels?: string[] | null
@@ -133,10 +217,16 @@ export type Database = {
           creative_assets?: string[] | null
           description?: string | null
           end_date?: string | null
+          expected_cpl?: number | null
+          expected_ctr?: number | null
+          experiment_id?: string | null
+          experiment_variant?: string | null
           id?: string
+          messaging_variant?: string | null
           objectives?: string[] | null
           organization_id?: string | null
           persona_id?: string
+          persona_traits_tested?: string[] | null
           start_date?: string | null
           status?: string | null
           target_metrics?: string[] | null
@@ -250,6 +340,63 @@ export type Database = {
           settings?: Json | null
           subdomain?: string | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      persona_performance_tracking: {
+        Row: {
+          avg_cpl: number | null
+          avg_ctr: number | null
+          campaign_count: number | null
+          conversion_rate: number | null
+          cost_efficiency: number | null
+          created_at: string
+          date: string
+          effectiveness_score: number | null
+          id: string
+          organization_id: string | null
+          persona_id: string
+          roi_score: number | null
+          total_leads: number | null
+          total_spend: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          avg_cpl?: number | null
+          avg_ctr?: number | null
+          campaign_count?: number | null
+          conversion_rate?: number | null
+          cost_efficiency?: number | null
+          created_at?: string
+          date?: string
+          effectiveness_score?: number | null
+          id?: string
+          organization_id?: string | null
+          persona_id: string
+          roi_score?: number | null
+          total_leads?: number | null
+          total_spend?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          avg_cpl?: number | null
+          avg_ctr?: number | null
+          campaign_count?: number | null
+          conversion_rate?: number | null
+          cost_efficiency?: number | null
+          created_at?: string
+          date?: string
+          effectiveness_score?: number | null
+          id?: string
+          organization_id?: string | null
+          persona_id?: string
+          roi_score?: number | null
+          total_leads?: number | null
+          total_spend?: number | null
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -417,6 +564,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      calculate_persona_effectiveness: {
+        Args: { _end_date?: string; _persona_id: string; _start_date?: string }
+        Returns: number
+      }
       can_manage_personas_in_org: {
         Args: { _org_id: string; _user_id: string }
         Returns: boolean
@@ -426,7 +577,7 @@ export type Database = {
         Returns: boolean
       }
       check_user_role: {
-        Args: { _user_id: string; _role: string }
+        Args: { _role: string; _user_id: string }
         Returns: boolean
       }
       get_user_organization_role: {
