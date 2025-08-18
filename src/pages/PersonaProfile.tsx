@@ -10,6 +10,7 @@ import { PersonaPerformanceCharts } from "@/components/persona/PersonaPerformanc
 import { PersonaCampaigns } from "@/components/persona/PersonaCampaigns";
 import { PersonaInsights } from "@/components/persona/PersonaInsights";
 import { PersonaVisualIdentity } from "@/components/persona/PersonaVisualIdentity";
+import { PersonaValidation } from "@/components/persona/PersonaValidation";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { TopHeader } from "@/components/layout/TopHeader";
 import { supabase } from "@/integrations/supabase/client";
@@ -222,10 +223,14 @@ export default function PersonaProfile() {
           {/* Main Content */}
           <div className="max-w-7xl mx-auto px-6 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5 lg:w-auto lg:grid-cols-5">
+          <TabsList className="grid w-full grid-cols-6 lg:w-auto lg:grid-cols-6">
             <TabsTrigger value="details" className="flex items-center space-x-2">
               <User className="w-4 h-4" />
               <span>Details</span>
+            </TabsTrigger>
+            <TabsTrigger value="validation" className="flex items-center space-x-2">
+              <Target className="w-4 h-4" />
+              <span>Validation</span>
             </TabsTrigger>
             <TabsTrigger value="visual" className="flex items-center space-x-2">
               <Images className="w-4 h-4" />
@@ -389,6 +394,10 @@ export default function PersonaProfile() {
                 </div>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          <TabsContent value="validation">
+            <PersonaValidation persona={persona} />
           </TabsContent>
 
           <TabsContent value="visual">

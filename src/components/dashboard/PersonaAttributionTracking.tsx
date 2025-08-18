@@ -230,6 +230,7 @@ export function PersonaAttributionTracking({ className }: PersonaAttributionTrac
           <TabsTrigger value="personas">Persona Performance</TabsTrigger>
           <TabsTrigger value="traits">Trait Analysis</TabsTrigger>
           <TabsTrigger value="experiments">A/B Tests</TabsTrigger>
+          <TabsTrigger value="usage">Usage Enforcement</TabsTrigger>
         </TabsList>
 
         <TabsContent value="personas" className="space-y-4">

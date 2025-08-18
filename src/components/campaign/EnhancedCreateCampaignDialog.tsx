@@ -101,7 +101,21 @@ export function EnhancedCreateCampaignDialog({ trigger, onCampaignCreated }: Enh
       return;
     }
     
-    setPersonas(data || []);
+    // Filter personas that have sufficient data for campaigns
+    const validPersonas = (data || []).filter(persona => 
+      validatePersonaForCampaign(persona)
+    );
+    
+    setPersonas(validPersonas);
+  };
+
+  const validatePersonaForCampaign = (persona: Persona) => {
+    // Check if persona has minimum required fields
+    const hasBasicInfo = persona.name && persona.description;
+    const hasTargetingData = persona.age_range || persona.occupation || persona.industry;
+    const hasChannelData = persona.preferred_channels && persona.preferred_channels.length > 0;
+    
+    return hasBasicInfo && hasTargetingData && hasChannelData;
   };
 
   const onSubmit = async (data: EnhancedCreateCampaignFormData) => {
@@ -222,11 +236,20 @@ export function EnhancedCreateCampaignDialog({ trigger, onCampaignCreated }: Enh
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {personas.map((persona) => (
-                          <SelectItem key={persona.id} value={persona.id}>
-                            {persona.name} - {persona.program_category}
+                        {personas.length === 0 ? (
+                          <SelectItem value="" disabled>
+                            No valid personas available. Create personas with complete targeting data.
                           </SelectItem>
-                        ))}
+                        ) : (
+                          personas.map((persona) => (
+                            <SelectItem key={persona.id} value={persona.id}>
+                              {persona.name} - {persona.program_category}
+                              <div className="text-xs text-muted-foreground ml-2">
+                                {persona.preferred_channels?.join(', ')}
+                              </div>
+                            </SelectItem>
+                          ))
+                        )}
                       </SelectContent>
                     </Select>
                     <FormMessage />

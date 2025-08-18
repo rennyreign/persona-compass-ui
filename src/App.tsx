@@ -15,6 +15,7 @@ import Campaigns from "./pages/Campaigns";
 import Performance from "./pages/Performance";
 import Insights from "./pages/Insights";
 import AttributionTracking from "./pages/AttributionTracking";
+import PersonaValidationPage from "./pages/PersonaValidation";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -71,6 +72,11 @@ const App = () => (
             <Route path="/attribution" element={
               <ProtectedRoute>
                 <AttributionTracking />
+              </ProtectedRoute>
+            } />
+            <Route path="/persona/validate/:personaId" element={
+              <ProtectedRoute>
+                <PersonaValidationPage />
               </ProtectedRoute>
             } />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
