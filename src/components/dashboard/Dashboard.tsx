@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
-import { Users, FileText, DollarSign, GraduationCap, Plus, Building } from "lucide-react";
+import { Users, FileText, DollarSign, GraduationCap, Plus, Building, Target, FlaskConical } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -7,6 +7,9 @@ import { KPICard } from "./KPICard";
 import { PersonaFilterTabs } from "./PersonaFilterTabs";
 import { PersonaGrid } from "./PersonaGrid";
 import { CreateUniversityDialog } from "./CreateUniversityDialog";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { EnhancedCreateCampaignDialog } from "@/components/campaign/EnhancedCreateCampaignDialog";
+import { ABTestingDialog } from "@/components/experiments/ABTestingDialog";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
@@ -235,6 +238,58 @@ export function Dashboard({ className }: DashboardProps) {
           statusFilter={statusFilter}
           onStatusFilterChange={setStatusFilter}
         />
+
+        {/* Attribution Tracking Preview */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Target className="w-5 h-5" />
+                Attribution Tracking
+              </div>
+              <Link to="/attribution">
+                <Button variant="outline" size="sm">
+                  View Full Dashboard
+                </Button>
+              </Link>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="text-center p-4 border rounded-lg">
+                <div className="text-2xl font-bold text-primary mb-2">87.3</div>
+                <div className="text-sm text-muted-foreground">Avg Effectiveness Score</div>
+              </div>
+              <div className="text-center p-4 border rounded-lg">
+                <div className="text-2xl font-bold text-green-600 mb-2">3</div>
+                <div className="text-sm text-muted-foreground">Active A/B Tests</div>
+              </div>
+              <div className="text-center p-4 border rounded-lg">
+                <div className="text-2xl font-bold text-blue-600 mb-2">14</div>
+                <div className="text-sm text-muted-foreground">Traits Analyzed</div>
+              </div>
+            </div>
+            
+            <div className="mt-4 flex gap-2">
+              <EnhancedCreateCampaignDialog 
+                trigger={
+                  <Button size="sm">
+                    <Plus className="w-4 h-4 mr-2" />
+                    Create Campaign
+                  </Button>
+                }
+              />
+              <ABTestingDialog 
+                trigger={
+                  <Button variant="outline" size="sm">
+                    <FlaskConical className="w-4 h-4 mr-2" />
+                    Create A/B Test
+                  </Button>
+                }
+              />
+            </div>
+          </CardContent>
+        </Card>
         
         {/* Personas Grid */}
         {loading ? (

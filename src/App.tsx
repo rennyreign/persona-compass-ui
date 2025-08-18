@@ -14,6 +14,7 @@ import CampaignPlan from "./pages/CampaignPlan";
 import Campaigns from "./pages/Campaigns";
 import Performance from "./pages/Performance";
 import Insights from "./pages/Insights";
+import AttributionTracking from "./pages/AttributionTracking";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -65,6 +66,11 @@ const App = () => (
             <Route path="/insights" element={
               <ProtectedRoute>
                 <Insights />
+              </ProtectedRoute>
+            } />
+            <Route path="/attribution" element={
+              <ProtectedRoute>
+                <AttributionTracking />
               </ProtectedRoute>
             } />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

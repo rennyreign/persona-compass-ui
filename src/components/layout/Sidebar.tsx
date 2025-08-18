@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Home, Users, Megaphone, Lightbulb, Target } from "lucide-react";
+import { Home, Users, Megaphone, Lightbulb, Target, GitBranch } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -36,6 +36,12 @@ export function Sidebar({ className }: SidebarProps) {
       href: '/insights',
       icon: Lightbulb,
       isActive: window.location.pathname === '/insights'
+    },
+    {
+      name: 'Attribution',
+      href: '/attribution',
+      icon: GitBranch,
+      isActive: window.location.pathname === '/attribution'
     },
   ];
 

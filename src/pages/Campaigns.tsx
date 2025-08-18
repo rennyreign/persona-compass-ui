@@ -9,7 +9,7 @@ import { ExternalLink, Search, Plus } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { TopHeader } from "@/components/layout/TopHeader";
-import { CreateCampaignDialog } from "@/components/campaign/CreateCampaignDialog";
+import { EnhancedCreateCampaignDialog } from "@/components/campaign/EnhancedCreateCampaignDialog";
 import { supabase } from "@/integrations/supabase/client";
 
 export default function Campaigns() {
@@ -128,7 +128,19 @@ export default function Campaigns() {
                     Manage and monitor all marketing campaigns across personas
                   </p>
                 </div>
-                <CreateCampaignDialog />
+                <EnhancedCreateCampaignDialog 
+                  onCampaignCreated={() => {
+                    // Refresh campaigns list
+                    const fetchCampaigns = async () => {
+                      const { data, error } = await supabase
+                        .from('campaigns')
+                        .select('*')
+                        .order('created_at', { ascending: false });
+                      if (!error) setCampaigns(data || []);
+                    };
+                    fetchCampaigns();
+                  }}
+                />
               </div>
             </div>
 
