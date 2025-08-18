@@ -257,16 +257,19 @@ export function Dashboard({ className }: DashboardProps) {
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="text-center p-4 border rounded-lg">
-                <div className="text-2xl font-bold text-primary mb-2">87.3</div>
+                <div className="text-2xl font-bold text-muted-foreground mb-2">--</div>
                 <div className="text-sm text-muted-foreground">Avg Effectiveness Score</div>
+                <div className="text-xs text-muted-foreground mt-1">No performance data yet</div>
               </div>
               <div className="text-center p-4 border rounded-lg">
-                <div className="text-2xl font-bold text-green-600 mb-2">3</div>
+                <div className="text-2xl font-bold text-muted-foreground mb-2">0</div>
                 <div className="text-sm text-muted-foreground">Active A/B Tests</div>
+                <div className="text-xs text-muted-foreground mt-1">Create your first experiment</div>
               </div>
               <div className="text-center p-4 border rounded-lg">
-                <div className="text-2xl font-bold text-blue-600 mb-2">14</div>
+                <div className="text-2xl font-bold text-muted-foreground mb-2">0</div>
                 <div className="text-sm text-muted-foreground">Traits Analyzed</div>
+                <div className="text-xs text-muted-foreground mt-1">Run campaigns to analyze traits</div>
               </div>
             </div>
             
