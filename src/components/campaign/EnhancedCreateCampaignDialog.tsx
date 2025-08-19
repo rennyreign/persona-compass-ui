@@ -204,153 +204,134 @@ export function EnhancedCreateCampaignDialog({ trigger, onCampaignCreated }: Enh
           </Button>
         )}
       </DialogTrigger>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-primary/95 backdrop-blur-sm border border-primary/20 shadow-2xl">
-        <DialogHeader className="pb-6 border-b border-white/10">
-          <DialogTitle className="flex items-center gap-3 text-xl text-white">
-            <div className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center">
-              <Target className="w-5 h-5 text-white" />
-            </div>
-            <div>
-              <div className="text-xl font-semibold">Create Attribution-Tracked Campaign</div>
-              <div className="text-sm text-white/70 font-normal mt-1">
-                Set up a new campaign with persona attribution tracking and performance prediction
-              </div>
-            </div>
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2">
+            <Target className="w-5 h-5" />
+            Create Attribution-Tracked Campaign
           </DialogTitle>
+          <DialogDescription>
+            Set up a new campaign with persona attribution tracking and performance prediction
+          </DialogDescription>
         </DialogHeader>
         
-        <div className="px-1 py-6">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            {/* Basic Campaign Info Section */}
-            <div className="space-y-6">
-              <div className="flex items-center gap-2 pb-2 border-b border-white/10">
-                <h3 className="text-lg font-semibold text-white">Campaign Details</h3>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <FormField
-                  control={form.control}
-                  name="personaId"
-                  rules={{ required: "Please select a persona" }}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-sm font-medium text-white">Target Persona *</FormLabel>
-                      <Select onValueChange={(value) => {
-                        field.onChange(value);
-                        handlePersonaSelect(value);
-                      }} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger className="h-11 bg-white border-white/20 text-primary hover:border-white/40 transition-colors">
-                            <SelectValue placeholder="Select persona" className="text-muted-foreground" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent className="bg-white border border-border z-50">
-                          {personas.length === 0 ? (
-                            <SelectItem value="" disabled className="text-muted-foreground">
-                              No valid personas available. Create personas with complete targeting data.
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            {/* Basic Campaign Info */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="personaId"
+                rules={{ required: "Please select a persona" }}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Target Persona *</FormLabel>
+                    <Select onValueChange={(value) => {
+                      field.onChange(value);
+                      handlePersonaSelect(value);
+                    }} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select persona" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {personas.length === 0 ? (
+                          <SelectItem value="" disabled>
+                            No valid personas available. Create personas with complete targeting data.
+                          </SelectItem>
+                        ) : (
+                          personas.map((persona) => (
+                            <SelectItem key={persona.id} value={persona.id}>
+                              {persona.name} - {persona.program_category}
+                              <div className="text-xs text-muted-foreground ml-2">
+                                {persona.preferred_channels?.join(', ')}
+                              </div>
                             </SelectItem>
-                          ) : (
-                            personas.map((persona) => (
-                              <SelectItem key={persona.id} value={persona.id} className="hover:bg-muted text-foreground">
-                                <div className="flex flex-col">
-                                  <span className="font-medium">{persona.name} - {persona.program_category}</span>
-                                  <span className="text-xs text-muted-foreground">
-                                    {persona.preferred_channels?.join(', ')}
-                                  </span>
-                                </div>
-                              </SelectItem>
-                            ))
-                          )}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage className="text-red-300" />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="channel"
-                  rules={{ required: "Please select a channel" }}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-sm font-medium text-white">Marketing Channel *</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger className="h-11 bg-white border-white/20 text-primary hover:border-white/40 transition-colors">
-                            <SelectValue placeholder="Select channel" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent className="bg-white border border-border z-50">
-                          {channels.map((channel) => (
-                            <SelectItem key={channel} value={channel} className="hover:bg-muted text-foreground">
-                              {channel}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage className="text-red-300" />
-                    </FormItem>
-                  )}
-                />
-              </div>
+                          ))
+                        )}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
               <FormField
                 control={form.control}
-                name="name"
-                rules={{ required: "Campaign name is required" }}
+                name="channel"
+                rules={{ required: "Please select a channel" }}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium text-white">Campaign Name *</FormLabel>
-                    <FormControl>
-                      <Input 
-                        placeholder="Enter campaign name" 
-                        className="h-11 bg-white border-white/20 text-primary placeholder:text-muted-foreground hover:border-white/40 focus:border-white transition-colors"
-                        {...field} 
-                      />
-                    </FormControl>
-                    <FormMessage className="text-red-300" />
+                    <FormLabel>Marketing Channel *</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select channel" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {channels.map((channel) => (
+                          <SelectItem key={channel} value={channel}>
+                            {channel}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
             </div>
 
+            <FormField
+              control={form.control}
+              name="name"
+              rules={{ required: "Campaign name is required" }}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Campaign Name *</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter campaign name" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             {/* Attribution Tracking Section */}
-            <div className="bg-white/5 border border-white/10 rounded-xl p-6 space-y-6">
-              <div className="flex items-center gap-3 pb-3 border-b border-white/10">
-                <div className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center">
-                  <TrendingUp className="w-4 h-4 text-white" />
-                </div>
-                <h3 className="text-lg font-semibold text-white">Attribution Tracking</h3>
-              </div>
+            <div className="border rounded-lg p-4 space-y-4">
+              <h3 className="text-lg font-semibold flex items-center gap-2">
+                <TrendingUp className="w-5 h-5" />
+                Attribution Tracking
+              </h3>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
                   name="messagingVariant"
                   rules={{ required: "Please select a messaging variant" }}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm font-medium text-white">Messaging Variant *</FormLabel>
+                      <FormLabel>Messaging Variant *</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
-                          <SelectTrigger className="h-11 bg-white border-white/20 text-primary hover:border-white/40 transition-colors">
+                          <SelectTrigger>
                             <SelectValue placeholder="Select messaging approach" />
                           </SelectTrigger>
                         </FormControl>
-                        <SelectContent className="bg-white border border-border z-50">
+                        <SelectContent>
                           {messagingVariants.map((variant) => (
-                            <SelectItem key={variant} value={variant} className="hover:bg-muted text-foreground">
+                            <SelectItem key={variant} value={variant}>
                               {variant}
                             </SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
-                      <FormDescription className="text-xs text-white/60 mt-2">
+                      <FormDescription>
                         This helps track which messaging approaches work best for this persona
                       </FormDescription>
-                      <FormMessage className="text-red-300" />
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -361,39 +342,34 @@ export function EnhancedCreateCampaignDialog({ trigger, onCampaignCreated }: Enh
                   rules={{ required: "Call-to-action is required" }}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm font-medium text-white">Call-to-Action *</FormLabel>
+                      <FormLabel>Call-to-Action *</FormLabel>
                       <FormControl>
-                        <Input 
-                          placeholder="e.g., Sign up for free trial" 
-                          className="h-11 bg-white border-white/20 text-primary placeholder:text-muted-foreground hover:border-white/40 focus:border-white transition-colors"
-                          {...field} 
-                        />
+                        <Input placeholder="e.g., Sign up for free trial" {...field} />
                       </FormControl>
-                      <FormMessage className="text-red-300" />
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
               </div>
 
               {/* Performance Predictions */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <FormField
                   control={form.control}
                   name="expectedCpl"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm font-medium text-white">Expected CPL ($)</FormLabel>
+                      <FormLabel>Expected CPL ($)</FormLabel>
                       <FormControl>
                         <Input 
                           type="number" 
                           step="0.01" 
                           placeholder="e.g., 75.00" 
-                          className="h-11 bg-white border-white/20 text-primary placeholder:text-muted-foreground hover:border-white/40 focus:border-white transition-colors"
                           {...field}
                           onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
                         />
                       </FormControl>
-                      <FormDescription className="text-xs text-white/60 mt-1">
+                      <FormDescription>
                         Predicted cost per lead
                       </FormDescription>
                     </FormItem>
@@ -405,18 +381,17 @@ export function EnhancedCreateCampaignDialog({ trigger, onCampaignCreated }: Enh
                   name="expectedCtr"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm font-medium text-white">Expected CTR (%)</FormLabel>
+                      <FormLabel>Expected CTR (%)</FormLabel>
                       <FormControl>
                         <Input 
                           type="number" 
                           step="0.1" 
                           placeholder="e.g., 2.5" 
-                          className="h-11 bg-white border-white/20 text-primary placeholder:text-muted-foreground hover:border-white/40 focus:border-white transition-colors"
                           {...field}
                           onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
                         />
                       </FormControl>
-                      <FormDescription className="text-xs text-white/60 mt-1">
+                      <FormDescription>
                         Predicted click-through rate
                       </FormDescription>
                     </FormItem>
@@ -429,15 +404,11 @@ export function EnhancedCreateCampaignDialog({ trigger, onCampaignCreated }: Enh
                   rules={{ required: "Start date is required" }}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm font-medium text-white">Start Date *</FormLabel>
+                      <FormLabel>Start Date *</FormLabel>
                       <FormControl>
-                        <Input 
-                          type="date" 
-                          className="h-11 bg-white border-white/20 text-primary hover:border-white/40 focus:border-white transition-colors"
-                          {...field} 
-                        />
+                        <Input type="date" {...field} />
                       </FormControl>
-                      <FormMessage className="text-red-300" />
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -445,63 +416,51 @@ export function EnhancedCreateCampaignDialog({ trigger, onCampaignCreated }: Enh
 
               {/* Persona Traits Being Tested */}
               {selectedPersona && (
-                <div className="space-y-3 pt-4 border-t border-white/10">
-                  <FormLabel className="text-sm font-medium text-white">Persona Traits Being Tested</FormLabel>
+                <div className="space-y-2">
+                  <FormLabel>Persona Traits Being Tested</FormLabel>
                   <div className="flex flex-wrap gap-2">
                     {form.watch('personaTraitsTested').map((trait, index) => (
-                      <Badge key={index} variant="secondary" className="bg-white/10 text-white border-white/20 hover:bg-white/20 transition-colors">
+                      <Badge key={index} variant="secondary">
                         {trait}
                       </Badge>
                     ))}
                   </div>
-                  <FormDescription className="text-xs text-white/60">
+                  <FormDescription>
                     These traits will be tracked to see which drive the best performance
                   </FormDescription>
                 </div>
               )}
             </div>
 
-            {/* Campaign Content Section */}
-            <div className="space-y-4">
-              <div className="flex items-center gap-2 pb-2 border-b border-white/10">
-                <h3 className="text-lg font-semibold text-white">Campaign Content</h3>
-              </div>
-              
-              <FormField
-                control={form.control}
-                name="markdownContent"
-                rules={{ required: "Campaign content is required" }}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-sm font-medium text-white">Campaign Plan Content *</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder="Paste your campaign markdown content here or type directly..."
-                        className="min-h-[200px] font-mono bg-white border-white/20 text-primary placeholder:text-muted-foreground hover:border-white/40 focus:border-white transition-colors resize-none"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormDescription className="text-xs text-white/60">
-                      Import your campaign plan markdown or create content directly in this editor
-                    </FormDescription>
-                    <FormMessage className="text-red-300" />
-                  </FormItem>
-                )}
-              />
-            </div>
+            <FormField
+              control={form.control}
+              name="markdownContent"
+              rules={{ required: "Campaign content is required" }}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Campaign Plan Content *</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Paste your campaign markdown content here or type directly..."
+                      className="min-h-[200px] font-mono"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Import your campaign plan markdown or create content directly in this editor
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </form>
         </Form>
-        </div>
 
-        <DialogFooter className="pt-6 border-t border-white/10 bg-primary/95">
-          <Button variant="outline" onClick={() => setOpen(false)} className="border-white/20 text-white hover:bg-white/10">
+        <DialogFooter>
+          <Button variant="outline" onClick={() => setOpen(false)}>
             Cancel
           </Button>
-          <Button 
-            onClick={form.handleSubmit(onSubmit)} 
-            disabled={loading}
-            className="bg-white text-primary hover:bg-white/90 shadow-sm font-medium"
-          >
+          <Button onClick={form.handleSubmit(onSubmit)} disabled={loading}>
             {loading ? "Creating..." : "Create Campaign"}
           </Button>
         </DialogFooter>
