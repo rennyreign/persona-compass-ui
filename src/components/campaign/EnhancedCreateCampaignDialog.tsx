@@ -230,11 +230,11 @@ export function EnhancedCreateCampaignDialog({ trigger, onCampaignCreated }: Enh
                       field.onChange(value);
                       handlePersonaSelect(value);
                     }} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select persona" />
-                        </SelectTrigger>
-                      </FormControl>
+                       <FormControl>
+                         <SelectTrigger className="bg-white border-border text-foreground">
+                           <SelectValue placeholder="Select persona" />
+                         </SelectTrigger>
+                       </FormControl>
                       <SelectContent>
                         {personas.length === 0 ? (
                           <SelectItem value="" disabled>
@@ -265,11 +265,11 @@ export function EnhancedCreateCampaignDialog({ trigger, onCampaignCreated }: Enh
                   <FormItem>
                     <FormLabel>Marketing Channel *</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select channel" />
-                        </SelectTrigger>
-                      </FormControl>
+                       <FormControl>
+                         <SelectTrigger className="bg-white border-border text-foreground">
+                           <SelectValue placeholder="Select channel" />
+                         </SelectTrigger>
+                       </FormControl>
                       <SelectContent>
                         {channels.map((channel) => (
                           <SelectItem key={channel} value={channel}>
@@ -291,9 +291,9 @@ export function EnhancedCreateCampaignDialog({ trigger, onCampaignCreated }: Enh
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Campaign Name *</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter campaign name" {...field} />
-                  </FormControl>
+                   <FormControl>
+                     <Input placeholder="Enter campaign name" className="bg-white border-border text-foreground" {...field} />
+                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
@@ -315,11 +315,11 @@ export function EnhancedCreateCampaignDialog({ trigger, onCampaignCreated }: Enh
                     <FormItem>
                       <FormLabel>Messaging Variant *</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select messaging approach" />
-                          </SelectTrigger>
-                        </FormControl>
+                         <FormControl>
+                           <SelectTrigger className="bg-white border-border text-foreground">
+                             <SelectValue placeholder="Select messaging approach" />
+                           </SelectTrigger>
+                         </FormControl>
                         <SelectContent>
                           {messagingVariants.map((variant) => (
                             <SelectItem key={variant} value={variant}>
@@ -343,9 +343,9 @@ export function EnhancedCreateCampaignDialog({ trigger, onCampaignCreated }: Enh
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Call-to-Action *</FormLabel>
-                      <FormControl>
-                        <Input placeholder="e.g., Sign up for free trial" {...field} />
-                      </FormControl>
+                       <FormControl>
+                         <Input placeholder="e.g., Sign up for free trial" className="bg-white border-border text-foreground" {...field} />
+                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -360,15 +360,16 @@ export function EnhancedCreateCampaignDialog({ trigger, onCampaignCreated }: Enh
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Expected CPL ($)</FormLabel>
-                      <FormControl>
-                        <Input 
-                          type="number" 
-                          step="0.01" 
-                          placeholder="e.g., 75.00" 
-                          {...field}
-                          onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
-                        />
-                      </FormControl>
+                       <FormControl>
+                         <Input 
+                           type="number" 
+                           step="0.01" 
+                           placeholder="e.g., 75.00" 
+                           className="bg-white border-border text-foreground"
+                           {...field}
+                           onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                         />
+                       </FormControl>
                       <FormDescription>
                         Predicted cost per lead
                       </FormDescription>
@@ -382,15 +383,16 @@ export function EnhancedCreateCampaignDialog({ trigger, onCampaignCreated }: Enh
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Expected CTR (%)</FormLabel>
-                      <FormControl>
-                        <Input 
-                          type="number" 
-                          step="0.1" 
-                          placeholder="e.g., 2.5" 
-                          {...field}
-                          onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
-                        />
-                      </FormControl>
+                       <FormControl>
+                         <Input 
+                           type="number" 
+                           step="0.1" 
+                           placeholder="e.g., 2.5" 
+                           className="bg-white border-border text-foreground"
+                           {...field}
+                           onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                         />
+                       </FormControl>
                       <FormDescription>
                         Predicted click-through rate
                       </FormDescription>
@@ -405,9 +407,9 @@ export function EnhancedCreateCampaignDialog({ trigger, onCampaignCreated }: Enh
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Start Date *</FormLabel>
-                      <FormControl>
-                        <Input type="date" {...field} />
-                      </FormControl>
+                       <FormControl>
+                         <Input type="date" className="bg-white border-border text-foreground" {...field} />
+                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -439,13 +441,13 @@ export function EnhancedCreateCampaignDialog({ trigger, onCampaignCreated }: Enh
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Campaign Plan Content *</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="Paste your campaign markdown content here or type directly..."
-                      className="min-h-[200px] font-mono"
-                      {...field}
-                    />
-                  </FormControl>
+                   <FormControl>
+                     <Textarea
+                       placeholder="Paste your campaign markdown content here or type directly..."
+                       className="min-h-[200px] font-mono bg-white border-border text-foreground"
+                       {...field}
+                     />
+                   </FormControl>
                   <FormDescription>
                     Import your campaign plan markdown or create content directly in this editor
                   </FormDescription>
