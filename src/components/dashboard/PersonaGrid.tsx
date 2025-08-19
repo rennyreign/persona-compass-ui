@@ -33,7 +33,7 @@ export function PersonaGrid({ personas, className, onPersonaClick }: PersonaGrid
   return (
     <div className={cn("grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6", className)}>
       {personas.map((persona) => (
-        <Card key={persona.id} className="persona-card overflow-hidden">
+        <Card key={persona.id} className="persona-card group overflow-hidden">
           {/* Simplified Card Layout */}
           <div className="aspect-[4/3] w-full overflow-hidden relative">
             <img 
@@ -98,7 +98,7 @@ export function PersonaGrid({ personas, className, onPersonaClick }: PersonaGrid
 
       {/* Add New Persona Card */}
       <Link to="/create-persona">
-        <Card className="persona-card border-2 border-dashed border-muted-foreground/30 hover:border-primary/50 hover:bg-primary/5 cursor-pointer">
+        <Card className="persona-card group border-2 border-dashed border-muted-foreground/30 hover:border-primary/50 hover:bg-primary/5 cursor-pointer">
           <div className="flex flex-col items-center justify-center h-full min-h-[280px] space-y-4 text-center p-6">
             <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center group-hover:bg-primary/20 transition-colors duration-300">
               <span className="text-xl text-primary font-light">+</span>

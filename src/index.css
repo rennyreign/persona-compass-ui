@@ -151,7 +151,7 @@ All colors MUST be HSL.
   }
   
   .persona-card {
-    @apply bg-card border border-border/60 rounded-xl shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group cursor-pointer;
+    @apply bg-card border border-border/60 rounded-xl shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-pointer;
   }
   
   .filter-pill {
