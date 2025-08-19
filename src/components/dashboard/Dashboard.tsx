@@ -212,7 +212,7 @@ export function Dashboard({ className }: DashboardProps) {
             
             {/* Create University Button - Only for bisk_admin */}
             {userRole === 'bisk_admin' && (
-              <Button variant="outline" onClick={() => setShowCreateUniversity(true)}>
+              <Button variant="outline" onClick={() => setShowCreateUniversity(true)} className="bg-white border-border text-foreground">
                 <Building className="w-4 h-4 mr-2" />
                 Create University
               </Button>
