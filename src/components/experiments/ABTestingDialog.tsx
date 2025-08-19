@@ -194,11 +194,11 @@ export function ABTestingDialog({ trigger, onExperimentCreated }: ABTestingDialo
                   <FormItem>
                     <FormLabel>Target Persona *</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select persona" />
-                        </SelectTrigger>
-                      </FormControl>
+                       <FormControl>
+                         <SelectTrigger className="bg-white border-border text-foreground">
+                           <SelectValue placeholder="Select persona" />
+                         </SelectTrigger>
+                       </FormControl>
                       <SelectContent>
                         {personas.map((persona) => (
                           <SelectItem key={persona.id} value={persona.id}>
@@ -220,11 +220,11 @@ export function ABTestingDialog({ trigger, onExperimentCreated }: ABTestingDialo
                   <FormItem>
                     <FormLabel>Primary Metric *</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select metric to optimize" />
-                        </SelectTrigger>
-                      </FormControl>
+                       <FormControl>
+                         <SelectTrigger className="bg-white border-border text-foreground">
+                           <SelectValue placeholder="Select metric to optimize" />
+                         </SelectTrigger>
+                       </FormControl>
                       <SelectContent>
                         {testMetrics.map((metric) => (
                           <SelectItem key={metric.value} value={metric.value}>
@@ -246,9 +246,9 @@ export function ABTestingDialog({ trigger, onExperimentCreated }: ABTestingDialo
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Experiment Name *</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g., Email Subject Line Test" {...field} />
-                  </FormControl>
+                   <FormControl>
+                     <Input placeholder="e.g., Email Subject Line Test" className="bg-white border-border text-foreground" {...field} />
+                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
@@ -261,12 +261,13 @@ export function ABTestingDialog({ trigger, onExperimentCreated }: ABTestingDialo
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Hypothesis *</FormLabel>
-                  <FormControl>
-                    <Textarea 
-                      placeholder="e.g., Benefit-focused headlines will outperform feature-focused headlines for this persona because they prioritize outcomes over technical details"
-                      {...field} 
-                    />
-                  </FormControl>
+                   <FormControl>
+                     <Textarea 
+                       placeholder="e.g., Benefit-focused headlines will outperform feature-focused headlines for this persona because they prioritize outcomes over technical details"
+                       className="bg-white border-border text-foreground"
+                       {...field} 
+                     />
+                   </FormControl>
                   <FormDescription>
                     What do you expect to happen and why?
                   </FormDescription>
@@ -281,12 +282,13 @@ export function ABTestingDialog({ trigger, onExperimentCreated }: ABTestingDialo
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Description</FormLabel>
-                  <FormControl>
-                    <Textarea 
-                      placeholder="Optional: Additional context about the experiment"
-                      {...field} 
-                    />
-                  </FormControl>
+                   <FormControl>
+                     <Textarea 
+                       placeholder="Optional: Additional context about the experiment"
+                       className="bg-white border-border text-foreground"
+                       {...field} 
+                     />
+                   </FormControl>
                 </FormItem>
               )}
             />
@@ -306,12 +308,13 @@ export function ABTestingDialog({ trigger, onExperimentCreated }: ABTestingDialo
                         <Badge variant="outline">A</Badge>
                         Control Variant *
                       </FormLabel>
-                      <FormControl>
-                        <Textarea 
-                          placeholder="Describe the control/current approach"
-                          {...field} 
-                        />
-                      </FormControl>
+                       <FormControl>
+                         <Textarea 
+                           placeholder="Describe the control/current approach"
+                           className="bg-white border-border text-foreground"
+                           {...field} 
+                         />
+                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -327,12 +330,13 @@ export function ABTestingDialog({ trigger, onExperimentCreated }: ABTestingDialo
                         <Badge variant="default">B</Badge>
                         Test Variant *
                       </FormLabel>
-                      <FormControl>
-                        <Textarea 
-                          placeholder="Describe the new approach being tested"
-                          {...field} 
-                        />
-                      </FormControl>
+                       <FormControl>
+                         <Textarea 
+                           placeholder="Describe the new approach being tested"
+                           className="bg-white border-border text-foreground"
+                           {...field} 
+                         />
+                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -349,14 +353,15 @@ export function ABTestingDialog({ trigger, onExperimentCreated }: ABTestingDialo
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Sample Size Target *</FormLabel>
-                    <FormControl>
-                      <Input 
-                        type="number" 
-                        placeholder="1000" 
-                        {...field}
-                        onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
-                      />
-                    </FormControl>
+                     <FormControl>
+                       <Input 
+                         type="number" 
+                         placeholder="1000" 
+                         className="bg-white border-border text-foreground"
+                         {...field}
+                         onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
+                       />
+                     </FormControl>
                     <FormDescription>
                       Total number of interactions needed for statistical significance
                     </FormDescription>
@@ -373,11 +378,11 @@ export function ABTestingDialog({ trigger, onExperimentCreated }: ABTestingDialo
                   <FormItem>
                     <FormLabel>Confidence Level *</FormLabel>
                     <Select onValueChange={(value) => field.onChange(parseFloat(value))} defaultValue={field.value.toString()}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                      </FormControl>
+                       <FormControl>
+                         <SelectTrigger className="bg-white border-border text-foreground">
+                           <SelectValue />
+                         </SelectTrigger>
+                       </FormControl>
                       <SelectContent>
                         {confidenceLevels.map((level) => (
                           <SelectItem key={level.value} value={level.value.toString()}>

@@ -89,6 +89,7 @@ export function CreateUniversityDialog({
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               placeholder="e.g., Arizona State University"
+              className="bg-white border-border text-foreground"
               required
             />
           </div>
@@ -100,6 +101,7 @@ export function CreateUniversityDialog({
               value={formData.subdomain}
               onChange={(e) => setFormData({ ...formData, subdomain: e.target.value.toLowerCase() })}
               placeholder="e.g., asu"
+              className="bg-white border-border text-foreground"
               required
             />
             <p className="text-xs text-muted-foreground">
@@ -114,6 +116,7 @@ export function CreateUniversityDialog({
               value={formData.domain}
               onChange={(e) => setFormData({ ...formData, domain: e.target.value })}
               placeholder="e.g., asu.edu"
+              className="bg-white border-border text-foreground"
             />
           </div>
 
@@ -125,7 +128,7 @@ export function CreateUniversityDialog({
                 type="color"
                 value={formData.primaryColor}
                 onChange={(e) => setFormData({ ...formData, primaryColor: e.target.value })}
-                className="h-10"
+                className="h-10 bg-white border-border"
               />
             </div>
             
@@ -136,7 +139,7 @@ export function CreateUniversityDialog({
                 type="color"
                 value={formData.secondaryColor}
                 onChange={(e) => setFormData({ ...formData, secondaryColor: e.target.value })}
-                className="h-10"
+                className="h-10 bg-white border-border"
               />
             </div>
           </div>

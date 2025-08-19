@@ -139,11 +139,11 @@ export function CreateCampaignDialog({ trigger, onCampaignCreated }: CreateCampa
                   <FormItem>
                     <FormLabel>Target Persona</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select persona" />
-                        </SelectTrigger>
-                      </FormControl>
+                       <FormControl>
+                         <SelectTrigger className="bg-white border-border text-foreground">
+                           <SelectValue placeholder="Select persona" />
+                         </SelectTrigger>
+                       </FormControl>
                       <SelectContent>
                         {mockPersonas.map((persona) => (
                           <SelectItem key={persona.id} value={persona.id}>
@@ -165,11 +165,11 @@ export function CreateCampaignDialog({ trigger, onCampaignCreated }: CreateCampa
                   <FormItem>
                     <FormLabel>Marketing Channel</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select channel" />
-                        </SelectTrigger>
-                      </FormControl>
+                       <FormControl>
+                         <SelectTrigger className="bg-white border-border text-foreground">
+                           <SelectValue placeholder="Select channel" />
+                         </SelectTrigger>
+                       </FormControl>
                       <SelectContent>
                         {channels.map((channel) => (
                           <SelectItem key={channel} value={channel}>
@@ -191,9 +191,9 @@ export function CreateCampaignDialog({ trigger, onCampaignCreated }: CreateCampa
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Campaign Name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter campaign name" {...field} />
-                  </FormControl>
+                   <FormControl>
+                     <Input placeholder="Enter campaign name" className="bg-white border-border text-foreground" {...field} />
+                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
@@ -207,9 +207,9 @@ export function CreateCampaignDialog({ trigger, onCampaignCreated }: CreateCampa
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Call-to-Action</FormLabel>
-                    <FormControl>
-                      <Input placeholder="e.g., Sign up for free trial" {...field} />
-                    </FormControl>
+                   <FormControl>
+                     <Input placeholder="e.g., Sign up for free trial" className="bg-white border-border text-foreground" {...field} />
+                   </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -222,9 +222,9 @@ export function CreateCampaignDialog({ trigger, onCampaignCreated }: CreateCampa
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Start Date</FormLabel>
-                    <FormControl>
-                      <Input type="date" {...field} />
-                    </FormControl>
+                   <FormControl>
+                     <Input type="date" className="bg-white border-border text-foreground" {...field} />
+                   </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -238,13 +238,13 @@ export function CreateCampaignDialog({ trigger, onCampaignCreated }: CreateCampa
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Campaign Plan Content</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="Paste your campaign markdown content here or type directly..."
-                      className="min-h-[200px] font-mono"
-                      {...field}
-                    />
-                  </FormControl>
+                   <FormControl>
+                     <Textarea
+                       placeholder="Paste your campaign markdown content here or type directly..."
+                       className="min-h-[200px] font-mono bg-white border-border text-foreground"
+                       {...field}
+                     />
+                   </FormControl>
                   <FormDescription>
                     Import your campaign plan markdown or create content directly in this editor
                   </FormDescription>
