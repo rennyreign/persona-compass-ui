@@ -33,107 +33,74 @@ export function PersonaFilterTabs({ personas, availablePrograms, activeFilter, o
   };
 
   return (
-    <div className={cn("space-y-4", className)}>
-      {/* Status Filter Pills */}
-      <div className="flex flex-wrap gap-2 bg-muted/50 p-3 rounded-xl">
-        <button
-          onClick={() => onStatusFilterChange('all')}
-          className={cn(
-            "inline-flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200",
-            statusFilter === 'all'
-              ? "bg-blue-100 text-blue-800 border border-blue-200 shadow-sm"
-              : "bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground"
-          )}
-        >
-          All Status
-          <Badge 
-            variant="outline" 
-            className={cn(
-              "ml-2 border-0",
-              statusFilter === 'all' 
-                ? "bg-blue-50 text-blue-700" 
-                : "bg-muted text-muted-foreground"
-            )}
-          >
-            {getStatusCount('all')}
-          </Badge>
-        </button>
-        
-        <button
-          onClick={() => onStatusFilterChange('active')}
-          className={cn(
-            "inline-flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200",
-            statusFilter === 'active'
-              ? "bg-green-100 text-green-800 border border-green-200 shadow-sm"
-              : "bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground"
-          )}
-        >
-          Active
-          <Badge 
-            variant="outline" 
-            className={cn(
-              "ml-2 border-0",
-              statusFilter === 'active' 
-                ? "bg-green-50 text-green-700" 
-                : "bg-muted text-muted-foreground"
-            )}
-          >
-            {getStatusCount('active')}
-          </Badge>
-        </button>
-        
-        <button
-          onClick={() => onStatusFilterChange('inactive')}
-          className={cn(
-            "inline-flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200",
-            statusFilter === 'inactive'
-              ? "bg-red-100 text-red-800 border border-red-200 shadow-sm"
-              : "bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground"
-          )}
-        >
-          Inactive
-          <Badge 
-            variant="outline" 
-            className={cn(
-              "ml-2 border-0",
-              statusFilter === 'inactive' 
-                ? "bg-red-50 text-red-700" 
-                : "bg-muted text-muted-foreground"
-            )}
-          >
-            {getStatusCount('inactive')}
-          </Badge>
-        </button>
-      </div>
+    <div className={cn("space-y-3", className)}>
+      {/* Combined Filter Section - More minimal approach */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <span className="text-sm font-medium text-muted-foreground">Filter:</span>
+          {/* Status Filter Pills */}
+          <div className="flex gap-1">
+            {['all', 'active', 'inactive'].map((status) => (
+              <button
+                key={status}
+                onClick={() => onStatusFilterChange(status)}
+                className={cn(
+                  "filter-pill",
+                  statusFilter === status 
+                    ? "bg-primary text-primary-foreground border-primary shadow-sm" 
+                    : "bg-card text-muted-foreground border-border/60 hover:border-primary/50 hover:bg-card/80"
+                )}
+              >
+                {status === 'all' ? 'All' : status.charAt(0).toUpperCase() + status.slice(1)}
+                <span className="ml-1.5 text-xs px-1.5 py-0.5 rounded-full bg-primary/10">
+                  {getStatusCount(status)}
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
 
-
-      {/* Program Filter Pills */}
-      <div className="flex flex-wrap gap-2">
-        {availablePrograms.map((program) => (
-          <button
-            key={program}
-            onClick={() => onFilterChange(program)}
-            className={cn(
-              "inline-flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200",
-              activeFilter === program
-                ? "bg-green-100 text-green-800 border border-green-200 shadow-sm"
-                : "bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground"
-            )}
-          >
-            {program}
-            <Badge 
-              variant="outline" 
+        {/* Program Category Pills - Only show if there are programs */}
+        {availablePrograms.length > 0 && (
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => onFilterChange('all')}
               className={cn(
-                "ml-2 border-0",
-                activeFilter === program 
-                  ? "bg-green-50 text-green-700" 
-                  : "bg-muted text-muted-foreground"
+                "filter-pill",
+                activeFilter === 'all' 
+                  ? "bg-secondary text-secondary-foreground border-secondary" 
+                  : "bg-card text-muted-foreground border-border/60 hover:border-secondary/50"
               )}
             >
-              {getFilterCount(program)}
-            </Badge>
-          </button>
-        ))}
+              All Programs
+              <span className="ml-1.5 text-xs px-1.5 py-0.5 rounded-full bg-secondary/10">
+                {getFilterCount('all')}
+              </span>
+            </button>
+            {availablePrograms.slice(0, 3).map((program) => (
+              <button
+                key={program}
+                onClick={() => onFilterChange(program)}
+                className={cn(
+                  "filter-pill",
+                  activeFilter === program 
+                    ? "bg-secondary text-secondary-foreground border-secondary" 
+                    : "bg-card text-muted-foreground border-border/60 hover:border-secondary/50"
+                )}
+              >
+                {program}
+                <span className="ml-1.5 text-xs px-1.5 py-0.5 rounded-full bg-secondary/10">
+                  {getFilterCount(program)}
+                </span>
+              </button>
+            ))}
+            {availablePrograms.length > 3 && (
+              <span className="text-xs text-muted-foreground ml-2">
+                +{availablePrograms.length - 3} more
+              </span>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

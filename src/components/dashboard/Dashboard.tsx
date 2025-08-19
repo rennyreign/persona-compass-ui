@@ -154,35 +154,28 @@ export function Dashboard({ className }: DashboardProps) {
 
   return (
     <div className={cn("space-y-8", className)}>
-      {/* KPI Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <KPICard
-          title="Total Personas"
-          value={kpis.totalPersonas}
-          change={{ value: 12, period: "this month" }}
-          trend="up"
-          icon={<Users className="w-6 h-6" />}
-        />
+      {/* KPI Pills - Reduced to 3 key metrics */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <KPICard
           title="Application Rate"
           value="18.5%"
           change={{ value: 3.2, period: "vs last month" }}
           trend="up"
-          icon={<FileText className="w-6 h-6" />}
+          icon={<FileText className="w-5 h-5" />}
         />
         <KPICard
           title="Avg CPL"
           value={`$${kpis.avgCPL.toFixed(2)}`}
           change={{ value: -5, period: "vs last month" }}
           trend="up"
-          icon={<DollarSign className="w-6 h-6" />}
+          icon={<DollarSign className="w-5 h-5" />}
         />
         <KPICard
           title="Enrollment Rate"
           value="12.3%"
           change={{ value: 1.8, period: "vs last month" }}
           trend="up"
-          icon={<GraduationCap className="w-6 h-6" />}
+          icon={<GraduationCap className="w-5 h-5" />}
         />
       </div>
 
@@ -190,9 +183,14 @@ export function Dashboard({ className }: DashboardProps) {
       <div className="space-y-6">
         {/* Header with Create Button */}
         <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-2xl font-semibold text-foreground">Personas</h2>
-            <p className="text-muted-foreground">Manage your marketing personas</p>
+          <div className="space-y-2">
+            <div className="flex items-center gap-3">
+              <h2 className="text-3xl font-bold text-foreground">Personas</h2>
+              <div className="pill-card px-3 py-1">
+                <span className="text-sm font-medium text-muted-foreground">{kpis.totalPersonas}</span>
+              </div>
+            </div>
+            <p className="text-muted-foreground/80">Manage your marketing personas and track their performance</p>
           </div>
           <div className="flex items-center gap-4">
             {/* University Filter - Only for bisk_admin */}
@@ -239,60 +237,45 @@ export function Dashboard({ className }: DashboardProps) {
           onStatusFilterChange={setStatusFilter}
         />
 
-        {/* Attribution Tracking Preview */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center justify-between">
+        {/* Attribution Tracking - Slim horizontal strip */}
+        <div className="pill-card p-4 bg-gradient-to-r from-card to-muted/10">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-6">
               <div className="flex items-center gap-2">
-                <Target className="w-5 h-5" />
-                Attribution Tracking
+                <Target className="w-4 h-4 text-muted-foreground" />
+                <span className="text-sm font-medium text-foreground">Insights</span>
               </div>
-              <Link to="/attribution">
-                <Button variant="outline" size="sm">
-                  View Full Dashboard
-                </Button>
-              </Link>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="text-center p-4 border rounded-lg">
-                <div className="text-2xl font-bold text-muted-foreground mb-2">--</div>
-                <div className="text-sm text-muted-foreground">Avg Effectiveness Score</div>
-                <div className="text-xs text-muted-foreground mt-1">No performance data yet</div>
-              </div>
-              <div className="text-center p-4 border rounded-lg">
-                <div className="text-2xl font-bold text-muted-foreground mb-2">0</div>
-                <div className="text-sm text-muted-foreground">Active A/B Tests</div>
-                <div className="text-xs text-muted-foreground mt-1">Create your first experiment</div>
-              </div>
-              <div className="text-center p-4 border rounded-lg">
-                <div className="text-2xl font-bold text-muted-foreground mb-2">0</div>
-                <div className="text-sm text-muted-foreground">Traits Analyzed</div>
-                <div className="text-xs text-muted-foreground mt-1">Run campaigns to analyze traits</div>
+              <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                <span><strong className="text-foreground">0</strong> A/B Tests</span>
+                <span><strong className="text-foreground">0</strong> Traits Analyzed</span>
+                <span><strong className="text-foreground">--</strong> Avg Score</span>
               </div>
             </div>
-            
-            <div className="mt-4 flex gap-2">
+            <div className="flex items-center gap-2">
               <EnhancedCreateCampaignDialog 
                 trigger={
-                  <Button size="sm">
-                    <Plus className="w-4 h-4 mr-2" />
-                    Create Campaign
+                  <Button size="sm" variant="outline" className="h-8">
+                    <Plus className="w-3 h-3 mr-1" />
+                    Campaign
                   </Button>
                 }
               />
               <ABTestingDialog 
                 trigger={
-                  <Button variant="outline" size="sm">
-                    <FlaskConical className="w-4 h-4 mr-2" />
-                    Create A/B Test
+                  <Button size="sm" variant="outline" className="h-8">
+                    <FlaskConical className="w-3 h-3 mr-1" />
+                    A/B Test
                   </Button>
                 }
               />
+              <Link to="/attribution">
+                <Button variant="ghost" size="sm" className="h-8 text-xs">
+                  View All
+                </Button>
+              </Link>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
         
         {/* Personas Grid */}
         {loading ? (

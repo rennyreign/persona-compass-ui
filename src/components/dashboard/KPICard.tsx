@@ -39,24 +39,24 @@ export function KPICard({ title, value, change, icon, trend = 'neutral', classNa
   };
 
   return (
-    <Card className={cn("p-6 bg-card border-0 shadow-md rounded-2xl hover:shadow-lg transition-shadow duration-200", className)}>
-      <div className="flex items-start justify-between">
-        <div className="space-y-2">
-          <p className="text-sm font-medium text-muted-foreground">{title}</p>
+    <Card className={cn("pill-card p-4 bg-gradient-to-br from-card to-muted/20 border-0", className)}>
+      <div className="flex items-center justify-between">
+        <div className="space-y-1">
+          <p className="text-xs font-medium text-muted-foreground/80 uppercase tracking-wider">{title}</p>
           <div className="flex items-baseline space-x-2">
-            <h3 className="text-3xl font-semibold text-foreground">
+            <h3 className="text-2xl font-bold text-foreground">
               {formatValue(value)}
             </h3>
             {change && (
               <span className={cn("text-xs font-medium", getTrendColor())}>
-                {change.value > 0 ? '+' : ''}{change.value}% {change.period}
+                {change.value > 0 ? '+' : ''}{change.value}%
               </span>
             )}
           </div>
         </div>
         {icon && (
-          <div className="p-3 bg-primary/10 rounded-xl">
-            <div className="w-6 h-6 text-muted-foreground">
+          <div className="p-2 bg-primary/10 rounded-lg">
+            <div className="w-5 h-5 text-primary/70">
               {icon}
             </div>
           </div>
