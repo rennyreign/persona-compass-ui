@@ -156,7 +156,7 @@ export default function Campaigns() {
                 />
               </div>
               <Select value={selectedPersona} onValueChange={setSelectedPersona}>
-                <SelectTrigger className="w-full sm:w-[200px]">
+                <SelectTrigger className="w-full sm:w-[200px] bg-white border-border text-foreground">
                   <SelectValue placeholder="Filter by persona" />
                 </SelectTrigger>
                 <SelectContent>
