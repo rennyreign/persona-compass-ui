@@ -138,11 +138,13 @@ export default function PersonaProfile() {
                   </div>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <Button variant="outline" size="sm" onClick={() => navigate(`/persona/${persona.id}/edit`)}>
+                  <Button variant="outline" size="sm" onClick={() => navigate(`/persona/${persona.id}/edit`)} 
+                    className="border-primary/30 text-primary hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-200">
                     <Edit className="w-4 h-4 mr-2" />
                     Edit
                   </Button>
-                  <Button variant="outline" size="sm" onClick={handleArchivePersona}>
+                  <Button variant="outline" size="sm" onClick={handleArchivePersona}
+                    className="border-muted-foreground/30 text-muted-foreground hover:bg-muted hover:text-foreground hover:border-muted-foreground transition-all duration-200">
                     <Archive className="w-4 h-4 mr-2" />
                     {persona.status === 'active' ? 'Archive' : 'Activate'}
                   </Button>
@@ -191,10 +193,10 @@ export default function PersonaProfile() {
                         {persona.occupation}
                       </Badge>
                     )}
-                    <Badge className={`px-3 py-1 ${
+                    <Badge className={`px-3 py-1 transition-colors duration-200 ${
                       persona.status === 'active' 
-                        ? 'bg-green-100 text-green-800 border-green-200' 
-                        : 'bg-gray-100 text-gray-800 border-gray-200'
+                        ? 'bg-success/20 text-success border-success/30 hover:bg-success/30' 
+                        : 'bg-muted text-muted-foreground border-muted-foreground/30 hover:bg-muted/80'
                     }`}>
                       {persona.status === 'active' ? 'Active' : 'Archived'}
                     </Badge>
@@ -223,28 +225,28 @@ export default function PersonaProfile() {
           {/* Main Content */}
           <div className="max-w-7xl mx-auto px-6 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-6 lg:w-auto lg:grid-cols-6">
-            <TabsTrigger value="details" className="flex items-center space-x-2">
+          <TabsList className="grid w-full grid-cols-6 lg:w-auto lg:grid-cols-6 bg-muted/30 border border-border/50">
+            <TabsTrigger value="details" className="flex items-center space-x-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground hover:bg-primary/10 hover:text-primary transition-all duration-200">
               <User className="w-4 h-4" />
               <span>Details</span>
             </TabsTrigger>
-            <TabsTrigger value="validation" className="flex items-center space-x-2">
+            <TabsTrigger value="validation" className="flex items-center space-x-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground hover:bg-primary/10 hover:text-primary transition-all duration-200">
               <Target className="w-4 h-4" />
               <span>Validation</span>
             </TabsTrigger>
-            <TabsTrigger value="visual" className="flex items-center space-x-2">
+            <TabsTrigger value="visual" className="flex items-center space-x-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground hover:bg-primary/10 hover:text-primary transition-all duration-200">
               <Images className="w-4 h-4" />
               <span>Visual Identity</span>
             </TabsTrigger>
-            <TabsTrigger value="performance" className="flex items-center space-x-2">
+            <TabsTrigger value="performance" className="flex items-center space-x-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground hover:bg-primary/10 hover:text-primary transition-all duration-200">
               <TrendingUp className="w-4 h-4" />
               <span>Performance</span>
             </TabsTrigger>
-            <TabsTrigger value="campaigns" className="flex items-center space-x-2">
+            <TabsTrigger value="campaigns" className="flex items-center space-x-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground hover:bg-primary/10 hover:text-primary transition-all duration-200">
               <Target className="w-4 h-4" />
               <span>Campaigns</span>
             </TabsTrigger>
-            <TabsTrigger value="insights" className="flex items-center space-x-2">
+            <TabsTrigger value="insights" className="flex items-center space-x-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground hover:bg-primary/10 hover:text-primary transition-all duration-200">
               <Brain className="w-4 h-4" />
               <span>Insights</span>
             </TabsTrigger>
