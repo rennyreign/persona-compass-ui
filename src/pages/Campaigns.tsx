@@ -152,7 +152,7 @@ export default function Campaigns() {
                   placeholder="Search campaigns..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
+                  className="pl-10 bg-white border-border text-foreground"
                 />
               </div>
               <Select value={selectedPersona} onValueChange={setSelectedPersona}>
