@@ -196,7 +196,7 @@ export function Dashboard({ className }: DashboardProps) {
             {/* University Filter - Only for bisk_admin */}
             {userRole === 'bisk_admin' && (
               <Select value={selectedOrganization} onValueChange={setSelectedOrganization}>
-                <SelectTrigger className="w-48">
+                <SelectTrigger className="w-48 bg-white border-border text-foreground">
                   <SelectValue placeholder="Select University" />
                 </SelectTrigger>
                 <SelectContent>
