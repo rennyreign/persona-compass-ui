@@ -1,4 +1,5 @@
 import { useParams, Navigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { ArrowLeft, Edit, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,15 +9,52 @@ import { Sidebar } from "@/components/layout/Sidebar";
 import { TopHeader } from "@/components/layout/TopHeader";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { mockCampaigns, mockCampaignPlans } from "@/data/mockData";
+import { supabase } from "@/integrations/supabase/client";
 
 export default function CampaignPlan() {
   const { campaignId } = useParams();
+  const [campaign, setCampaign] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
   
-  const campaign = mockCampaigns.find(c => c.id === campaignId);
-  const campaignPlan = mockCampaignPlans.find(p => p.campaignId === campaignId);
+  useEffect(() => {
+    const fetchCampaign = async () => {
+      setLoading(true);
+      
+      const { data, error } = await supabase
+        .from('campaigns')
+        .select('*')
+        .eq('id', campaignId)
+        .single();
+        
+      if (error) {
+        console.error('Error fetching campaign:', error);
+      } else {
+        setCampaign(data);
+      }
+      
+      setLoading(false);
+    };
+
+    if (campaignId) {
+      fetchCampaign();
+    }
+  }, [campaignId]);
   
-  if (!campaign || !campaignPlan) {
+  if (loading) {
+    return (
+      <div className="flex h-screen bg-background">
+        <Sidebar />
+        <div className="flex-1 flex flex-col overflow-hidden">
+          <TopHeader />
+          <div className="flex-1 flex items-center justify-center">
+            <p className="text-muted-foreground">Loading campaign...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  
+  if (!campaign) {
     return <Navigate to="/404" replace />;
   }
 
@@ -78,22 +116,24 @@ export default function CampaignPlan() {
             <div className="max-w-5xl mx-auto px-6 py-6">
               <div className="flex items-center justify-between">
                 <div className="space-y-2">
-                  <h2 className="text-xl font-semibold text-foreground">{campaign.name}</h2>
+                  <h2 className="text-xl font-semibold text-foreground">{campaign.title}</h2>
                   <div className="flex items-center space-x-3">
-                    <Badge variant="outline">{campaign.channel}</Badge>
+                    {(campaign.channels || []).slice(0, 2).map((channel: string, index: number) => (
+                      <Badge key={index} variant="outline">{channel}</Badge>
+                    ))}
                     <Badge className={getStatusColor(campaign.status)}>
                       {campaign.status}
                     </Badge>
                     <span className="text-sm text-muted-foreground">
-                      Started: {new Date(campaign.startDate).toLocaleDateString()}
+                      Started: {new Date(campaign.start_date).toLocaleDateString()}
                     </span>
                   </div>
                 </div>
                 <div className="text-right space-y-1">
                   <div className="text-2xl font-bold text-foreground">
-                    ${campaign.spend.toLocaleString()}
+                    ${(campaign.budget || 0).toLocaleString()}
                   </div>
-                  <div className="text-sm text-muted-foreground">Total Spend</div>
+                  <div className="text-sm text-muted-foreground">Total Budget</div>
                 </div>
               </div>
             </div>
@@ -107,22 +147,24 @@ export default function CampaignPlan() {
               </CardHeader>
               <CardContent>
                 <div className="prose prose-sm max-w-none prose-headings:text-foreground prose-p:text-muted-foreground prose-strong:text-foreground prose-ul:text-muted-foreground prose-li:text-muted-foreground">
-                  <ReactMarkdown 
-                    remarkPlugins={[remarkGfm]}
-                    components={{
-                      h1: ({children}) => <h1 className="text-2xl font-bold text-foreground mb-4">{children}</h1>,
-                      h2: ({children}) => <h2 className="text-xl font-semibold text-foreground mb-3 mt-6">{children}</h2>,
-                      h3: ({children}) => <h3 className="text-lg font-semibold text-foreground mb-2 mt-5">{children}</h3>,
-                      p: ({children}) => <p className="text-muted-foreground mb-3 leading-relaxed">{children}</p>,
-                      ul: ({children}) => <ul className="list-disc pl-6 mb-4 text-muted-foreground">{children}</ul>,
-                      li: ({children}) => <li className="mb-1">{children}</li>,
-                      strong: ({children}) => <strong className="font-semibold text-foreground">{children}</strong>,
-                      hr: () => <Separator className="my-6" />,
-                      blockquote: ({children}) => <blockquote className="border-l-4 border-primary pl-4 italic text-muted-foreground">{children}</blockquote>,
-                    }}
-                  >
-                    {campaignPlan.markdownContent}
-                  </ReactMarkdown>
+                  <div className="text-center py-8">
+                    <h3 className="text-lg font-semibold text-foreground mb-2">Campaign Plan Coming Soon</h3>
+                    <p className="text-muted-foreground">
+                      Campaign plan details and strategy will be available here once configured.
+                    </p>
+                    <div className="mt-4 p-4 bg-muted/50 rounded-lg">
+                      <h4 className="font-medium text-foreground mb-2">Campaign Details</h4>
+                      <div className="text-sm text-muted-foreground space-y-1">
+                        <p><strong>Title:</strong> {campaign.title}</p>
+                        <p><strong>Description:</strong> {campaign.description || 'No description available'}</p>
+                        <p><strong>Type:</strong> {campaign.campaign_type || 'General'}</p>
+                        <p><strong>Budget:</strong> ${(campaign.budget || 0).toLocaleString()}</p>
+                        {campaign.objectives && campaign.objectives.length > 0 && (
+                          <p><strong>Objectives:</strong> {campaign.objectives.join(', ')}</p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </CardContent>
             </Card>
