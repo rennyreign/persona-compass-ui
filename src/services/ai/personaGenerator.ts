@@ -123,9 +123,9 @@ Generate realistic personas with:
 4. Main challenges and pain points
 5. Decision factors and timeline
 6. Communication preferences
-7. Budget considerations`,
-13. values: Array of 3-4 core values
-14. status: Always "active"
+7. Budget considerations
+8. Values: Array of 3-4 core values  
+9. Status: Always "active"
 
 IMPORTANT: 
 - Make personas realistic and diverse
@@ -135,7 +135,36 @@ IMPORTANT:
 - Vary demographics, backgrounds, and characteristics
 - Focus on working professionals seeking career advancement
 
-Format response as a valid JSON object with all required fields. Do not include any markdown formatting or code blocks.`;
+Format response as a valid JSON object with all required fields. Do not include any markdown formatting or code blocks.`,
+      advanced: `
+Generate detailed personas with advanced psychographic profiling:
+1. Comprehensive demographic and psychographic data
+2. Detailed career journey and aspirations
+3. Learning preferences and barriers
+4. Technology adoption patterns
+5. Social influences and peer networks
+6. Communication style preferences
+7. Decision-making process and timeline
+8. Financial considerations and ROI expectations
+
+Include advanced fields: personality_type, learning_style, digital_behavior, career_stage.`,
+      expert: `
+Generate expert-level personas with deep market research insights:
+1. Complete persona ecosystem including influencers
+2. Multi-dimensional motivational framework
+3. Competitive landscape awareness
+4. Brand affinity mapping
+5. Channel preference hierarchy
+6. Content consumption patterns
+7. Objection handling insights
+8. Conversion path optimization data
+
+Include expert fields: competitive_analysis, brand_preferences, content_engagement_patterns.`
+    };
+
+    return `${basePrompt}
+
+${intelligencePrompts[intelligenceLevel as keyof typeof intelligencePrompts] || intelligencePrompts.basic}`;
   }
 
   /**

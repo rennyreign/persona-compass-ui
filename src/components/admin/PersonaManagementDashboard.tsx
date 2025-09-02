@@ -11,7 +11,7 @@ import { Persona } from '@/types/persona';
 import { AIPersonaPromptDialog } from './AIPersonaPromptDialog';
 import { BulkPersonaEditor } from './BulkPersonaEditor';
 import { useToast } from '@/hooks/use-toast';
-import { PersonaValidationService } from '@/services/ai/personaValidationService';
+import { PersonaValidationService } from '@/services/personaValidation';
 
 interface PersonaStats {
   total: number;
