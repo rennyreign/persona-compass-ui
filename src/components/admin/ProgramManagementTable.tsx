@@ -259,15 +259,14 @@ export function ProgramManagementTable({ selectedOrganization, onPersonaCountCha
       </CardContent>
       
       {/* Program Manager Dialog */}
-      {showProgramManager && (
-        <ProgramManager 
-          selectedOrganization={selectedOrganization}
-          onClose={() => {
-            setShowProgramManager(false);
-            loadPrograms(); // Refresh programs after adding
-          }}
-        />
-      )}
+      <ProgramManager 
+        selectedOrganization={selectedOrganization}
+        showAddDialog={showProgramManager}
+        onClose={() => {
+          setShowProgramManager(false);
+          loadPrograms(); // Refresh programs after adding
+        }}
+      />
     </Card>
   );
 }
