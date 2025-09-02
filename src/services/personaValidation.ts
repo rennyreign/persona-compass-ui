@@ -447,120 +447,29 @@ export class PersonaValidationService {
   }
 
   /**
-   * Calculate overall quality score with enhanced metrics
+   * Generate quality score for persona
    */
-  static calculateQualityScore(persona: Persona): QualityScore {
-    const scores = {
-      completeness: this.calculateCompletenessScore(persona),
-      marketingReadiness: this.calculateMarketingReadinessScore(persona),
-      campaignCompatibility: this.calculateCampaignCompatibilityScore(persona),
-      aiQuality: this.calculateAIQualityScore(persona),
-      uniqueness: this.calculateUniquenessScore(persona),
-    };
+  static calculateQualityScore(persona: Persona): { overall: number; grade: string } {
+    const validation = this.validatePersonaData(persona);
+    let score = validation.score / 100; // Convert to 0-1 scale
 
-    const weights = {
-      completeness: 0.25,
-      marketingReadiness: 0.25,
-      campaignCompatibility: 0.20,
-      aiQuality: 0.15,
-      uniqueness: 0.15,
-    };
+    // Bonus points for completeness
+    if (persona.avatar_url) score += 0.05;
+    if (persona.visual_identity_images?.length) score += 0.05;
+    if (persona.description && persona.description.length > 100) score += 0.05;
 
-    const overallScore = Object.entries(scores).reduce((total, [key, score]) => {
-      return total + (score * weights[key as keyof typeof weights]);
-    }, 0);
+    // Bonus for array field richness
+    this.ARRAY_FIELDS.forEach(field => {
+      const value = persona[field as keyof Persona] as string[];
+      if (value && value.length >= 3) score += 0.02;
+    });
 
+    const finalScore = Math.min(1, Math.max(0, score));
+    
     return {
-      ...scores,
-      overall: Math.round(overallScore * 100) / 100,
-      suggestions: this.generateEnhancedSuggestions(persona, scores),
-      grade: this.getQualityGrade(overallScore),
+      overall: finalScore,
+      grade: this.getQualityGrade(finalScore)
     };
-  }
-
-  /**
-   * Calculate AI-specific quality metrics
-   */
-  private static calculateAIQualityScore(persona: Persona): number {
-    let score = 1.0;
-    
-    // Check for AI-generated content quality indicators
-    const textFields = [persona.background, persona.goals?.join(' '), persona.pain_points?.join(' ')].filter(Boolean);
-    
-    for (const text of textFields) {
-      if (typeof text === 'string') {
-        // Penalize generic or template-like content
-        if (text.includes('Lorem ipsum') || text.includes('placeholder')) {
-          score -= 0.3;
-        }
-        
-        // Reward specific, detailed content
-        if (text.length > 100 && text.includes('specific') || text.includes('years')) {
-          score += 0.1;
-        }
-        
-        // Check for realistic details
-        if (text.match(/\$[\d,]+/) || text.match(/\d+\s+years?/)) {
-          score += 0.1;
-        }
-      }
-    }
-    
-    return Math.max(0, Math.min(1, score));
-  }
-
-  /**
-   * Calculate uniqueness score to avoid duplicate personas
-   */
-  private static calculateUniquenessScore(persona: Persona): number {
-    // This would ideally compare against existing personas in the database
-    // For now, check for generic patterns
-    let score = 1.0;
-    
-    const genericNames = ['John Doe', 'Jane Smith', 'Professional Manager', 'Career Specialist'];
-    if (genericNames.some(name => persona.name.includes(name))) {
-      score -= 0.4;
-    }
-    
-    const genericBackgrounds = ['experienced professional', 'seeking advancement', 'career growth'];
-    if (genericBackgrounds.some(phrase => persona.background?.toLowerCase().includes(phrase))) {
-      score -= 0.2;
-    }
-    
-    return Math.max(0, Math.min(1, score));
-  }
-
-  /**
-   * Generate enhanced improvement suggestions
-   */
-  private static generateEnhancedSuggestions(persona: Persona, scores: any): string[] {
-    const suggestions: string[] = [];
-    
-    if (scores.completeness < 0.8) {
-      suggestions.push('Add missing demographic or psychographic details');
-    }
-    
-    if (scores.marketingReadiness < 0.7) {
-      suggestions.push('Include more specific pain points and decision factors');
-    }
-    
-    if (scores.campaignCompatibility < 0.7) {
-      suggestions.push('Add communication preferences and channel data');
-    }
-    
-    if (scores.aiQuality < 0.6) {
-      suggestions.push('Replace generic content with specific, realistic details');
-    }
-    
-    if (scores.uniqueness < 0.6) {
-      suggestions.push('Make persona more distinctive and avoid generic patterns');
-    }
-    
-    if (scores.overall > 0.9) {
-      suggestions.push('Excellent quality! This persona is ready for campaigns.');
-    }
-    
-    return suggestions;
   }
 
   /**
@@ -572,26 +481,5 @@ export class PersonaValidationService {
     if (score >= 0.7) return 'C';
     if (score >= 0.6) return 'D';
     return 'F';
-  }
-
-  /**
-   * Generate quality score for persona
-   */
-  static calculateQualityScore(persona: Persona): number {
-    const validation = this.validatePersonaData(persona);
-    let score = validation.score;
-
-    // Bonus points for completeness
-    if (persona.avatar_url) score += 5;
-    if (persona.visual_identity_images?.length) score += 5;
-    if (persona.description && persona.description.length > 100) score += 5;
-
-    // Bonus for array field richness
-    this.ARRAY_FIELDS.forEach(field => {
-      const value = persona[field as keyof Persona] as string[];
-      if (value && value.length >= 3) score += 2;
-    });
-
-    return Math.min(100, score);
   }
 }

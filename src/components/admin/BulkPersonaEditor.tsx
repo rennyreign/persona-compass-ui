@@ -36,8 +36,8 @@ export function BulkPersonaEditor({ personas, onPersonasUpdated }: BulkPersonaEd
   // Filter personas based on search and status
   const filteredPersonas = personas.filter(persona => {
     const matchesSearch = persona.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         persona.background.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         persona.program_category.toLowerCase().includes(searchTerm.toLowerCase());
+                         (persona.description || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         (persona.program_category || '').toLowerCase().includes(searchTerm.toLowerCase());
     
     const matchesStatus = filterStatus === 'all' || persona.status === filterStatus;
     
@@ -352,12 +352,12 @@ export function BulkPersonaEditor({ personas, onPersonasUpdated }: BulkPersonaEd
                       />
                     </div>
                     <div>
-                      <Label htmlFor="age">Age</Label>
+                      <Label htmlFor="age_range">Age Range</Label>
                       <Input
-                        id="age"
-                        type="number"
-                        value={editForm.age || ''}
-                        onChange={(e) => setEditForm({ ...editForm, age: parseInt(e.target.value) })}
+                        id="age_range"
+                        value={editForm.age_range || ''}
+                        onChange={(e) => setEditForm({ ...editForm, age_range: e.target.value })}
+                        placeholder="e.g., 25-35"
                       />
                     </div>
                     <div>
@@ -388,11 +388,11 @@ export function BulkPersonaEditor({ personas, onPersonasUpdated }: BulkPersonaEd
                   </div>
                   
                   <div>
-                    <Label htmlFor="background">Background</Label>
+                    <Label htmlFor="description">Description</Label>
                     <Textarea
-                      id="background"
-                      value={editForm.background || ''}
-                      onChange={(e) => setEditForm({ ...editForm, background: e.target.value })}
+                      id="description"
+                      value={editForm.description || ''}
+                      onChange={(e) => setEditForm({ ...editForm, description: e.target.value })}
                       rows={3}
                     />
                   </div>
@@ -410,7 +410,7 @@ export function BulkPersonaEditor({ personas, onPersonasUpdated }: BulkPersonaEd
                       <div>
                         <h3 className="text-lg font-semibold">{persona.name}</h3>
                         <p className="text-sm text-muted-foreground">
-                          Age {persona.age} • {persona.location}
+                          {persona.age_range} • {persona.location}
                         </p>
                       </div>
                       <div className="flex items-center gap-2">
@@ -428,7 +428,7 @@ export function BulkPersonaEditor({ personas, onPersonasUpdated }: BulkPersonaEd
                       </div>
                     </div>
                     
-                    <p className="text-sm">{persona.background}</p>
+                    <p className="text-sm">{persona.description}</p>
                     
                     {persona.goals && persona.goals.length > 0 && (
                       <div>

@@ -53,9 +53,9 @@ export class EnhancedPersonaGenerator {
         );
         
         // Validate and enrich the persona
-        const validationResult = PersonaValidationService.validatePersona(persona);
+        const validationResult = PersonaValidationService.validatePersonaData(persona);
         if (validationResult.isValid) {
-          const enrichedPersona = PersonaValidationService.enrichPersonaData(persona, context);
+          const enrichedPersona = this.enrichPersonaData(persona, context);
           personas.push(enrichedPersona);
         } else {
           console.warn(`Persona ${i + 1} validation failed:`, validationResult.errors);
@@ -231,7 +231,7 @@ Return only a valid JSON object with the persona data, no additional text or for
       const persona = JSON.parse(jsonMatch[0]);
       
       // Validate required fields
-      const requiredFields = ['name', 'age', 'location', 'background', 'goals', 'pain_points'];
+      const requiredFields = ['name', 'age_range', 'location', 'description', 'goals', 'pain_points'];
       for (const field of requiredFields) {
         if (!persona[field]) {
           throw new Error(`Missing required field: ${field}`);
@@ -250,7 +250,6 @@ Return only a valid JSON object with the persona data, no additional text or for
   private static enrichPersonaData(persona: Persona, context: UniversityContext): Persona {
     return {
       ...persona,
-      university_id: context.universityName,
       status: 'active',
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
@@ -268,21 +267,26 @@ Return only a valid JSON object with the persona data, no additional text or for
     return {
       id: `fallback-${Date.now()}-${index}`,
       name: `${fallbackNames[index % fallbackNames.length]} ${index}`,
-      age: 30 + (index * 5),
+      age_range: `${30 + (index * 5)}-${40 + (index * 5)}`,
+      occupation: 'Professional',
+      industry: 'Business',
+      education_level: "Bachelor's degree",
+      income_range: '$50k-$100k',
       location: context.location || 'United States',
-      background: `Experienced professional seeking to advance through ${programs[0] || 'education'} program.`,
+      personality_traits: ['professional', 'goal-oriented'],
+      values: ['Excellence', 'Growth', 'Innovation'],
       goals: ['Career advancement', 'Skill development', 'Professional growth'],
       pain_points: ['Time constraints', 'Work-life balance', 'Financial investment'],
-      decision_factors: ['Program reputation', 'Flexibility', 'ROI'],
-      communication_preferences: ['Email', 'Professional networks'],
-      budget_range: '$50,000 - $100,000',
-      timeline: '6-12 months',
+      preferred_channels: ['Email', 'LinkedIn'],
+      avatar_url: null,
+      description: `Experienced professional seeking to advance through ${programs[0] || 'education'} program.`,
       program_category: programs[0] || 'General',
-      university_id: context.universityName,
       status: 'active',
-      values: ['Excellence', 'Growth', 'Innovation'],
+      organization_id: null,
+      user_id: '',
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
+      visual_identity_images: null
     };
   }
 }
