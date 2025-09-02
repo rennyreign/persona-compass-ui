@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Persona } from "@/types/persona";
+import { formatPersonaAttribute } from '@/utils/formatPersonaAttributes';
 
 interface PersonaGridProps {
   personas: Persona[];
@@ -13,7 +14,7 @@ interface PersonaGridProps {
 }
 
 export function PersonaGrid({ personas, className, onPersonaClick }: PersonaGridProps) {
-  console.log('PersonaGrid rendered with personas:', personas.length, personas);
+  // PersonaGrid rendered with personas: ${personas.length}
   const getInitials = (name: string) => {
     return name
       .split(' ')
@@ -79,18 +80,20 @@ export function PersonaGrid({ personas, className, onPersonaClick }: PersonaGrid
                 </Badge>
               )}
               <Badge variant="outline" className="text-xs bg-muted text-muted-foreground border-border/50 px-2 py-0.5">
-                {persona.organization?.name || 'University'}
+                {typeof persona.organization === 'string' ? persona.organization : persona.organization?.name || 'University'}
               </Badge>
             </div>
 
             {/* Action Button */}
             <Button 
+              asChild
               variant="ghost" 
               size="sm"
               className="w-full mt-3 text-primary hover:bg-primary/10 hover:text-primary font-medium"
-              onClick={() => onPersonaClick?.(persona)}
             >
-              View Profile →
+              <Link to={`/persona/${persona.id}`}>
+                View Profile →
+              </Link>
             </Button>
           </div>
         </Card>

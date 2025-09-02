@@ -1,9 +1,11 @@
 import { useState } from "react";
-import { Home, Users, Megaphone, Lightbulb, Target, GitBranch } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
+import { Home, Users, Megaphone, Lightbulb, Target, GitBranch, Brain, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { BiskLogo } from "@/components/ui/bisk-logo";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface SidebarProps {
   className?: string;
@@ -11,37 +13,51 @@ interface SidebarProps {
 
 export function Sidebar({ className }: SidebarProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const { user } = useAuth();
+  const location = useLocation();
 
   const navigation = [
     {
       name: 'Dashboard',
       href: '/',
       icon: Home,
-      isActive: window.location.pathname === '/'
+      isActive: location.pathname === '/'
     },
     {
       name: 'Campaigns',
       href: '/campaigns',
       icon: Target,
-      isActive: window.location.pathname === '/campaigns'
+      isActive: location.pathname === '/campaigns'
     },
     {
       name: 'Performance',
       href: '/performance',
       icon: Megaphone,
-      isActive: window.location.pathname === '/performance'
+      isActive: location.pathname === '/performance'
     },
     {
       name: 'Insights',
       href: '/insights',
       icon: Lightbulb,
-      isActive: window.location.pathname === '/insights'
+      isActive: location.pathname === '/insights'
     },
     {
       name: 'Attribution',
       href: '/attribution',
       icon: GitBranch,
-      isActive: window.location.pathname === '/attribution'
+      isActive: location.pathname === '/attribution'
+    },
+    {
+      name: 'Control Panel',
+      href: '/control-panel',
+      icon: Brain,
+      isActive: location.pathname === '/control-panel'
+    },
+    {
+      name: 'Admin Tools',
+      href: '/admin',
+      icon: Settings,
+      isActive: location.pathname === '/admin'
     },
   ];
 
@@ -49,17 +65,17 @@ export function Sidebar({ className }: SidebarProps) {
     {
       name: 'Create Persona',
       icon: '👤',
-      action: () => console.log('Create persona')
+      action: () => {/* Create persona action */}
     },
     {
       name: 'Launch Campaign',
       icon: '🚀',
-      action: () => console.log('Launch campaign')
+      action: () => {/* Launch campaign action */}
     },
     {
       name: 'Generate Insights',
       icon: '🤖',
-      action: () => console.log('Generate insights')
+      action: () => {/* Generate insights action */}
     }
   ];
 
@@ -73,9 +89,9 @@ export function Sidebar({ className }: SidebarProps) {
       <div className="p-6 border-b border-border">
         <div className="flex items-center justify-between">
            {!isCollapsed && (
-           <a href="/" className="hover:opacity-80 transition-opacity">
+           <Link to="/" className="hover:opacity-80 transition-opacity">
             <BiskLogo />
-          </a>
+          </Link>
           )}
           <Button
             variant="ghost"
@@ -92,9 +108,9 @@ export function Sidebar({ className }: SidebarProps) {
       <div className="flex-1 overflow-y-auto">
         <nav className="p-4 space-y-2">
           {navigation.map((item) => (
-            <a
+            <Link
               key={item.name}
-              href={item.href}
+              to={item.href}
               className={cn(
                 "flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors duration-200",
                 item.isActive
@@ -106,7 +122,7 @@ export function Sidebar({ className }: SidebarProps) {
               {!isCollapsed && (
                 <span className="font-medium">{item.name}</span>
               )}
-            </a>
+            </Link>
           ))}
         </nav>
 
@@ -123,8 +139,10 @@ export function Sidebar({ className }: SidebarProps) {
           </div>
           {!isCollapsed && (
              <div className="flex-1 min-w-0">
-               <p className="text-sm font-medium text-foreground truncate">Bisk Team</p>
-               <p className="text-xs text-muted-foreground truncate">admin@bisk.com</p>
+               <p className="text-sm font-medium text-foreground truncate">
+                 {user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User'}
+               </p>
+               <p className="text-xs text-muted-foreground truncate">{user?.email || 'user@example.com'}</p>
              </div>
           )}
         </div>

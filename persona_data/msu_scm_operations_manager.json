@@ -1,0 +1,88 @@
+{
+  "id": "msu_scm_operations_manager",
+  "university": {
+    "id": "msu",
+    "name": "Michigan State University"
+  },
+  "program": {
+    "id": "scm",
+    "name": "Supply Chain Management",
+    "enrollment_goal": 120
+  },
+  "persona_type": "operations_manager",
+  "name": "Sarah Chen",
+  "title": "Operations Manager",
+  "demographics": {
+    "age_range": "32-42",
+    "income_range": "$65k-$95k",
+    "education": "Bachelor's in Business or Engineering",
+    "location": "Midwest manufacturing hubs",
+    "family_status": "Married with children"
+  },
+  "professional_background": {
+    "current_role": "Operations Manager",
+    "industry": "Manufacturing/Automotive",
+    "experience_years": "8-15",
+    "company_size": "Mid to large enterprise"
+  },
+  "motivations": [
+    "advance_to_director_level",
+    "increase_strategic_influence",
+    "master_supply_chain_analytics",
+    "improve_operational_efficiency"
+  ],
+  "pain_points": [
+    "supply_chain_disruptions",
+    "lack_of_strategic_training",
+    "limited_advancement_opportunities",
+    "need_for_data_analytics_skills"
+  ],
+  "goals": {
+    "short_term": "Gain advanced SCM certification",
+    "long_term": "Become VP of Operations or Chief Supply Chain Officer"
+  },
+  "preferred_channels": [
+    "LinkedIn",
+    "industry_publications",
+    "professional_associations",
+    "webinars"
+  ],
+  "behavior_patterns": {
+    "research_phase_duration": "3-6 weeks",
+    "decision_factors": [
+      "program_reputation",
+      "industry_connections",
+      "practical_application",
+      "flexible_scheduling"
+    ],
+    "content_preferences": [
+      "industry_case_studies",
+      "executive_testimonials",
+      "ROI_data",
+      "curriculum_details"
+    ]
+  },
+  "conversion_triggers": {
+    "primary": "promotion_opportunity_available",
+    "secondary": [
+      "employer_tuition_assistance",
+      "industry_networking_events",
+      "supply_chain_crisis_experience"
+    ]
+  },
+  "attribution_data": {
+    "typical_touchpoints": 8,
+    "conversion_timeline": "45-90 days",
+    "high_value_channels": [
+      "LinkedIn",
+      "industry_associations"
+    ]
+  },
+  "communication_style": {
+    "tone_attributes": ["professional", "results_oriented", "analytical"],
+    "preferred_language": ["efficiency", "optimization", "strategic", "data-driven"]
+  },
+  "created_by": "ordae_system",
+  "created_at": "2024-01-15",
+  "data_completeness": 0.92
+}

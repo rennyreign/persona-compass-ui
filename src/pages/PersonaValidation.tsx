@@ -3,9 +3,11 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Sidebar } from "@/components/layout/Sidebar";
 import { TopHeader } from "@/components/layout/TopHeader";
 import { PersonaValidation } from "@/components/persona/PersonaValidation";
+import { ORDAEPersonaValidator } from "@/components/persona/ORDAEPersonaValidator";
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Shield } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ArrowLeft, Shield, Brain } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { Persona } from '@/types/persona';
 
@@ -14,6 +16,7 @@ export default function PersonaValidationPage() {
   const navigate = useNavigate();
   const [persona, setPersona] = useState<Persona | null>(null);
   const [loading, setLoading] = useState(true);
+  const [validationResult, setValidationResult] = useState<any>(null);
 
   useEffect(() => {
     if (personaId) {
@@ -111,7 +114,10 @@ export default function PersonaValidationPage() {
                   Persona Validation
                 </h1>
                 <p className="text-muted-foreground">
-                  Ensure {persona.name} has complete data for effective campaign targeting
+                  {validationResult 
+                    ? `AI validation completed with ${validationResult.overallScore}/100 score`
+                    : `Comprehensive validation and optimization for ${persona.name}`
+                  }
                 </p>
               </div>
             </div>
@@ -145,8 +151,31 @@ export default function PersonaValidationPage() {
               </CardContent>
             </Card>
 
-            {/* Validation Component */}
-            <PersonaValidation persona={persona} />
+            {/* Validation Tabs */}
+            <Tabs defaultValue="ai-validation" className="space-y-6">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="ai-validation" className="flex items-center space-x-2">
+                  <Brain className="w-4 h-4" />
+                  <span>AI Validation</span>
+                </TabsTrigger>
+                <TabsTrigger value="data-validation" className="flex items-center space-x-2">
+                  <Shield className="w-4 h-4" />
+                  <span>Data Validation</span>
+                </TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="ai-validation">
+                <ORDAEPersonaValidator 
+                  personaId={persona.id}
+                  personaName={persona.name}
+                  onValidationComplete={setValidationResult}
+                />
+              </TabsContent>
+
+              <TabsContent value="data-validation">
+                <PersonaValidation persona={persona} />
+              </TabsContent>
+            </Tabs>
           </div>
         </div>
       </div>

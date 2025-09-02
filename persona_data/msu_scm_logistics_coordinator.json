@@ -1,0 +1,88 @@
+{
+  "id": "msu_scm_logistics_coordinator",
+  "university": {
+    "id": "msu",
+    "name": "Michigan State University"
+  },
+  "program": {
+    "id": "scm",
+    "name": "Supply Chain Management",
+    "enrollment_goal": 120
+  },
+  "persona_type": "logistics_coordinator",
+  "name": "Jennifer Park",
+  "title": "Logistics Coordinator",
+  "demographics": {
+    "age_range": "26-35",
+    "income_range": "$45k-$70k",
+    "education": "Bachelor's in Logistics, Business, or related field",
+    "location": "Transportation hubs and port cities",
+    "family_status": "Single or young family"
+  },
+  "professional_background": {
+    "current_role": "Logistics Coordinator/Transportation Analyst",
+    "industry": "Retail/E-commerce/3PL",
+    "experience_years": "3-8",
+    "company_size": "Mid-size to large companies"
+  },
+  "motivations": [
+    "advance_to_logistics_manager",
+    "master_transportation_optimization",
+    "develop_warehouse_management_skills",
+    "understand_international_logistics"
+  ],
+  "pain_points": [
+    "delivery_delays_and_disruptions",
+    "inventory_management_challenges",
+    "cost_optimization_pressure",
+    "technology_integration_needs"
+  ],
+  "goals": {
+    "short_term": "Become Logistics Manager",
+    "long_term": "Director of Distribution or VP of Logistics"
+  },
+  "preferred_channels": [
+    "logistics_publications",
+    "LinkedIn",
+    "transportation_forums",
+    "supply_chain_webinars"
+  ],
+  "behavior_patterns": {
+    "research_phase_duration": "2-5 weeks",
+    "decision_factors": [
+      "practical_application",
+      "technology_focus",
+      "career_advancement_potential",
+      "flexible_learning_options"
+    ],
+    "content_preferences": [
+      "logistics_optimization_cases",
+      "technology_integration_examples",
+      "career_progression_stories",
+      "industry_trend_analysis"
+    ]
+  },
+  "conversion_triggers": {
+    "primary": "promotion_opportunity_with_requirements",
+    "secondary": [
+      "technology_transformation_at_work",
+      "employer_education_benefits",
+      "industry_certification_needs"
+    ]
+  },
+  "attribution_data": {
+    "typical_touchpoints": 7,
+    "conversion_timeline": "30-75 days",
+    "high_value_channels": [
+      "logistics_publications",
+      "LinkedIn"
+    ]
+  },
+  "communication_style": {
+    "tone_attributes": ["solution_oriented", "tech_savvy", "collaborative"],
+    "preferred_language": ["optimization", "efficiency", "innovation", "streamlined"]
+  },
+  "created_by": "ordae_system",
+  "created_at": "2024-01-15",
+  "data_completeness": 0.88
+}

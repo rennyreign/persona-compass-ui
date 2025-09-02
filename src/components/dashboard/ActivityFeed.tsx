@@ -1,7 +1,17 @@
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Activity } from "@/data/mockData";
+// Activity interface moved inline - no mock data dependency
 import { cn } from "@/lib/utils";
+
+interface Activity {
+  id: string;
+  type: 'persona_created' | 'campaign_launched' | 'insight_generated' | 'performance_alert';
+  title: string;
+  description: string;
+  timestamp: string;
+  personaId?: string;
+  campaignId?: string;
+}
 
 interface ActivityFeedProps {
   activities: Activity[];

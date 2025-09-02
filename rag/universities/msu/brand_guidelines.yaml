@@ -1,0 +1,89 @@
+university:
+  id: msu
+  name: "Michigan State University"
+  online_brand: "MSU Online"
+  tagline: "Reach Your Full Potential with Michigan State University Online"
+  
+brand_identity:
+  mascot: "Spartans"
+  colors:
+    primary: "Green"
+    secondary: "White"
+  
+  core_values:
+    - "Excellence in education"
+    - "Innovation and forward-thinking"
+    - "Practical application"
+    - "Leadership development"
+    - "Accessibility and flexibility"
+    
+  brand_personality:
+    - "Future-focused"
+    - "Practical"
+    - "Achievement-oriented"
+    - "Professional"
+    - "Empowering"
+
+messaging_framework:
+  primary_value_proposition: "Make tomorrow's business happen today"
+  
+  key_themes:
+    leadership_focus:
+      - "Future-focused leaders"
+      - "Forward-thinking solutions"
+      - "Leadership excellence"
+      - "Strategic leadership"
+      
+    practical_education:
+      - "Practical education experience"
+      - "Impactful skills"
+      - "Apply knowledge to career quickly"
+      - "Real-world application"
+      
+    flexibility_convenience:
+      - "100% online"
+      - "Accelerated timeframe"
+      - "Work-life balance"
+      - "Professional advancement"
+      
+    quality_reputation:
+      - "AACSB accredited since 1953"
+      - "Top-ranked faculty"
+      - "Eli Broad College of Business"
+      - "Top 25 Best Online Master's programs"
+
+target_messaging_by_persona:
+  working_professional:
+    primary: "Advance your career while maintaining work-life balance"
+    secondary: "Gain strategic leadership skills that drive immediate impact"
+    pain_points_addressed: ["time_constraints", "career_advancement", "skill_gaps"]
+    
+  career_changer:
+    primary: "Transform your career with proven management foundations"
+    secondary: "Bridge to leadership roles with practical business strategy"
+    pain_points_addressed: ["skill_transition", "credibility", "career_uncertainty"]
+    
+  military_veteran:
+    primary: "Translate your leadership experience into business success"
+    secondary: "Strategic management skills for civilian career advancement"
+    pain_points_addressed: ["civilian_transition", "business_acumen", "credential_recognition"]
+
+compliance_requirements:
+  accreditation_mention: "Always mention AACSB accreditation when discussing program quality"
+  ranking_claims: "Use current U.S. News rankings with proper attribution"
+  admission_requirements: "Always include minimum GPA and experience requirements"
+  cost_transparency: "Include current tuition rates when discussing program investment"
+  
+brand_voice:
+  tone: "Professional yet approachable"
+  style: "Confident and empowering"
+  avoid:
+    - "Overly academic jargon"
+    - "Passive language"
+    - "Generic business school claims"
+  
+  preferred_language:
+    - "Future-focused instead of modern"
+    - "Practical instead of theoretical"
+    - "Leadership excellence instead of management skills"
+    - "Strategic advantage instead of competitive edge"

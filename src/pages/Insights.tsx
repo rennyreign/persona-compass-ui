@@ -3,17 +3,37 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Brain, Lightbulb, TrendingUp, AlertTriangle, Sparkles, Search, Filter, Calendar } from "lucide-react";
+import { Brain, Lightbulb, TrendingUp, AlertTriangle, Sparkles, Search, Filter, Calendar, BarChart3 } from "lucide-react";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { TopHeader } from "@/components/layout/TopHeader";
-import { mockInsights } from "@/data/mockData";
+import { ORDAEInsightsGenerator } from "@/components/insights/ORDAEInsightsGenerator";
+// Mock data removed - using database-driven insights
+
+interface AIInsight {
+  id: string;
+  title: string;
+  content: string;
+  type: 'optimization' | 'opportunity' | 'warning' | 'trend';
+  confidence: number;
+  impact: 'high' | 'medium' | 'low';
+  personaId: string;
+  generatedAt: string;
+  isGptGenerated: boolean;
+  vectorSimilarity?: number;
+  recommendations: string[];
+}
 
 const Insights = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterType, setFilterType] = useState("all");
+  const [aiInsights, setAiInsights] = useState<AIInsight[]>([]);
+  const [showGenerator, setShowGenerator] = useState(false);
+
+  // Use only AI-generated insights (database-driven)
+  const allInsights = [...aiInsights];
 
   // Sort insights by date (newest first)
-  const sortedInsights = [...mockInsights].sort((a, b) => 
+  const sortedInsights = [...allInsights].sort((a, b) => 
     new Date(b.generatedAt).getTime() - new Date(a.generatedAt).getTime()
   );
 
@@ -25,6 +45,11 @@ const Insights = () => {
     return matchesSearch && matchesType;
   });
 
+  const handleAIInsightsGenerated = (newInsights: AIInsight[]) => {
+    setAiInsights(prev => [...newInsights, ...prev]);
+    setShowGenerator(false);
+  };
+
   const getInsightIcon = (type: string) => {
     switch (type) {
       case 'optimization':
@@ -34,7 +59,7 @@ const Insights = () => {
       case 'warning':
         return <AlertTriangle className="w-5 h-5 text-red-600" />;
       case 'trend':
-        return <TrendingUp className="w-5 h-5 text-green-600" />;
+        return <BarChart3 className="w-5 h-5 text-green-600" />;
       default:
         return <Brain className="w-5 h-5 text-gray-600" />;
     }
@@ -66,7 +91,7 @@ const Insights = () => {
   };
 
   const getTypeCount = (type: string) => {
-    return mockInsights.filter(insight => insight.type === type).length;
+    return allInsights.filter(insight => insight.type === type).length;
   };
 
   return (
@@ -85,22 +110,40 @@ const Insights = () => {
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-3xl font-bold text-foreground">AI Insights</h1>
-                <p className="text-muted-foreground mt-2">Audit trail of recent insights and recommendations</p>
+                <p className="text-muted-foreground mt-2">
+                  {aiInsights.length > 0 
+                    ? `${aiInsights.length} AI-generated insights available`
+                    : "Generate AI insights from your persona and campaign data"
+                  }
+                </p>
               </div>
-              <Button className="flex items-center space-x-2">
-                <Sparkles className="w-4 h-4" />
-                <span>Generate New Insights</span>
+              <Button 
+                className="flex items-center space-x-2"
+                onClick={() => setShowGenerator(!showGenerator)}
+              >
+                <Brain className="w-4 h-4" />
+                <span>{showGenerator ? 'Hide Generator' : 'Generate AI Insights'}</span>
               </Button>
             </div>
 
+            {/* ORDAE AI Insights Generator */}
+            {showGenerator && (
+              <ORDAEInsightsGenerator onInsightsGenerated={handleAIInsightsGenerated} />
+            )}
+
             {/* Summary Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
               <Card>
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm font-medium text-muted-foreground">Total Insights</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold text-foreground">{mockInsights.length}</div>
+                  <div className="text-2xl font-bold text-foreground">{allInsights.length}</div>
+                  {aiInsights.length > 0 && (
+                    <div className="text-xs text-muted-foreground">
+                      {aiInsights.length} AI-generated
+                    </div>
+                  )}
                 </CardContent>
               </Card>
               
@@ -130,13 +173,27 @@ const Insights = () => {
                   <div className="text-2xl font-bold text-red-600">{getTypeCount('warning')}</div>
                 </CardContent>
               </Card>
+
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-medium text-muted-foreground">Trends</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold text-green-600">{getTypeCount('trend')}</div>
+                </CardContent>
+              </Card>
             </div>
 
             {/* Filters and Search */}
             <Card>
               <CardHeader>
                 <CardTitle>Insights Feed</CardTitle>
-                <CardDescription>Search and filter through your AI-generated insights</CardDescription>
+                <CardDescription>
+                  {aiInsights.length > 0 
+                    ? "AI-powered insights with vector memory analysis and historical data"
+                    : "Search and filter through your insights"
+                  }
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="flex flex-col md:flex-row gap-4 mb-6">
@@ -156,10 +213,11 @@ const Insights = () => {
                     <Filter className="w-4 h-4 text-muted-foreground" />
                     <div className="flex space-x-2">
                       {[
-                        { key: 'all', label: 'All', count: mockInsights.length },
+                        { key: 'all', label: 'All', count: allInsights.length },
                         { key: 'optimization', label: 'Optimizations', count: getTypeCount('optimization') },
                         { key: 'opportunity', label: 'Opportunities', count: getTypeCount('opportunity') },
                         { key: 'warning', label: 'Warnings', count: getTypeCount('warning') },
+                        { key: 'trend', label: 'Trends', count: getTypeCount('trend') },
                       ].map((filter) => (
                         <Button
                           key={filter.key}
@@ -220,12 +278,37 @@ const Insights = () => {
                                         AI Generated
                                       </Badge>
                                     )}
+                                    {(insight as any).confidence && (
+                                      <Badge variant="outline" className="text-xs">
+                                        {(insight as any).confidence}% confidence
+                                      </Badge>
+                                    )}
+                                    {(insight as any).vectorSimilarity && (
+                                      <Badge variant="outline" className="text-xs">
+                                        {((insight as any).vectorSimilarity * 100).toFixed(0)}% similarity
+                                      </Badge>
+                                    )}
                                   </div>
                                 </div>
                                 
                                 <p className="text-foreground leading-relaxed">
                                   {insight.content}
                                 </p>
+
+                                {/* AI-generated recommendations */}
+                                {(insight as any).recommendations && (insight as any).recommendations.length > 0 && (
+                                  <div className="mt-3 p-3 bg-gray-50 rounded-lg">
+                                    <h4 className="text-sm font-medium text-gray-800 mb-2">Recommendations:</h4>
+                                    <ul className="space-y-1">
+                                      {(insight as any).recommendations.map((rec: string, index: number) => (
+                                        <li key={index} className="text-sm text-gray-600 flex items-start gap-2">
+                                          <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-2 flex-shrink-0" />
+                                          {rec}
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  </div>
+                                )}
                                 
                                 <div className="flex items-center space-x-4 text-sm text-muted-foreground">
                                   <div className="flex items-center space-x-1">
@@ -236,6 +319,14 @@ const Insights = () => {
                                     <span className="w-2 h-2 bg-primary rounded-full"></span>
                                     <span>Persona: {insight.personaId}</span>
                                   </div>
+                                  {(insight as any).impact && (
+                                    <Badge 
+                                      variant={(insight as any).impact === 'high' ? 'default' : 'secondary'} 
+                                      className="text-xs"
+                                    >
+                                      {(insight as any).impact} impact
+                                    </Badge>
+                                  )}
                                 </div>
                               </div>
                             </div>

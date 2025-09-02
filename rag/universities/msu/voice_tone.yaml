@@ -1,0 +1,99 @@
+voice_guidelines:
+  university_id: msu
+  brand_voice: "MSU Online"
+  
+  core_voice_attributes:
+    authoritative: "Backed by AACSB accreditation and top rankings"
+    empowering: "Focus on unlocking potential and driving success"
+    practical: "Emphasis on real-world application and immediate impact"
+    future_oriented: "Forward-thinking solutions and tomorrow's leadership"
+    accessible: "Professional yet approachable, not intimidating"
+
+  tone_variations:
+    awareness_stage:
+      tone: "Inspirational and aspirational"
+      messaging: "Future-focused leadership, strategic advantage, career transformation"
+      example: "Make tomorrow's business happen today with strategic leadership skills that drive real impact"
+      
+    consideration_stage:
+      tone: "Informative and credible"
+      messaging: "Program details, faculty expertise, accreditation, rankings"
+      example: "Learn from top-ranked faculty in our AACSB-accredited program, designed for experienced professionals"
+      
+    decision_stage:
+      tone: "Confident and supportive"
+      messaging: "Clear next steps, admission process, student success"
+      example: "Join a network of future-focused leaders. Apply today and start your transformation in 20 months"
+
+  messaging_hierarchy:
+    primary_messages:
+      - "Future-focused leadership development"
+      - "Practical skills with immediate career impact"
+      - "100% online flexibility for working professionals"
+      - "AACSB-accredited excellence"
+      
+    supporting_messages:
+      - "Top-ranked faculty and programs"
+      - "Accelerated 20-month completion"
+      - "Strategic management expertise"
+      - "Network of professional leaders"
+
+  language_preferences:
+    power_words:
+      - "Transform"
+      - "Strategic"
+      - "Excellence" 
+      - "Future-focused"
+      - "Impact"
+      - "Leadership"
+      - "Practical"
+      - "Advanced"
+      
+    avoid_words:
+      - "Cheap or affordable (use investment or value)"
+      - "Easy (use accessible or flexible)"
+      - "Basic (use foundational or essential)"
+      - "Online only (use 100% online or fully online)"
+
+  call_to_action_style:
+    primary_ctas:
+      - "Start Your Leadership Journey"
+      - "Apply Today"
+      - "Become a Future-Focused Leader"
+      - "Transform Your Career"
+      
+    secondary_ctas:
+      - "Learn More About the Program"
+      - "Speak with an Advisor"
+      - "Download Program Guide"
+      - "Explore Curriculum"
+
+  persona_specific_voice:
+    working_professional:
+      tone: "Respectful of their experience, focused on advancement"
+      key_phrases: ["leverage your experience", "next level leadership", "strategic advantage"]
+      
+    career_changer:
+      tone: "Encouraging and confidence-building"
+      key_phrases: ["bridge to leadership", "transform your career", "proven foundations"]
+      
+    military_veteran:
+      tone: "Respectful of service, focused on translation"
+      key_phrases: ["translate leadership experience", "civilian career success", "strategic business skills"]
+
+  content_guidelines:
+    headlines:
+      structure: "Benefit + Credential/Proof Point"
+      examples:
+        - "Advance Your Career with Top-Ranked Leadership Education"
+        - "Strategic Management Skills from AACSB-Accredited Faculty"
+        - "Future-Focused Leadership in Just 20 Months"
+        
+    body_copy:
+      structure: "Problem → Solution → Proof → Action"
+      length: "Concise but comprehensive, scannable format"
+      style: "Professional bullets, clear benefits, specific outcomes"
+      
+    testimonials:
+      focus: "Career impact, practical application, program flexibility"
+      attribution: "Name, title, graduation year when possible"

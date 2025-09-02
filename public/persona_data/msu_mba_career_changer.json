@@ -1,0 +1,66 @@
+{
+  "id": "msu_mba_career_changer",
+  "university": {
+    "id": "msu",
+    "name": "Michigan State University"
+  },
+  "program": {
+    "id": "mba",
+    "name": "MBA Program",
+    "enrollment_goal": 150
+  },
+  "persona_type": "career_changer",
+  "demographics": {
+    "age_range": "28-40",
+    "income_range": "$50k-$80k",
+    "education": "Bachelor's degree"
+  },
+  "motivations": [
+    "career_advancement",
+    "salary_increase",
+    "skill_development"
+  ],
+  "pain_points": [
+    "time_constraints",
+    "financial_concerns",
+    "career_uncertainty"
+  ],
+  "preferred_channels": [
+    "LinkedIn",
+    "professional_networks",
+    "career_websites"
+  ],
+  "behavior_patterns": {
+    "research_phase_duration": "2-4 weeks",
+    "decision_factors": [
+      "program_reputation",
+      "flexibility",
+      "cost",
+      "career_outcomes"
+    ],
+    "content_preferences": [
+      "case_studies",
+      "alumni_testimonials",
+      "program_details"
+    ]
+  },
+  "conversion_triggers": {
+    "primary": "application_deadline_approaching",
+    "secondary": [
+      "scholarship_availability",
+      "peer_recommendations",
+      "career_advancement_urgency"
+    ]
+  },
+  "attribution_data": {
+    "typical_touchpoints": 7,
+    "conversion_timeline": "30-60 days",
+    "high_value_channels": [
+      "LinkedIn",
+      "professional_networks"
+    ]
+  },
+  "created_by": "ordae_system",
+  "created_at": "/Users/renaldoedmondson/Library/CloudStorage/Dropbox/projects/ADXAgents/personadb/persona-compass-ui",
+  "data_completeness": 0.85
+}

@@ -1,0 +1,88 @@
+{
+  "id": "msu_scm_procurement_specialist",
+  "university": {
+    "id": "msu",
+    "name": "Michigan State University"
+  },
+  "program": {
+    "id": "scm",
+    "name": "Supply Chain Management",
+    "enrollment_goal": 120
+  },
+  "persona_type": "procurement_specialist",
+  "name": "Marcus Rodriguez",
+  "title": "Senior Procurement Specialist",
+  "demographics": {
+    "age_range": "28-38",
+    "income_range": "$55k-$85k",
+    "education": "Bachelor's in Business, Economics, or related field",
+    "location": "Major metropolitan areas",
+    "family_status": "Single or newly married"
+  },
+  "professional_background": {
+    "current_role": "Procurement Specialist/Buyer",
+    "industry": "Healthcare/Technology/Government",
+    "experience_years": "5-12",
+    "company_size": "Large enterprise or government"
+  },
+  "motivations": [
+    "become_procurement_manager",
+    "master_strategic_sourcing",
+    "develop_vendor_negotiation_skills",
+    "understand_global_supply_chains"
+  ],
+  "pain_points": [
+    "vendor_relationship_management",
+    "cost_reduction_pressure",
+    "compliance_requirements",
+    "limited_strategic_involvement"
+  ],
+  "goals": {
+    "short_term": "Lead strategic sourcing initiatives",
+    "long_term": "Become Chief Procurement Officer"
+  },
+  "preferred_channels": [
+    "professional_associations",
+    "LinkedIn",
+    "procurement_forums",
+    "industry_conferences"
+  ],
+  "behavior_patterns": {
+    "research_phase_duration": "2-4 weeks",
+    "decision_factors": [
+      "certification_value",
+      "networking_opportunities",
+      "practical_skills",
+      "cost_effectiveness"
+    ],
+    "content_preferences": [
+      "procurement_best_practices",
+      "negotiation_strategies",
+      "supplier_management_cases",
+      "cost_savings_examples"
+    ]
+  },
+  "conversion_triggers": {
+    "primary": "career_advancement_opportunity",
+    "secondary": [
+      "professional_certification_requirement",
+      "employer_sponsorship",
+      "industry_transformation"
+    ]
+  },
+  "attribution_data": {
+    "typical_touchpoints": 6,
+    "conversion_timeline": "30-60 days",
+    "high_value_channels": [
+      "professional_associations",
+      "LinkedIn"
+    ]
+  },
+  "communication_style": {
+    "tone_attributes": ["detail_oriented", "cost_conscious", "relationship_focused"],
+    "preferred_language": ["savings", "efficiency", "partnership", "value"]
+  },
+  "created_by": "ordae_system",
+  "created_at": "2024-01-15",
+  "data_completeness": 0.90
+}

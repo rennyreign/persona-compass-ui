@@ -1,0 +1,151 @@
+programs:
+  - id: msu_msl
+    university_id: msu
+    name: "MS in Management, Strategy & Leadership"
+    college: "Eli Broad College of Business"
+    delivery: "Online"
+    estimated_credits: 30
+    duration: "20 months"
+    format: "15 five-week courses"
+    start_cycles: ["Fall", "Spring", "Summer"]
+    cost_per_credit: 1130
+    total_program_cost: 33900
+    accreditation: "AACSB accredited since 1953"
+    
+    admissions_highlights:
+      min_gpa: 3.0
+      experience_required: true
+      experience_note: "3+ years managerial/supervisory experience minimum"
+      bachelor_degree: "From regionally accredited university"
+      
+    curriculum_focus:
+      - "Team and organizational leadership"
+      - "Strategic management" 
+      - "Negotiation and conflict resolution"
+      - "Human resource management"
+      - "Managerial decision making and ethics"
+      - "Organizational learning and change management"
+      - "Competitive business strategy"
+      
+    concentrations:
+      - name: "Human Resource Management"
+        courses: 4
+      - name: "Strategic Management"
+        courses: 4
+        
+    personas_target:
+      - key: working_professional
+        emphasis: ["career_acceleration", "leadership_skills", "flexibility"]
+        fit_score: 0.95
+      - key: career_changer
+        emphasis: ["skill_bridge", "management_foundations", "strategic_thinking"]
+        fit_score: 0.85
+      - key: military_veteran
+        emphasis: ["leadership_transition", "business_acumen", "team_management"]
+        fit_score: 0.80
+        
+    channels_priority: ["LinkedIn", "Search", "Professional Networks"]
+    
+    experiments_required:
+      - type: message_angle
+        details: 
+          variants: ["ROI & promotion focus", "Lead teams confidently", "Strategic leadership edge"]
+          test_duration: "4 weeks"
+      - type: channel_split
+        details: 
+          channels: ["LinkedIn", "Search"]
+          budget_split: "60/40"
+      - type: audience_targeting
+        details:
+          segments: ["Current managers", "Aspiring leaders", "Career changers"]
+          
+    rankings_achievements:
+      - "Top 25 Best Online Master's in Business Programs (U.S. News 2017-2025)"
+      - "#1 General Management specialty ranking"
+      - "#1 HR Management specialty ranking" 
+      - "#2 Leadership specialty ranking"
+      - "#5 Best Online Master's for Veterans"
+      
+    source_of_truth:
+      program_page: "https://www.michiganstateuniversityonline.com/programs/degrees/ms-management-strategy-leadership/"
+      
+  - id: msu_scm
+    university_id: msu
+    name: "MS in Supply Chain Management"
+    college: "Eli Broad College of Business"
+    delivery: "Online"
+    estimated_credits: 30
+    start_cycles: ["Fall", "Spring", "Summer"]
+    
+    personas_target:
+      - key: working_professional
+        emphasis: ["supply_chain_expertise", "operations_optimization", "career_advancement"]
+      - key: career_changer
+        emphasis: ["industry_transition", "technical_skills", "supply_chain_fundamentals"]
+        
+    channels_priority: ["LinkedIn", "Industry Publications", "Search"]
+    
+    source_of_truth:
+      program_page: "https://www.michiganstateuniversityonline.com/programs/degrees/ms-supply-chain-management/"
+      
+  - id: msu_hcm
+    university_id: msu
+    name: "MS in Healthcare Management"
+    college: "Eli Broad College of Business"
+    delivery: "Online"
+    estimated_credits: 30
+    start_cycles: ["Fall", "Spring", "Summer"]
+    
+    personas_target:
+      - key: healthcare_professional
+        emphasis: ["leadership_transition", "healthcare_business", "management_skills"]
+      - key: working_professional
+        emphasis: ["healthcare_industry_entry", "management_advancement"]
+        
+    channels_priority: ["Healthcare Networks", "LinkedIn", "Search"]
+    
+    source_of_truth:
+      program_page: "https://www.michiganstateuniversityonline.com/programs/degrees/ms-healthcare-management/"
+
+certificates:
+  - id: msu_strategic_mgmt_cert
+    university_id: msu
+    name: "Strategic Management Graduate Certificate"
+    college: "Eli Broad College of Business"
+    delivery: "Online"
+    type: "For-Credit Graduate Certificate"
+    
+    personas_target:
+      - key: working_professional
+        emphasis: ["strategic_thinking", "quick_skill_boost", "career_enhancement"]
+        
+    source_of_truth:
+      program_page: "https://www.michiganstateuniversityonline.com/programs/for-credit-certificates/strategic-management-graduate-certificate/"
+      
+  - id: msu_hr_mgmt_cert
+    university_id: msu
+    name: "HR Management & Development Graduate Certificate"
+    college: "Eli Broad College of Business"
+    delivery: "Online"
+    type: "For-Credit Graduate Certificate"
+    
+    personas_target:
+      - key: working_professional
+        emphasis: ["hr_specialization", "people_management", "professional_development"]
+        
+    source_of_truth:
+      program_page: "https://www.michiganstateuniversityonline.com/programs/for-credit-certificates/hr-management-development-graduate-certificate/"
+      
+  - id: msu_leadership_cert
+    university_id: msu
+    name: "Leadership & Managing Teams Graduate Certificate"
+    college: "Eli Broad College of Business"
+    delivery: "Online"
+    type: "For-Credit Graduate Certificate"
+    
+    personas_target:
+      - key: working_professional
+        emphasis: ["team_leadership", "management_skills", "leadership_development"]
+        
+    source_of_truth:
+      program_page: "https://www.michiganstateuniversityonline.com/programs/for-credit-certificates/leadership-managing-teams-graduate-certificate/"

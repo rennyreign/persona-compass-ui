@@ -1,0 +1,23 @@
+{
+  "mission": "autonomous_university_onboarding",
+  "universities": [
+    "msu"
+  ],
+  "target_programs": [
+    "mba",
+    "online_mba",
+    "mscs"
+  ],
+  "success_metrics": {
+    "personas_per_program": 3,
+    "data_completeness_threshold": 0.8,
+    "campaign_readiness_score": 0.75
+  },
+  "constraints": {
+    "max_iterations": 10,
+    "budget_limit": null,
+    "timeline_days": 30
+  },
+  "status": "active",
+  "created_at": "/Users/renaldoedmondson/Library/CloudStorage/Dropbox/projects/ADXAgents/personadb/persona-compass-ui"
+}

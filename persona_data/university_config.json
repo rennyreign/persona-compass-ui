@@ -1,0 +1,69 @@
+{
+  "universities": [
+    {
+      "id": "msu",
+      "name": "Michigan State University",
+      "programs": [
+        {
+          "id": "mba",
+          "name": "MBA Program",
+          "target_personas": ["career_changer", "working_professional", "recent_graduate"],
+          "priority": "high",
+          "enrollment_goals": 150
+        },
+        {
+          "id": "mscs",
+          "name": "MS Computer Science",
+          "target_personas": ["tech_professional", "career_switcher", "international_student"],
+          "priority": "medium",
+          "enrollment_goals": 80
+        }
+      ]
+    },
+    {
+      "id": "asu",
+      "name": "Arizona State University",
+      "programs": [
+        {
+          "id": "online_mba",
+          "name": "Online MBA",
+          "target_personas": ["remote_worker", "working_parent", "military_veteran"],
+          "priority": "high",
+          "enrollment_goals": 200
+        }
+      ]
+    }
+  ],
+  "persona_templates": {
+    "career_changer": {
+      "demographics": {
+        "age_range": "28-40",
+        "income_range": "$50k-$80k",
+        "education": "Bachelor's degree"
+      },
+      "motivations": ["career_advancement", "salary_increase", "skill_development"],
+      "pain_points": ["time_constraints", "financial_concerns", "career_uncertainty"],
+      "channels": ["LinkedIn", "professional_networks", "career_websites"]
+    },
+    "working_professional": {
+      "demographics": {
+        "age_range": "25-35",
+        "income_range": "$60k-$100k",
+        "education": "Bachelor's degree + work experience"
+      },
+      "motivations": ["leadership_skills", "promotion_readiness", "network_building"],
+      "pain_points": ["work_life_balance", "program_flexibility", "employer_support"],
+      "channels": ["company_partnerships", "LinkedIn", "industry_events"]
+    },
+    "recent_graduate": {
+      "demographics": {
+        "age_range": "22-26",
+        "income_range": "$35k-$55k",
+        "education": "Recent bachelor's degree"
+      },
+      "motivations": ["competitive_advantage", "career_acceleration", "skill_specialization"],
+      "pain_points": ["student_debt", "limited_experience", "job_market_competition"],
+      "channels": ["university_partnerships", "social_media", "career_fairs"]
+    }
+  }
+}

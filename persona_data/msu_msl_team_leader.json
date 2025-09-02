@@ -1,0 +1,88 @@
+{
+  "id": "msu_msl_team_leader",
+  "university": {
+    "id": "msu",
+    "name": "Michigan State University"
+  },
+  "program": {
+    "id": "msl",
+    "name": "Management and Leadership",
+    "enrollment_goal": 100
+  },
+  "persona_type": "team_leader",
+  "name": "Amanda Thompson",
+  "title": "Team Leader",
+  "demographics": {
+    "age_range": "30-40",
+    "income_range": "$60k-$90k",
+    "education": "Bachelor's degree in any field",
+    "location": "Suburban and urban areas",
+    "family_status": "Married with children"
+  },
+  "professional_background": {
+    "current_role": "Team Leader/Supervisor",
+    "industry": "Healthcare/Financial Services/Technology",
+    "experience_years": "7-12",
+    "company_size": "Mid to large organizations"
+  },
+  "motivations": [
+    "advance_to_management_role",
+    "improve_leadership_skills",
+    "increase_team_effectiveness",
+    "develop_strategic_thinking"
+  ],
+  "pain_points": [
+    "managing_difficult_team_members",
+    "lack_of_formal_leadership_training",
+    "balancing_work_and_family",
+    "limited_advancement_opportunities"
+  ],
+  "goals": {
+    "short_term": "Become Department Manager",
+    "long_term": "Director or VP level position"
+  },
+  "preferred_channels": [
+    "LinkedIn",
+    "management_blogs",
+    "professional_development_sites",
+    "company_internal_communications"
+  ],
+  "behavior_patterns": {
+    "research_phase_duration": "4-6 weeks",
+    "decision_factors": [
+      "program_flexibility",
+      "leadership_skill_development",
+      "career_advancement_potential",
+      "employer_support"
+    ],
+    "content_preferences": [
+      "leadership_case_studies",
+      "management_best_practices",
+      "team_building_strategies",
+      "success_stories"
+    ]
+  },
+  "conversion_triggers": {
+    "primary": "promotion_opportunity_requiring_leadership_credentials",
+    "secondary": [
+      "team_performance_challenges",
+      "employer_tuition_reimbursement",
+      "leadership_development_program"
+    ]
+  },
+  "attribution_data": {
+    "typical_touchpoints": 8,
+    "conversion_timeline": "60-120 days",
+    "high_value_channels": [
+      "LinkedIn",
+      "management_blogs"
+    ]
+  },
+  "communication_style": {
+    "tone_attributes": ["supportive", "growth_oriented", "practical"],
+    "preferred_language": ["development", "empowerment", "results", "collaboration"]
+  },
+  "created_by": "ordae_system",
+  "created_at": "2024-01-15",
+  "data_completeness": 0.89
+}

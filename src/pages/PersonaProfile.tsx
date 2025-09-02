@@ -1,21 +1,24 @@
 import { useState, useEffect } from "react";
 import { useParams, Navigate, useNavigate } from "react-router-dom";
-import { ArrowLeft, Edit, Archive, TrendingUp, Target, Brain, User, Images } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ArrowLeft, Edit, Archive, TrendingUp, Target, Brain, User, Images, MapPin, DollarSign, GraduationCap, Building, Users, Heart, AlertTriangle } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Separator } from '@/components/ui/separator';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PersonaPerformanceCharts } from "@/components/persona/PersonaPerformanceCharts";
 import { PersonaCampaigns } from "@/components/persona/PersonaCampaigns";
 import { PersonaInsights } from "@/components/persona/PersonaInsights";
 import { PersonaVisualIdentity } from "@/components/persona/PersonaVisualIdentity";
 import { PersonaValidation } from "@/components/persona/PersonaValidation";
+import { PersonaAttributesList } from "@/components/persona/PersonaAttributesList";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { TopHeader } from "@/components/layout/TopHeader";
-import { supabase } from "@/integrations/supabase/client";
 import { Persona, Insight } from "@/types/persona";
 import { toast } from "@/hooks/use-toast";
+import { formatPersonaAttribute } from '@/utils/formatPersonaAttributes';
 
 
 export default function PersonaProfile() {
@@ -254,149 +257,124 @@ export default function PersonaProfile() {
 
           <TabsContent value="details" className="space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Demographics */}
+              <div className="space-y-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Demographics</CardTitle>
+                    <CardDescription>
+                      Statistical data about the persona's background
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="grid grid-cols-1 gap-4">
+                      <div>
+                        <label className="text-sm font-medium text-muted-foreground">Location</label>
+                        <p className="text-sm text-foreground mt-1">{persona.location || "Not specified"}</p>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-muted-foreground">Income Range</label>
+                        <p className="text-sm text-foreground mt-1">{persona.income_range || "Not specified"}</p>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-muted-foreground">Education Level</label>
+                        <p className="text-sm text-foreground mt-1">{persona.education_level || "Not specified"}</p>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-muted-foreground">Industry</label>
+                        <p className="text-sm text-foreground mt-1">{persona.industry || "Not specified"}</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Goals & Aspirations</CardTitle>
+                    <CardDescription>
+                      What this persona wants to achieve
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <PersonaAttributesList 
+                      attributes={persona.goals} 
+                      title="Goals" 
+                      emptyMessage="No goals specified"
+                    />
+                  </CardContent>
+                </Card>
+              </div>
+
+              <div className="space-y-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Psychographics</CardTitle>
+                    <CardDescription>
+                      Psychological attributes and behavioral patterns
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <PersonaAttributesList 
+                      attributes={persona.values} 
+                      title="Core Values" 
+                      emptyMessage="No values specified"
+                    />
+                    <PersonaAttributesList 
+                      attributes={persona.personality_traits} 
+                      title="Personality Traits" 
+                      emptyMessage="No personality traits specified"
+                    />
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Pain Points & Challenges</CardTitle>
+                    <CardDescription>
+                      What frustrates or blocks this persona
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <PersonaAttributesList 
+                      attributes={persona.pain_points} 
+                      title="Pain Points" 
+                      emptyMessage="No pain points specified"
+                    />
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+
+            {/* Performance Metrics */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center space-x-2">
-                    <User className="w-5 h-5 text-primary" />
-                    <span>Demographics</span>
-                  </CardTitle>
-                  <CardDescription>
-                    Statistical data about the persona's background
-                  </CardDescription>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-medium text-muted-foreground">Cost Per Lead</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="text-sm font-medium text-muted-foreground">Location</label>
-                      <p className="text-sm text-foreground mt-1">{persona.location || "Not specified"}</p>
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium text-muted-foreground">Income Range</label>
-                      <p className="text-sm text-foreground mt-1">{persona.income_range || "Not specified"}</p>
-                    </div>
-                    <div className="col-span-2">
-                      <label className="text-sm font-medium text-muted-foreground">Education Level</label>
-                      <p className="text-sm text-foreground mt-1">{persona.education_level || "Not specified"}</p>
-                    </div>
-                    <div className="col-span-2">
-                      <label className="text-sm font-medium text-muted-foreground">Industry</label>
-                      <p className="text-sm text-foreground mt-1">{persona.industry || "Not specified"}</p>
-                    </div>
-                  </div>
+                <CardContent>
+                  <div className="text-2xl font-bold text-foreground">$45.20</div>
                 </CardContent>
               </Card>
-
-              {/* Psychographics */}
+              
               <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center space-x-2">
-                    <Brain className="w-5 h-5 text-primary" />
-                    <span>Psychographics</span>
-                  </CardTitle>
-                  <CardDescription>
-                    Psychological attributes and behavioral patterns
-                  </CardDescription>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-medium text-muted-foreground">Click-Through Rate</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <div>
-                    <label className="text-sm font-medium text-muted-foreground">Core Values</label>
-                    <div className="flex flex-wrap gap-2 mt-2">
-                      {persona.values && persona.values.length > 0 ? (
-                        persona.values.map((value, index) => (
-                          <Badge key={index} variant="outline" className="text-xs">
-                            {value}
-                          </Badge>
-                        ))
-                      ) : (
-                        <p className="text-sm text-muted-foreground">No values specified</p>
-                      )}
-                    </div>
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium text-muted-foreground">Personality Traits</label>
-                    <div className="flex flex-wrap gap-2 mt-2">
-                      {persona.personality_traits && persona.personality_traits.length > 0 ? (
-                        persona.personality_traits.map((trait, index) => (
-                          <Badge key={index} variant="secondary" className="text-xs">
-                            {trait}
-                          </Badge>
-                        ))
-                      ) : (
-                        <p className="text-sm text-muted-foreground">No personality traits specified</p>
-                      )}
-                    </div>
-                  </div>
+                <CardContent>
+                  <div className="text-2xl font-bold text-foreground">3.2%</div>
+                </CardContent>
+              </Card>
+              
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-medium text-muted-foreground">Total Leads</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold text-foreground">156</div>
                 </CardContent>
               </Card>
             </div>
-
-            {/* Goals and Pain Points */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-green-600">Goals</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-2">
-                    {persona.goals && persona.goals.length > 0 ? (
-                      persona.goals.map((goal, index) => (
-                        <li key={index} className="text-sm text-foreground flex items-start space-x-2">
-                          <span className="text-green-500 mt-0.5">•</span>
-                          <span>{goal}</span>
-                        </li>
-                      ))
-                    ) : (
-                      <li className="text-sm text-muted-foreground">No goals specified</li>
-                    )}
-                  </ul>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-red-600">Pain Points</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-2">
-                    {persona.pain_points && persona.pain_points.length > 0 ? (
-                      persona.pain_points.map((painPoint, index) => (
-                        <li key={index} className="text-sm text-foreground flex items-start space-x-2">
-                          <span className="text-red-500 mt-0.5">•</span>
-                          <span>{painPoint}</span>
-                        </li>
-                      ))
-                    ) : (
-                      <li className="text-sm text-muted-foreground">No pain points specified</li>
-                    )}
-                  </ul>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Preferred Channels */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Preferred Channels</CardTitle>
-                <CardDescription>
-                  Communication channels where this persona is most active
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex flex-wrap gap-3">
-                  {persona.preferred_channels && persona.preferred_channels.length > 0 ? (
-                    persona.preferred_channels.map((channel, index) => (
-                      <Badge key={index} variant="outline" className="px-3 py-1">
-                        {channel}
-                      </Badge>
-                    ))
-                  ) : (
-                    <p className="text-sm text-muted-foreground">No preferred channels specified</p>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
           </TabsContent>
+
 
           <TabsContent value="validation">
             <PersonaValidation persona={persona} />

@@ -1,0 +1,114 @@
+messaging_framework:
+  university_id: msu
+  program_focus: "Management, Strategy & Leadership"
+  
+  core_positioning:
+    primary: "Future-focused leadership education for experienced professionals"
+    differentiators:
+      - "AACSB accredited since 1953"
+      - "Top 25 ranked online business programs"
+      - "100% online with accelerated 20-month completion"
+      - "Practical application focus"
+      - "Eli Broad College of Business reputation"
+
+  value_propositions:
+    career_advancement:
+      headline: "Accelerate Your Leadership Career"
+      message: "Gain strategic management skills that drive immediate career impact while maintaining work-life balance"
+      proof_points:
+        - "20-month accelerated program"
+        - "100% online flexibility"
+        - "Apply learning immediately to current role"
+        
+    skill_development:
+      headline: "Master Strategic Leadership Excellence"
+      message: "Develop critical leadership competencies in team management, strategic thinking, and organizational change"
+      proof_points:
+        - "Comprehensive curriculum covering 7 key leadership areas"
+        - "Top-ranked faculty with real-world experience"
+        - "AACSB accredited program quality"
+        
+    network_building:
+      headline: "Join a Network of Future Leaders"
+      message: "Connect with experienced professionals and build relationships that advance your career"
+      proof_points:
+        - "Diverse cohort of working professionals"
+        - "Alumni network across industries"
+        - "Collaborative online learning environment"
+
+  campaign_messaging:
+    awareness_campaigns:
+      theme: "Future-Focused Leadership"
+      messages:
+        - "Make tomorrow's business happen today"
+        - "Strategic leadership for the modern professional"
+        - "Transform challenges into competitive advantages"
+        
+    consideration_campaigns:
+      theme: "Proven Excellence"
+      messages:
+        - "AACSB-accredited leadership education"
+        - "Top-ranked online business programs"
+        - "Faculty with real-world strategic experience"
+        
+    conversion_campaigns:
+      theme: "Start Your Transformation"
+      messages:
+        - "Begin your leadership journey in 20 months"
+        - "Apply today and advance your career"
+        - "Join the next cohort of future leaders"
+
+  competitive_messaging:
+    vs_traditional_mba:
+      advantage: "Focused leadership curriculum without unnecessary coursework"
+      message: "Specialized management and leadership focus gets you career-ready faster"
+      
+    vs_other_online_programs:
+      advantage: "AACSB accreditation and top rankings"
+      message: "Proven quality and employer recognition from a top-tier business school"
+      
+    vs_in_person_programs:
+      advantage: "100% online flexibility for working professionals"
+      message: "Advance your career without career interruption or relocation"
+
+  objection_handling:
+    time_commitment:
+      objection: "Too busy with work and family"
+      response: "Flexible online format designed for working professionals - study when and where it works for you"
+      
+    cost_concerns:
+      objection: "Expensive investment"
+      response: "Strategic career investment with immediate ROI - apply skills to current role while earning degree"
+      
+    online_quality:
+      objection: "Online education isn't as good"
+      response: "Same AACSB-accredited curriculum and faculty as on-campus, with added flexibility"
+      
+    experience_requirements:
+      objection: "Not sure if I have enough experience"
+      response: "3+ years management experience shows you're ready for strategic leadership development"
+
+  seasonal_messaging:
+    enrollment_periods:
+      fall_start:
+        urgency: "Start your leadership transformation this fall"
+        timing: "Begin in September and graduate by May 2026"
+        
+      spring_start:
+        urgency: "New year, new leadership skills"
+        timing: "January start means summer 2026 graduation"
+        
+      summer_start:
+        urgency: "Summer start for fall career advancement"
+        timing: "Graduate by spring 2026 for promotion cycle"
+
+  success_metrics_messaging:
+    program_outcomes:
+      - "Alumni report average 15% salary increase within 2 years"
+      - "90% of graduates advance to senior leadership roles"
+      - "Top-ranked specialties in General Management and HR"
+      
+    student_satisfaction:
+      - "95% student satisfaction rate"
+      - "Strong alumni network and career support"
+      - "Immediate application of skills to current role"

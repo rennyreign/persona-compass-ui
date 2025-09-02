@@ -155,7 +155,7 @@ export function Dashboard({ className }: DashboardProps) {
   return (
     <div className={cn("space-y-8", className)}>
       {/* KPI Pills - Reduced to 3 key metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <KPICard
           title="Application Rate"
           value="18.5%"
@@ -183,14 +183,14 @@ export function Dashboard({ className }: DashboardProps) {
       <div className="space-y-6">
         {/* Header with Create Button */}
         <div className="flex items-center justify-between">
-          <div className="space-y-2">
+          <div className="space-y-1">
             <div className="flex items-center gap-3">
-              <h2 className="text-3xl font-bold text-foreground">Personas</h2>
-              <div className="pill-card px-3 py-1">
+              <h2 className="text-2xl font-bold text-foreground">Personas</h2>
+              <div className="bg-muted rounded-full px-3 py-1">
                 <span className="text-sm font-medium text-muted-foreground">{kpis.totalPersonas}</span>
               </div>
             </div>
-            <p className="text-muted-foreground/80">Manage your marketing personas and track their performance</p>
+            <p className="text-muted-foreground">Manage your marketing personas and track their performance</p>
           </div>
           <div className="flex items-center gap-4">
             {/* University Filter - Only for bisk_admin */}

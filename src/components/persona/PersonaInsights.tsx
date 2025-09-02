@@ -49,7 +49,7 @@ export function PersonaInsights({ personaId, insights }: PersonaInsightsProps) {
     setTimeout(() => {
       setIsGenerating(false);
       // Here you would typically call an API to generate new insights
-      console.log('Generate new insights for persona:', personaId);
+      // Generate new insights for persona: ${personaId}
     }, 2000);
   };
 

@@ -1,19 +1,77 @@
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { TrendingUp, TrendingDown, Users, DollarSign, Target, MousePointer } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { TrendingUp, TrendingDown, Users, DollarSign, Target, MousePointer, Brain, AlertTriangle, Lightbulb } from "lucide-react";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { TopHeader } from "@/components/layout/TopHeader";
-import { mockPersonas } from "@/data/mockData";
+import { ORDAEPerformanceMonitor } from "@/components/performance/ORDAEPerformanceMonitor";
+// Mock data removed - using database-driven personas
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from "recharts";
 
+interface PerformanceAnalysis {
+  id: string;
+  timestamp: string;
+  overallScore: number;
+  recommendations: PerformanceRecommendation[];
+  alerts: PerformanceAlert[];
+  predictions: PerformancePrediction[];
+  optimizations: PerformanceOptimization[];
+}
+
+interface PerformanceRecommendation {
+  id: string;
+  type: 'budget' | 'targeting' | 'creative' | 'timing';
+  priority: 'high' | 'medium' | 'low';
+  title: string;
+  description: string;
+  expectedImpact: string;
+  confidence: number;
+}
+
+interface PerformanceAlert {
+  id: string;
+  severity: 'critical' | 'warning' | 'info';
+  title: string;
+  description: string;
+  affectedPersonas: string[];
+  actionRequired: boolean;
+}
+
+interface PerformancePrediction {
+  id: string;
+  metric: string;
+  currentValue: number;
+  predictedValue: number;
+  timeframe: string;
+  confidence: number;
+}
+
+interface PerformanceOptimization {
+  id: string;
+  category: string;
+  title: string;
+  description: string;
+  potentialSavings: number;
+  implementationEffort: 'low' | 'medium' | 'high';
+}
+
 const Performance = () => {
-  // Calculate global blended metrics from all personas
-  const totalPersonas = mockPersonas.length;
-  const totalActivePersonas = mockPersonas.filter(p => p.isActive).length;
-  const globalCPL = mockPersonas.reduce((sum, p) => sum + p.performance.cpl, 0) / totalPersonas;
-  const globalCTR = mockPersonas.reduce((sum, p) => sum + p.performance.ctr, 0) / totalPersonas;
-  const totalLeads = mockPersonas.reduce((sum, p) => sum + p.performance.totalLeads, 0);
-  const totalSpend = mockPersonas.reduce((sum, p) => sum + p.performance.totalSpend, 0);
+  const [analysis, setAnalysis] = useState<PerformanceAnalysis | null>(null);
+  const [showMonitor, setShowMonitor] = useState(false);
+
+  // Placeholder metrics - will be calculated from database personas
+  const totalPersonas = 0;
+  const totalActivePersonas = 0;
+  const globalCPL = 0;
+  const globalCTR = 0;
+  const totalLeads = 0;
+  const totalSpend = 0;
+
+  const handleAnalysisComplete = (newAnalysis: PerformanceAnalysis) => {
+    setAnalysis(newAnalysis);
+    setShowMonitor(false);
+  };
 
   // Mock performance data over time
   const performanceData = [
@@ -33,12 +91,16 @@ const Performance = () => {
     { name: 'LinkedIn', leads: 15, spend: 1500, color: '#0077B5' },
   ];
 
-  // Program performance breakdown
-  const programData = mockPersonas.map(persona => ({
-    name: persona.program,
-    cpl: persona.performance.cpl,
-    leads: persona.performance.totalLeads,
-    ctr: persona.performance.ctr,
+  // Program performance breakdown - placeholder data
+  const programData = [
+    { name: 'Business Administration', cpl: 72.80, leads: 222, ctr: 3.1 },
+    { name: 'Healthcare', cpl: 78.25, leads: 199, ctr: 2.8 },
+    { name: 'Data Analytics', cpl: 67.25, leads: 216, ctr: 2.8 }
+  ].map(program => ({
+    name: program.name,
+    cpl: program.cpl,
+    leads: program.leads,
+    ctr: program.ctr,
   }));
 
   return (
@@ -54,10 +116,103 @@ const Performance = () => {
         <main className="flex-1 p-6 overflow-auto">
           <div className="max-w-7xl mx-auto space-y-8">
             {/* Page Header */}
-            <div>
-              <h1 className="text-3xl font-bold text-foreground">Performance Dashboard</h1>
-              <p className="text-muted-foreground mt-2">Global blended metrics across all personas</p>
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-3xl font-bold text-foreground">Performance Dashboard</h1>
+                <p className="text-muted-foreground mt-2">
+                  {analysis 
+                    ? `Real-time metrics with AI analysis (Score: ${analysis.overallScore}/100)`
+                    : "Global blended metrics across all personas"
+                  }
+                </p>
+              </div>
+              <Button 
+                className="flex items-center space-x-2"
+                onClick={() => setShowMonitor(!showMonitor)}
+              >
+                <Brain className="w-4 h-4" />
+                <span>{showMonitor ? 'Hide Monitor' : 'ORDAE Analysis'}</span>
+              </Button>
             </div>
+
+            {/* ORDAE Performance Monitor */}
+            {showMonitor && (
+              <ORDAEPerformanceMonitor onAnalysisComplete={handleAnalysisComplete} />
+            )}
+
+            {/* AI Analysis Summary */}
+            {analysis && (
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <Card className="border-l-4 border-l-red-500 bg-red-50/50">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-lg flex items-center gap-2">
+                      <AlertTriangle className="w-5 h-5 text-red-600" />
+                      Critical Alerts
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold text-red-600 mb-2">
+                      {analysis.alerts.filter(a => a.severity === 'critical').length}
+                    </div>
+                    {analysis.alerts.filter(a => a.severity === 'critical').slice(0, 1).map(alert => (
+                      <div key={alert.id} className="space-y-2">
+                        <p className="text-sm font-medium">{alert.title}</p>
+                        <p className="text-xs text-muted-foreground">{alert.description}</p>
+                      </div>
+                    ))}
+                  </CardContent>
+                </Card>
+
+                <Card className="border-l-4 border-l-blue-500 bg-blue-50/50">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-lg flex items-center gap-2">
+                      <Lightbulb className="w-5 h-5 text-blue-600" />
+                      Top Recommendations
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold text-blue-600 mb-2">
+                      {analysis.recommendations.filter(r => r.priority === 'high').length}
+                    </div>
+                    {analysis.recommendations.slice(0, 1).map(rec => (
+                      <div key={rec.id} className="space-y-2">
+                        <p className="text-sm font-medium">{rec.title}</p>
+                        <div className="flex items-center gap-2">
+                          <Badge variant="outline" className="text-xs">
+                            {rec.confidence}% confidence
+                          </Badge>
+                          <Badge variant="secondary" className="text-xs">
+                            {rec.expectedImpact}
+                          </Badge>
+                        </div>
+                      </div>
+                    ))}
+                  </CardContent>
+                </Card>
+
+                <Card className="border-l-4 border-l-green-500 bg-green-50/50">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-lg flex items-center gap-2">
+                      <DollarSign className="w-5 h-5 text-green-600" />
+                      Potential Savings
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold text-green-600 mb-2">
+                      ${analysis.optimizations.reduce((sum, o) => sum + o.potentialSavings, 0).toLocaleString()}
+                    </div>
+                    {analysis.optimizations.slice(0, 1).map(opt => (
+                      <div key={opt.id} className="space-y-2">
+                        <p className="text-sm font-medium">{opt.title}</p>
+                        <Badge variant="outline" className="text-xs">
+                          {opt.implementationEffort} effort
+                        </Badge>
+                      </div>
+                    ))}
+                  </CardContent>
+                </Card>
+              </div>
+            )}
 
             {/* Key Metrics */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -73,6 +228,17 @@ const Performance = () => {
                     <span className="text-green-500">8.2% lower</span>
                     <span>vs last month</span>
                   </div>
+                  {analysis && analysis.predictions.find(p => p.metric === 'Global CPL') && (
+                    <div className="mt-2 p-2 bg-blue-50 rounded text-xs">
+                      <div className="flex items-center gap-1">
+                        <Brain className="w-3 h-3 text-blue-600" />
+                        <span className="text-blue-600 font-medium">AI Prediction:</span>
+                      </div>
+                      <div className="text-blue-700">
+                        ${analysis.predictions.find(p => p.metric === 'Global CPL')?.predictedValue.toFixed(2)} in 30 days
+                      </div>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
 
@@ -88,6 +254,17 @@ const Performance = () => {
                     <span className="text-green-500">12.3% higher</span>
                     <span>vs last month</span>
                   </div>
+                  {analysis && analysis.predictions.find(p => p.metric === 'Global CTR') && (
+                    <div className="mt-2 p-2 bg-blue-50 rounded text-xs">
+                      <div className="flex items-center gap-1">
+                        <Brain className="w-3 h-3 text-blue-600" />
+                        <span className="text-blue-600 font-medium">AI Prediction:</span>
+                      </div>
+                      <div className="text-blue-700">
+                        {analysis.predictions.find(p => p.metric === 'Global CTR')?.predictedValue.toFixed(1)}% in 30 days
+                      </div>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
 
@@ -103,6 +280,17 @@ const Performance = () => {
                     <span className="text-green-500">15.4% increase</span>
                     <span>vs last month</span>
                   </div>
+                  {analysis && analysis.predictions.find(p => p.metric === 'Total Leads') && (
+                    <div className="mt-2 p-2 bg-blue-50 rounded text-xs">
+                      <div className="flex items-center gap-1">
+                        <Brain className="w-3 h-3 text-blue-600" />
+                        <span className="text-blue-600 font-medium">AI Prediction:</span>
+                      </div>
+                      <div className="text-blue-700">
+                        {analysis.predictions.find(p => p.metric === 'Total Leads')?.predictedValue.toLocaleString()} in 30 days
+                      </div>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
 
@@ -234,22 +422,18 @@ const Performance = () => {
                     <Badge variant="secondary">{totalActivePersonas}</Badge>
                   </div>
                   <div className="space-y-3">
-                    {mockPersonas.map((persona) => (
-                      <div key={persona.id} className="flex items-center justify-between p-3 border rounded-lg">
-                        <div className="flex items-center space-x-3">
-                          <div className="w-2 h-2 rounded-full bg-primary"></div>
-                          <span className="text-sm font-medium">{persona.name}</span>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <Badge variant="outline" className="text-xs">
-                            ${persona.performance.cpl} CPL
-                          </Badge>
-                          <Badge variant="outline" className="text-xs">
-                            {persona.performance.ctr}% CTR
-                          </Badge>
-                        </div>
+                    {totalPersonas === 0 ? (
+                      <div className="text-center py-8 text-muted-foreground">
+                        <Users className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                        <p className="text-sm">No personas available</p>
+                        <p className="text-xs">Create personas to see performance data</p>
                       </div>
-                    ))}
+                    ) : (
+                      <div className="text-center py-4 text-muted-foreground">
+                        <p className="text-sm">Persona performance data will be displayed here</p>
+                        <p className="text-xs">Connect to database to load real persona metrics</p>
+                      </div>
+                    )}
                   </div>
                 </CardContent>
               </Card>

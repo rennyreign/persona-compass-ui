@@ -1,0 +1,9 @@
+- Prefer pnpm if lockfile exists; otherwise npm.
+- For app/, run: install → build → preview.
+- Never run destructive commands without human confirmation.
+- Product lane tasks must produce a previewable route before Evaluate.
+- Auto-apply changes in orchestrator/**
+- Auto-apply changes in scripts/**
+- Auto-apply changes in .windsurf/**
+- Always ask for confirmation in app/** and supabase/**
+- Always deny in .env, config/secrets/**

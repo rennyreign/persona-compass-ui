@@ -1,0 +1,47 @@
+{
+  "id": "msu_mscs_tech_professional",
+  "university": {
+    "id": "msu",
+    "name": "Michigan State University"
+  },
+  "program": {
+    "id": "mscs",
+    "name": "MS Computer Science",
+    "enrollment_goal": 80
+  },
+  "persona_type": "tech_professional",
+  "demographics": {},
+  "motivations": [],
+  "pain_points": [],
+  "preferred_channels": [],
+  "behavior_patterns": {
+    "research_phase_duration": "2-4 weeks",
+    "decision_factors": [
+      "program_reputation",
+      "flexibility",
+      "cost",
+      "career_outcomes"
+    ],
+    "content_preferences": [
+      "case_studies",
+      "alumni_testimonials",
+      "program_details"
+    ]
+  },
+  "conversion_triggers": {
+    "primary": "application_deadline_approaching",
+    "secondary": [
+      "scholarship_availability",
+      "peer_recommendations",
+      "career_advancement_urgency"
+    ]
+  },
+  "attribution_data": {
+    "typical_touchpoints": 7,
+    "conversion_timeline": "30-60 days",
+    "high_value_channels": []
+  },
+  "created_by": "ordae_system",
+  "created_at": "/Users/renaldoedmondson/Library/CloudStorage/Dropbox/projects/ADXAgents/personadb/persona-compass-ui",
+  "data_completeness": 0.85
+}

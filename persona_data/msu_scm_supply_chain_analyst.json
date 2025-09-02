@@ -1,0 +1,88 @@
+{
+  "id": "msu_scm_supply_chain_analyst",
+  "university": {
+    "id": "msu",
+    "name": "Michigan State University"
+  },
+  "program": {
+    "id": "scm",
+    "name": "Supply Chain Management",
+    "enrollment_goal": 120
+  },
+  "persona_type": "supply_chain_analyst",
+  "name": "David Kim",
+  "title": "Supply Chain Analyst",
+  "demographics": {
+    "age_range": "24-32",
+    "income_range": "$50k-$75k",
+    "education": "Bachelor's in Analytics, Engineering, or Business",
+    "location": "Major business centers",
+    "family_status": "Single or early career professional"
+  },
+  "professional_background": {
+    "current_role": "Supply Chain Analyst/Data Analyst",
+    "industry": "Consumer Goods/Technology/Pharmaceuticals",
+    "experience_years": "2-6",
+    "company_size": "Large corporations"
+  },
+  "motivations": [
+    "advance_to_senior_analyst_role",
+    "master_supply_chain_analytics",
+    "develop_forecasting_expertise",
+    "understand_AI_and_machine_learning_applications"
+  ],
+  "pain_points": [
+    "data_quality_issues",
+    "demand_forecasting_accuracy",
+    "limited_strategic_input",
+    "need_for_advanced_analytics_skills"
+  ],
+  "goals": {
+    "short_term": "Become Senior Supply Chain Analyst",
+    "long_term": "Supply Chain Planning Manager or Analytics Director"
+  },
+  "preferred_channels": [
+    "analytics_communities",
+    "LinkedIn",
+    "data_science_forums",
+    "supply_chain_tech_blogs"
+  ],
+  "behavior_patterns": {
+    "research_phase_duration": "3-4 weeks",
+    "decision_factors": [
+      "analytics_curriculum_depth",
+      "technology_integration",
+      "career_advancement_data",
+      "program_flexibility"
+    ],
+    "content_preferences": [
+      "analytics_case_studies",
+      "forecasting_methodologies",
+      "technology_applications",
+      "career_outcome_statistics"
+    ]
+  },
+  "conversion_triggers": {
+    "primary": "analytics_skill_gap_at_work",
+    "secondary": [
+      "new_technology_implementation",
+      "promotion_requirements",
+      "industry_digital_transformation"
+    ]
+  },
+  "attribution_data": {
+    "typical_touchpoints": 9,
+    "conversion_timeline": "45-90 days",
+    "high_value_channels": [
+      "analytics_communities",
+      "LinkedIn"
+    ]
+  },
+  "communication_style": {
+    "tone_attributes": ["analytical", "data_driven", "forward_thinking"],
+    "preferred_language": ["insights", "predictive", "optimization", "intelligence"]
+  },
+  "created_by": "ordae_system",
+  "created_at": "2024-01-15",
+  "data_completeness": 0.91
+}

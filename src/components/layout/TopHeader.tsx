@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -8,16 +8,86 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Link } from "react-router-dom";
 import { Bell, Search, User, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { mockInsights } from "@/data/mockData";
+import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 
 interface TopHeaderProps {
   className?: string;
 }
 
+interface Notification {
+  id: string;
+  type: 'campaign' | 'persona' | 'performance' | 'system';
+  title: string;
+  content: string;
+  created_at: string;
+  read: boolean;
+}
+
 function NotificationPopover() {
-  const [hasUnreadNotifications, setHasUnreadNotifications] = useState(true);
-  const recentInsights = mockInsights.slice(0, 5);
+  const [hasUnreadNotifications, setHasUnreadNotifications] = useState(false);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const { user } = useAuth();
+
+  useEffect(() => {
+    if (user) {
+      fetchNotifications();
+    }
+  }, [user]);
+
+  const fetchNotifications = async () => {
+    try {
+      // Fetch recent campaign activities
+      const { data: campaigns } = await supabase
+        .from('campaigns')
+        .select('id, description, created_at')
+        .eq('user_id', user?.id)
+        .order('created_at', { ascending: false })
+        .limit(3);
+
+      // Fetch recent personas
+      const { data: personas } = await supabase
+        .from('personas')
+        .select('id, name, created_at')
+        .eq('user_id', user?.id)
+        .order('created_at', { ascending: false })
+        .limit(2);
+
+      const recentNotifications: Notification[] = [];
+
+      // Add campaign notifications
+      campaigns?.forEach(campaign => {
+        recentNotifications.push({
+          id: `campaign-${campaign.id}`,
+          type: 'campaign',
+          title: `New campaign created`,
+          content: campaign.description || 'Campaign is ready for launch',
+          created_at: campaign.created_at,
+          read: false
+        });
+      });
+
+      // Add persona notifications
+      personas?.forEach(persona => {
+        recentNotifications.push({
+          id: `persona-${persona.id}`,
+          type: 'persona',
+          title: `New persona created: ${persona.name}`,
+          content: 'Persona is ready for campaign targeting',
+          created_at: persona.created_at,
+          read: false
+        });
+      });
+
+      // Sort by date
+      recentNotifications.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+
+      setNotifications(recentNotifications.slice(0, 5));
+      setHasUnreadNotifications(recentNotifications.length > 0);
+    } catch (error) {
+      console.error('Error fetching notifications:', error);
+    }
+  };
 
   const handlePopoverOpen = () => {
     // Mark notifications as read when popover opens
@@ -35,13 +105,13 @@ function NotificationPopover() {
     return `${diffInDays}d ago`;
   };
 
-  const getInsightIcon = (type: string) => {
+  const getNotificationIcon = (type: string) => {
     switch (type) {
-      case 'optimization': return '📈';
-      case 'opportunity': return '💡';
-      case 'warning': return '⚠️';
-      case 'trend': return '📊';
-      default: return '🔍';
+      case 'campaign': return '🚀';
+      case 'persona': return '👤';
+      case 'performance': return '📈';
+      case 'system': return '⚙️';
+      default: return '🔔';
     }
   };
 
@@ -52,36 +122,42 @@ function NotificationPopover() {
           <Bell className="w-4 h-4 text-muted-foreground" />
           {hasUnreadNotifications && (
             <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 bg-destructive text-destructive-foreground text-xs flex items-center justify-center">
-              {recentInsights.length}
+              {notifications.length}
             </Badge>
           )}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-80 p-0" align="end">
         <div className="p-4 border-b border-border">
-          <h3 className="font-semibold text-foreground">Recent Insights</h3>
+          <h3 className="font-semibold text-foreground">Recent Activity</h3>
         </div>
         <div className="max-h-96 overflow-y-auto">
-          {recentInsights.map((insight) => (
-            <div key={insight.id} className="p-4 border-b border-border/50 last:border-b-0 hover:bg-muted/30 transition-colors">
+          {notifications.length > 0 ? notifications.map((notification) => (
+            <div key={notification.id} className="p-4 border-b border-border/50 last:border-b-0 hover:bg-muted/30 transition-colors">
               <div className="flex items-start space-x-3">
                 <div className="flex-shrink-0 w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center text-sm">
-                  {getInsightIcon(insight.type)}
+                  {getNotificationIcon(notification.type)}
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-foreground truncate">
-                    {insight.title}
+                    {notification.title}
                   </p>
                   <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
-                    {insight.content}
+                    {notification.content}
                   </p>
                   <p className="text-xs text-muted-foreground mt-1">
-                    {formatTimestamp(insight.generatedAt)}
+                    {formatTimestamp(notification.created_at)}
                   </p>
                 </div>
               </div>
             </div>
-          ))}
+          )) : (
+            <div className="p-8 text-center text-muted-foreground">
+              <Bell className="w-8 h-8 mx-auto mb-2 opacity-50" />
+              <p>No recent notifications</p>
+              <p className="text-xs mt-1">Create personas and campaigns to see updates</p>
+            </div>
+          )}
         </div>
         <div className="p-4 border-t border-border">
           <Link to="/insights">

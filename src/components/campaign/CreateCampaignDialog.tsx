@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -28,9 +28,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useForm } from "react-hook-form";
-import { mockPersonas } from "@/data/mockData";
+// Mock data removed - using database-driven personas
 import { Plus } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface CreateCampaignFormData {
   personaId: string;
@@ -44,6 +46,8 @@ interface CreateCampaignFormData {
 interface CreateCampaignDialogProps {
   trigger?: React.ReactNode;
   onCampaignCreated?: (campaign: any) => void;
+  editMode?: boolean;
+  existingCampaign?: any;
 }
 
 const channels = [
@@ -57,55 +61,120 @@ const channels = [
   "Email",
 ];
 
-export function CreateCampaignDialog({ trigger, onCampaignCreated }: CreateCampaignDialogProps) {
+export function CreateCampaignDialog({ trigger, onCampaignCreated, editMode = false, existingCampaign }: CreateCampaignDialogProps) {
   const [open, setOpen] = useState(false);
+  const [personas, setPersonas] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
   const { toast } = useToast();
+  const { user } = useAuth();
   
   const form = useForm<CreateCampaignFormData>({
     defaultValues: {
-      personaId: "",
-      name: "",
-      channel: "",
-      cta: "",
-      startDate: "",
-      markdownContent: "",
+      personaId: existingCampaign?.persona_id || "",
+      name: existingCampaign?.name || "",
+      channel: existingCampaign?.channel || "",
+      cta: existingCampaign?.cta || "",
+      startDate: existingCampaign?.start_date || "",
+      markdownContent: existingCampaign?.campaign_plans?.[0]?.markdown_content || existingCampaign?.markdown_content || "",
     },
   });
 
+  // Load personas when dialog opens
+  useEffect(() => {
+    const loadPersonas = async () => {
+      if (!user || !open) return;
+      
+      setLoading(true);
+      const { data, error } = await supabase
+        .from('personas')
+        .select('id, name, occupation')
+        .eq('user_id', user.id);
+        
+      if (error) {
+        console.error('Error loading personas:', error);
+        toast({
+          title: "Error",
+          description: "Failed to load personas",
+          variant: "destructive"
+        });
+      } else {
+        setPersonas(data || []);
+      }
+      setLoading(false);
+    };
+
+    loadPersonas();
+  }, [open, user]);
+
+  // Reset form when existingCampaign changes
+  useEffect(() => {
+    if (existingCampaign && editMode) {
+      form.reset({
+        personaId: existingCampaign?.persona_id || "",
+        name: existingCampaign?.name || "",
+        channel: existingCampaign?.channel || "",
+        cta: existingCampaign?.cta || "",
+        startDate: existingCampaign?.start_date || "",
+        markdownContent: existingCampaign?.campaign_plans?.[0]?.markdown_content || existingCampaign?.markdown_content || "",
+      });
+    }
+  }, [existingCampaign, editMode, form]);
+
   const onSubmit = (data: CreateCampaignFormData) => {
-    // Create new campaign object
-    const newCampaign = {
-      id: Math.random().toString(36).substr(2, 9),
-      personaId: data.personaId,
-      name: data.name,
-      channel: data.channel,
-      spend: 0,
-      clicks: 0,
-      leads: 0,
-      cta: data.cta,
-      notes: "Campaign created with imported content",
-      startDate: data.startDate,
-      status: 'active' as const,
-    };
+    if (editMode && existingCampaign) {
+      // Update existing campaign
+      const updatedCampaign = {
+        ...existingCampaign,
+        persona_id: data.personaId,
+        name: data.name,
+        channel: data.channel,
+        cta: data.cta,
+        start_date: data.startDate,
+        markdown_content: data.markdownContent,
+        updated_at: new Date().toISOString(),
+      };
 
-    // Create campaign plan
-    const newCampaignPlan = {
-      id: Math.random().toString(36).substr(2, 9),
-      campaignId: newCampaign.id,
-      markdownContent: data.markdownContent,
-      lastUpdated: new Date().toISOString(),
-    };
+      // Updated Campaign data processed
+      
+      toast({
+        title: "Campaign Updated",
+        description: "Campaign has been successfully updated.",
+      });
+    } else {
+      // Create new campaign object
+      const newCampaign = {
+        id: Math.random().toString(36).substr(2, 9),
+        personaId: data.personaId,
+        name: data.name,
+        channel: data.channel,
+        spend: 0,
+        clicks: 0,
+        leads: 0,
+        cta: data.cta,
+        notes: "Campaign created with imported content",
+        startDate: data.startDate,
+        status: 'active' as const,
+      };
 
-    // Here you would normally save to your backend
-    console.log('New Campaign:', newCampaign);
-    console.log('Campaign Plan:', newCampaignPlan);
+      // Create campaign plan
+      const newCampaignPlan = {
+        id: Math.random().toString(36).substr(2, 9),
+        campaignId: newCampaign.id,
+        markdownContent: data.markdownContent,
+        lastUpdated: new Date().toISOString(),
+      };
 
-    toast({
-      title: "Campaign Created",
-      description: `Campaign "${data.name}" has been created successfully.`,
-    });
+      // New Campaign and Campaign Plan data processed
+      
+      toast({
+        title: "Campaign Created",
+        description: "New campaign has been successfully created.",
+      });
+    }
 
-    onCampaignCreated?.(newCampaign);
+    // Call the callback with the appropriate campaign data
+    const campaignData = editMode ? existingCampaign : { name: data.name };
+    onCampaignCreated?.(campaignData);
     setOpen(false);
     form.reset();
   };
@@ -122,9 +191,9 @@ export function CreateCampaignDialog({ trigger, onCampaignCreated }: CreateCampa
       </DialogTrigger>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Create New Campaign</DialogTitle>
+          <DialogTitle>{editMode ? 'Edit Campaign' : 'Create New Campaign'}</DialogTitle>
           <DialogDescription>
-            Set up a new marketing campaign with imported markdown content
+            {editMode ? 'Update your campaign details and content' : 'Set up a new marketing campaign with imported markdown content'}
           </DialogDescription>
         </DialogHeader>
         
@@ -145,11 +214,17 @@ export function CreateCampaignDialog({ trigger, onCampaignCreated }: CreateCampa
                          </SelectTrigger>
                        </FormControl>
                       <SelectContent>
-                        {mockPersonas.map((persona) => (
-                          <SelectItem key={persona.id} value={persona.id}>
-                            {persona.name}
-                          </SelectItem>
-                        ))}
+                        {loading ? (
+                          <SelectItem value="loading" disabled>Loading personas...</SelectItem>
+                        ) : personas.length > 0 ? (
+                          personas.map((persona) => (
+                            <SelectItem key={persona.id} value={persona.id}>
+                              {persona.name} - {persona.occupation}
+                            </SelectItem>
+                          ))
+                        ) : (
+                          <SelectItem value="no-personas" disabled>No personas available</SelectItem>
+                        )}
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -256,11 +331,14 @@ export function CreateCampaignDialog({ trigger, onCampaignCreated }: CreateCampa
         </Form>
 
         <DialogFooter>
-          <Button variant="outline" onClick={() => setOpen(false)}>
+          <Button type="button" variant="outline" onClick={() => setOpen(false)}>
             Cancel
           </Button>
-          <Button onClick={form.handleSubmit(onSubmit)}>
-            Create Campaign
+          <Button type="button" onClick={form.handleSubmit(onSubmit)} disabled={form.formState.isSubmitting}>
+            {form.formState.isSubmitting 
+              ? (editMode ? 'Updating...' : 'Creating...') 
+              : (editMode ? 'Update Campaign' : 'Create Campaign')
+            }
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -5,14 +5,15 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { ExternalLink, Search, Plus } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Search, Edit, ExternalLink, Eye } from 'lucide-react';
+import { Link, useNavigate } from "react-router-dom";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { TopHeader } from "@/components/layout/TopHeader";
 import { EnhancedCreateCampaignDialog } from "@/components/campaign/EnhancedCreateCampaignDialog";
 import { supabase } from "@/integrations/supabase/client";
 
 export default function Campaigns() {
+  const navigate = useNavigate();
   const [selectedPersona, setSelectedPersona] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [campaigns, setCampaigns] = useState<any[]>([]);
@@ -56,7 +57,8 @@ export default function Campaigns() {
 
   const filteredCampaigns = campaigns.filter(campaign => {
     const matchesPersona = selectedPersona === "all" || campaign.persona_id === selectedPersona;
-    const matchesSearch = campaign.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    const matchesSearch = (campaign.name || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         (campaign.description || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
                          (campaign.channels || []).some((channel: string) => 
                            channel.toLowerCase().includes(searchQuery.toLowerCase()));
     return matchesPersona && matchesSearch;
@@ -226,90 +228,99 @@ export default function Campaigns() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                {filteredCampaigns.length === 0 ? (
-                  <div className="text-center py-8">
-                    <p className="text-muted-foreground">No campaigns found matching your criteria.</p>
-                  </div>
-                ) : (
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Campaign</TableHead>
-                        <TableHead>Persona</TableHead>
-                        <TableHead>Type</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead>Budget</TableHead>
-                        <TableHead>Channels</TableHead>
-                        <TableHead>Start Date</TableHead>
-                        <TableHead className="w-[100px]">Actions</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {filteredCampaigns.map((campaign) => (
-                          <TableRow key={campaign.id}>
-                            <TableCell>
-                              <div>
-                                <Link 
-                                  to={`/campaign/${campaign.id}`}
-                                  className="font-medium text-foreground hover:text-green-600 hover:underline transition-colors"
-                                >
-                                  {campaign.title}
-                                </Link>
-                                <div className="text-sm text-muted-foreground">{campaign.description?.substring(0, 100)}...</div>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Campaign</TableHead>
+                      <TableHead>Persona</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Budget</TableHead>
+                      <TableHead>Channels</TableHead>
+                      <TableHead>Created</TableHead>
+                      <TableHead>Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredCampaigns.map((campaign) => (
+                      <TableRow key={campaign.id}>
+                        <TableCell>
+                          <div>
+                            <div className="font-semibold text-foreground">{campaign.name}</div>
+                            {campaign.description && (
+                              <div className="text-sm text-muted-foreground mt-1 line-clamp-2">
+                                {campaign.description}
                               </div>
-                            </TableCell>
-                            <TableCell>
-                              <Link 
-                                to={`/persona/${campaign.persona_id}`}
-                                className="text-sm text-muted-foreground hover:text-green-600 hover:underline transition-colors"
-                              >
-                                {getPersonaName(campaign.persona_id)}
-                              </Link>
-                            </TableCell>
-                            <TableCell>
-                              <Badge variant="outline">{campaign.campaign_type || 'General'}</Badge>
-                            </TableCell>
-                            <TableCell>
-                              <Badge className={getStatusColor(campaign.status)}>
-                                {campaign.status}
+                            )}
+                            {campaign.objective && (
+                              <div className="text-xs text-blue-600 mt-1 font-medium">
+                                {campaign.objective}
+                              </div>
+                            )}
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          {campaign.persona_id && (
+                            <Link 
+                              to={`/persona/${campaign.persona_id}`}
+                              className="text-blue-600 hover:text-blue-800 hover:underline"
+                            >
+                              {personas.find(p => p.id === campaign.persona_id)?.name || 'Unknown'}
+                            </Link>
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          <Badge 
+                            variant={
+                              campaign.status === 'active' ? 'default' : 
+                              campaign.status === 'draft' ? 'secondary' : 
+                              'outline'
+                            }
+                          >
+                            {campaign.status}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>
+                          {campaign.budget ? formatCurrency(campaign.budget) : '-'}
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex flex-wrap gap-1 max-w-32">
+                            {campaign.channels?.slice(0, 2).map((channel, index) => (
+                              <Badge key={index} variant="outline" className="text-xs">
+                                {channel}
                               </Badge>
-                            </TableCell>
-                            <TableCell className="font-medium">
-                              {formatCurrency(campaign.budget || 0)}
-                            </TableCell>
-                            <TableCell>
-                              <div className="flex flex-wrap gap-1">
-                                {(campaign.channels || []).slice(0, 2).map((channel: string, index: number) => (
-                                  <Badge key={index} variant="outline" className="text-xs">
-                                    {channel}
-                                  </Badge>
-                                ))}
-                                {campaign.channels && campaign.channels.length > 2 && (
-                                  <Badge variant="outline" className="text-xs">
-                                    +{campaign.channels.length - 2}
-                                  </Badge>
-                                )}
-                              </div>
-                            </TableCell>
-                            <TableCell className="text-muted-foreground">
-                              {formatDate(campaign.start_date)}
-                            </TableCell>
-                            <TableCell>
-                              <Link to={`/campaign/${campaign.id}`}>
-                                <Button 
-                                  variant="ghost" 
-                                  size="sm" 
-                                  className="hover:bg-green-50 hover:text-green-600"
-                                >
-                                  <ExternalLink className="w-4 h-4" />
-                                </Button>
-                              </Link>
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                    </TableBody>
-                  </Table>
-                )}
+                            ))}
+                            {campaign.channels && campaign.channels.length > 2 && (
+                              <Badge variant="outline" className="text-xs">
+                                +{campaign.channels.length - 2}
+                              </Badge>
+                            )}
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-muted-foreground">
+                          {new Date(campaign.created_at).toLocaleDateString()}
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-2">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => navigate(`/campaign/${campaign.id}`)}
+                            >
+                              <Eye className="w-4 h-4" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => {/* TODO: Implement edit */}}
+                            >
+                              <Edit className="w-4 h-4" />
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
               </CardContent>
             </Card>
           </div>
