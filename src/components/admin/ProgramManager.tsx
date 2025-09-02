@@ -33,6 +33,7 @@ interface Organization {
 
 interface ProgramManagerProps {
   selectedOrganization: string;
+  onClose?: () => void;
 }
 
 export function ProgramManager({ selectedOrganization }: ProgramManagerProps) {

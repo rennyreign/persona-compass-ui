@@ -8,6 +8,7 @@ import { ChevronDown, ChevronRight, Building, Plus, Users } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { ProgramManager } from './ProgramManager';
+import { ProgramDataImporter } from './ProgramDataImporter';
 
 interface Program {
   id: string;
@@ -143,10 +144,16 @@ export function ProgramManagementTable({ selectedOrganization, onPersonaCountCha
             Program Management
             <Badge variant="secondary" className="ml-2">{programs.length} Programs</Badge>
           </CardTitle>
-          <Button size="sm" className="flex items-center gap-2" onClick={() => setShowProgramManager(true)}>
-            <Plus className="h-4 w-4" />
-            Add Program
-          </Button>
+          <div className="flex items-center gap-2">
+            <ProgramDataImporter 
+              selectedOrganization={selectedOrganization}
+              onImportComplete={loadPrograms}
+            />
+            <Button size="sm" className="flex items-center gap-2" onClick={() => setShowProgramManager(true)}>
+              <Plus className="h-4 w-4" />
+              Add Program
+            </Button>
+          </div>
         </div>
         <p className="text-sm text-muted-foreground">
           Define program inputs that drive persona generation and campaign targeting
