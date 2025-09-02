@@ -13,6 +13,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Persona } from '@/types/persona';
 import { useToast } from '@/hooks/use-toast';
 import { PersonaValidationService } from '@/services/personaValidation';
+import { AIPersonaPromptDialog } from './AIPersonaPromptDialog';
 
 interface PersonaManagementTableProps {
   onSelectionChange: (selectedPersonas: Persona[]) => void;
@@ -34,6 +35,7 @@ export function PersonaManagementTable({ onSelectionChange }: PersonaManagementT
   const [programFilter, setProgramFilter] = useState<string>('all');
   const [selectedPersona, setSelectedPersona] = useState<Persona | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [showAIDialog, setShowAIDialog] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -138,7 +140,7 @@ export function PersonaManagementTable({ onSelectionChange }: PersonaManagementT
               <Badge variant="default" className="ml-1">{selectedPersonas.size} Selected</Badge>
             )}
           </CardTitle>
-          <Button size="sm" className="flex items-center gap-2">
+          <Button size="sm" className="flex items-center gap-2" onClick={() => setShowAIDialog(true)}>
             <Sparkles className="h-4 w-4" />
             Generate AI Personas
           </Button>
@@ -226,7 +228,7 @@ export function PersonaManagementTable({ onSelectionChange }: PersonaManagementT
                 : 'Try adjusting your search terms or filters to find more personas.'
               }
             </p>
-            <Button className="flex items-center gap-2">
+            <Button className="flex items-center gap-2" onClick={() => setShowAIDialog(true)}>
               <Sparkles className="h-4 w-4" />
               Generate Your First Personas
             </Button>
@@ -397,6 +399,18 @@ export function PersonaManagementTable({ onSelectionChange }: PersonaManagementT
           </div>
         )}
       </CardContent>
+      
+      {/* AI Persona Generator Dialog */}
+      <AIPersonaPromptDialog 
+        isOpen={showAIDialog}
+        onOpenChange={setShowAIDialog}
+        onGenerate={(request) => {
+          // Handle persona generation request
+          console.log('Generating personas with request:', request);
+          setShowAIDialog(false);
+          loadPersonas(); // Refresh personas after generation
+        }}
+      />
     </Card>
   );
 }

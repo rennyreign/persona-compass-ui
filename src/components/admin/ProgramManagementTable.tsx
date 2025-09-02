@@ -7,6 +7,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '../ui/colla
 import { ChevronDown, ChevronRight, Building, Plus, Users } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { ProgramManager } from './ProgramManager';
 
 interface Program {
   id: string;
@@ -37,6 +38,7 @@ export function ProgramManagementTable({ selectedOrganization, onPersonaCountCha
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
   const [personaCounts, setPersonaCounts] = useState<Record<string, number>>({});
   const [isLoading, setIsLoading] = useState(true);
+  const [showProgramManager, setShowProgramManager] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -141,7 +143,7 @@ export function ProgramManagementTable({ selectedOrganization, onPersonaCountCha
             Program Management
             <Badge variant="secondary" className="ml-2">{programs.length} Programs</Badge>
           </CardTitle>
-          <Button size="sm" className="flex items-center gap-2">
+          <Button size="sm" className="flex items-center gap-2" onClick={() => setShowProgramManager(true)}>
             <Plus className="h-4 w-4" />
             Add Program
           </Button>
@@ -158,7 +160,7 @@ export function ProgramManagementTable({ selectedOrganization, onPersonaCountCha
             <p className="text-muted-foreground mb-4">
               Create programs to define target audiences and generate relevant personas.
             </p>
-            <Button className="flex items-center gap-2">
+            <Button className="flex items-center gap-2" onClick={() => setShowProgramManager(true)}>
               <Plus className="h-4 w-4" />
               Create Your First Program
             </Button>
@@ -252,6 +254,17 @@ export function ProgramManagementTable({ selectedOrganization, onPersonaCountCha
           </div>
         )}
       </CardContent>
+      
+      {/* Program Manager Dialog */}
+      {showProgramManager && (
+        <ProgramManager 
+          selectedOrganization={selectedOrganization}
+          onClose={() => {
+            setShowProgramManager(false);
+            loadPrograms(); // Refresh programs after adding
+          }}
+        />
+      )}
     </Card>
   );
 }
