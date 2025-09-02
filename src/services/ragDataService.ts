@@ -1,4 +1,5 @@
 import { UniversityContext, ProgramData } from './ai/personaGenerator';
+import { supabase } from '@/integrations/supabase/client';
 
 export interface MessagingFramework {
   coreMessage: string;
@@ -214,22 +215,77 @@ export class RAGDataService {
    * Get all available universities
    */
   static async getAvailableUniversities(): Promise<Array<{id: string, name: string, location: string}>> {
-    if (this.universityData.size === 0) {
-      this.initialize();
-    }
+    try {
+      const { data: organizations, error } = await supabase
+        .from('organizations')
+        .select('id, name, domain')
+        .eq('is_active', true)
+        .order('name');
 
-    return Array.from(this.universityData.entries()).map(([id, context]) => ({
-      id,
-      name: context.universityName,
-      location: context.location || 'Not specified'
-    }));
+      if (error) {
+        console.warn('Failed to load organizations from database, using fallback:', error);
+        // Fallback to hardcoded data
+        if (this.universityData.size === 0) {
+          this.initialize();
+        }
+        return Array.from(this.universityData.entries()).map(([id, context]) => ({
+          id,
+          name: context.universityName,
+          location: context.location || 'Not specified'
+        }));
+      }
+
+      return (organizations || []).map(org => ({
+        id: org.id,
+        name: org.name,
+        location: org.domain || 'Not specified'
+      }));
+    } catch (error) {
+      console.error('Error fetching universities:', error);
+      // Fallback to hardcoded data
+      if (this.universityData.size === 0) {
+        this.initialize();
+      }
+      return Array.from(this.universityData.entries()).map(([id, context]) => ({
+        id,
+        name: context.universityName,
+        location: context.location || 'Not specified'
+      }));
+    }
   }
 
   /**
    * Get all programs for a university
    */
   static async getAllPrograms(universityId: string): Promise<ProgramData[]> {
-    return this.programData.get(universityId) || [];
+    try {
+      const { data: programs, error } = await supabase
+        .rpc('get_programs_for_organization', { org_id: universityId });
+
+      if (error) {
+        console.warn('Failed to load programs from database, using fallback:', error);
+        // Fallback to hardcoded data
+        return this.programData.get(universityId) || [];
+      }
+
+      // Transform database programs to ProgramData format
+      if (Array.isArray(programs)) {
+        return programs.map((program: any) => ({
+          id: program.id,
+          name: program.name,
+          category: program.category,
+          description: program.description || '',
+          targetAudience: program.target_audience || '',
+          keyBenefits: program.key_benefits || []
+        }));
+      }
+
+      return [];
+    } catch (error) {
+      console.error('Error fetching programs:', error);
+      // Fallback to hardcoded data
+      return this.programData.get(universityId) || [];
+    }
   }
 
   /**

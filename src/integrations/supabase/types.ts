@@ -483,6 +483,53 @@ export type Database = {
           },
         ]
       }
+      programs: {
+        Row: {
+          category: string
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          id: string
+          key_benefits: string[] | null
+          name: string
+          organization_id: string | null
+          target_audience: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          category: string
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          key_benefits?: string[] | null
+          name: string
+          organization_id?: string | null
+          target_audience?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          category?: string
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          key_benefits?: string[] | null
+          name?: string
+          organization_id?: string | null
+          target_audience?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "programs_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -579,6 +626,17 @@ export type Database = {
       check_user_role: {
         Args: { _role: string; _user_id: string }
         Returns: boolean
+      }
+      get_programs_for_organization: {
+        Args: { org_id: string }
+        Returns: {
+          category: string
+          description: string
+          id: string
+          key_benefits: string[]
+          name: string
+          target_audience: string
+        }[]
       }
       get_user_organization_role: {
         Args: Record<PropertyKey, never>
