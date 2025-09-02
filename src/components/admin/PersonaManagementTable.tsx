@@ -19,11 +19,11 @@ interface PersonaManagementTableProps {
 }
 
 const categoryColors: Record<string, string> = {
-  'Supply Chain Management': 'bg-green-100 text-green-800',
-  'Management and Leadership': 'bg-purple-100 text-purple-800',  
-  'Human Capital Management': 'bg-blue-100 text-blue-800',
-  'Healthcare Management': 'bg-red-100 text-red-800',
-  'Technology Management': 'bg-indigo-100 text-indigo-800',
+  'Supply Chain Management': 'bg-muted/80 text-muted-foreground border border-muted',
+  'Management and Leadership': 'bg-muted/60 text-muted-foreground border border-muted',  
+  'Human Capital Management': 'bg-muted/40 text-muted-foreground border border-muted',
+  'Healthcare Management': 'bg-muted/20 text-muted-foreground border border-muted',
+  'Technology Management': 'bg-muted text-muted-foreground border border-muted',
 };
 
 export function PersonaManagementTable({ onSelectionChange }: PersonaManagementTableProps) {
@@ -98,7 +98,7 @@ export function PersonaManagementTable({ onSelectionChange }: PersonaManagementT
   };
 
   const getCategoryBadgeClass = (category: string) => {
-    return categoryColors[category] || 'bg-gray-100 text-gray-800';
+    return categoryColors[category] || 'bg-muted/20 text-muted-foreground border border-muted';
   };
 
   const getQualityGrade = (persona: Persona) => {
@@ -290,11 +290,11 @@ export function PersonaManagementTable({ onSelectionChange }: PersonaManagementT
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-2">
-                          <div className={`w-6 h-6 rounded-full flex items-center justify-center text-white text-xs font-bold ${
-                            qualityScore.grade === 'A' ? 'bg-green-500' :
-                            qualityScore.grade === 'B' ? 'bg-blue-500' :
-                            qualityScore.grade === 'C' ? 'bg-yellow-500' :
-                            qualityScore.grade === 'D' ? 'bg-orange-500' : 'bg-red-500'
+                          <div className={`w-6 h-6 rounded-full flex items-center justify-center text-foreground text-xs font-bold border ${
+                            qualityScore.grade === 'A' ? 'bg-muted text-foreground border-muted-foreground/30' :
+                            qualityScore.grade === 'B' ? 'bg-muted/80 text-foreground border-muted-foreground/30' :
+                            qualityScore.grade === 'C' ? 'bg-muted/60 text-foreground border-muted-foreground/30' :
+                            qualityScore.grade === 'D' ? 'bg-muted/40 text-foreground border-muted-foreground/30' : 'bg-muted/20 text-foreground border-muted-foreground/30'
                           }`}>
                             {qualityScore.grade}
                           </div>
