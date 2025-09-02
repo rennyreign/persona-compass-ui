@@ -36,7 +36,7 @@ interface ProgramManagerProps {
   onClose?: () => void;
 }
 
-export function ProgramManager({ selectedOrganization }: ProgramManagerProps) {
+export function ProgramManager({ selectedOrganization, onClose }: ProgramManagerProps) {
   const [programs, setPrograms] = useState<Program[]>([]);
   const [organizations, setOrganizations] = useState<Organization[]>([]);
   const [loading, setLoading] = useState(true);
@@ -394,24 +394,26 @@ export function ProgramManager({ selectedOrganization }: ProgramManagerProps) {
   }
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-3">
-          <BookOpen className="w-6 h-6 text-blue-600" />
-          <div>
-            <h2 className="text-2xl font-bold">Program Management</h2>
-            <p className="text-muted-foreground">Manage university programs for AI persona generation</p>
-          </div>
-        </div>
+    <Dialog open={true} onOpenChange={(open) => !open && onClose?.()}>
+      <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2">
+            <BookOpen className="w-5 h-5 text-blue-600" />
+            Program Management
+          </DialogTitle>
+        </DialogHeader>
         
-        <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
-          <DialogTrigger asChild>
-            <Button onClick={() => resetForm()}>
-              <Plus className="w-4 h-4 mr-2" />
-              Add Program
-            </Button>
-          </DialogTrigger>
+        <div className="space-y-6">
+          <div className="flex items-center justify-between">
+            <p className="text-muted-foreground">Manage university programs for AI persona generation</p>
+            
+            <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
+              <DialogTrigger asChild>
+                <Button onClick={() => resetForm()}>
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add Program
+                </Button>
+              </DialogTrigger>
           <DialogContent className="max-w-2xl">
             <DialogHeader>
               <DialogTitle>
@@ -619,6 +621,8 @@ export function ProgramManager({ selectedOrganization }: ProgramManagerProps) {
         </div>
       )}
 
-    </div>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }

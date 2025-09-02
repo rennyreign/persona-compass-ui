@@ -164,13 +164,9 @@ export function ProgramManagementTable({ selectedOrganization, onPersonaCountCha
           <div className="text-center py-12">
             <Building className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
             <h3 className="text-lg font-semibold text-foreground mb-2">No Programs Found</h3>
-            <p className="text-muted-foreground mb-4">
+            <p className="text-muted-foreground">
               Create programs to define target audiences and generate relevant personas.
             </p>
-            <Button className="flex items-center gap-2" onClick={() => setShowProgramManager(true)}>
-              <Plus className="h-4 w-4" />
-              Create Your First Program
-            </Button>
           </div>
         ) : (
           <div className="border rounded-lg overflow-hidden">
