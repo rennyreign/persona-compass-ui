@@ -231,34 +231,34 @@ export default function Campaigns() {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Campaign</TableHead>
-                      <TableHead>Persona</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Budget</TableHead>
-                      <TableHead>Channels</TableHead>
-                      <TableHead>Created</TableHead>
-                      <TableHead>Actions</TableHead>
+                      <TableHead className="w-[200px]">Campaign</TableHead>
+                      <TableHead className="w-[250px]">Persona</TableHead>
+                      <TableHead className="w-[100px]">Status</TableHead>
+                      <TableHead className="w-[120px]">Budget</TableHead>
+                      <TableHead className="w-[140px]">Channels</TableHead>
+                      <TableHead className="w-[100px]">Created</TableHead>
+                      <TableHead className="w-[120px]">Actions</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {filteredCampaigns.map((campaign) => (
                       <TableRow key={campaign.id}>
-                        <TableCell>
+                        <TableCell className="w-[200px]">
                           <div>
-                            <div className="font-semibold text-foreground">{campaign.name}</div>
+                            <div className="font-semibold text-foreground truncate">{campaign.name}</div>
                             {campaign.description && (
-                              <div className="text-sm text-muted-foreground mt-1 line-clamp-2">
+                              <div className="text-sm text-muted-foreground mt-1 line-clamp-1">
                                 {campaign.description}
                               </div>
                             )}
                             {campaign.objective && (
-                              <div className="text-xs text-blue-600 mt-1 font-medium">
+                              <div className="text-xs text-blue-600 mt-1 font-medium truncate">
                                 {campaign.objective}
                               </div>
                             )}
                           </div>
                         </TableCell>
-                        <TableCell>
+                        <TableCell className="w-[250px]">
                           {campaign.persona_id && (
                             <Link 
                               to={`/persona/${campaign.persona_id}`}
