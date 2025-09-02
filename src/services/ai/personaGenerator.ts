@@ -54,8 +54,11 @@ export class AIPersonaGenerator {
           request.prompt,
           context,
           request.programs,
-          i + 1
+          i + 1,
+          request.intelligenceLevel
         );
+        // Set organization ID for database storage
+        persona.organization_id = request.universityId;
         personas.push(persona);
       } catch (error) {
         console.error(`Failed to generate persona ${i + 1}:`, error);
@@ -73,9 +76,10 @@ export class AIPersonaGenerator {
     prompt: string,
     context: UniversityContext,
     programs: string[],
-    index: number = 1
+    index: number = 1,
+    intelligenceLevel: 'basic' | 'advanced' | 'expert' = 'basic'
   ): Promise<Persona> {
-    const systemPrompt = this.buildSystemPrompt(context, programs);
+    const systemPrompt = this.buildSystemPrompt(context, programs, intelligenceLevel);
     const userPrompt = this.buildUserPrompt(prompt, index);
 
     let lastError: Error | null = null;
@@ -104,13 +108,13 @@ export class AIPersonaGenerator {
   /**
    * Build system prompt with university context
    */
-  private static buildSystemPrompt(context: UniversityContext, programs: string[], intelligenceLevel: string = 'basic'): string {
+  private static buildSystemPrompt(context: UniversityContext, programs: string[], intelligenceLevel: 'basic' | 'advanced' | 'expert' = 'basic'): string {
     const basePrompt = `You are an expert marketing persona generator for higher education institutions.
 
 University Context:
 - University: ${context.universityName}
 - Location: ${context.location || 'Not specified'}
-- Target Programs: ${programs.join(', ')}
+- Target Programs: ${this.getSelectedProgramNames(context, programs).join(', ')}
 - Brand Guidelines: ${context.brandGuidelines || 'Standard academic branding'}
 - Messaging Framework: ${context.messagingFramework || 'Professional and aspirational'}`;
 
@@ -372,43 +376,65 @@ Return only a valid JSON object with the persona data - no additional text or fo
   }
 
   /**
-   * Get university context (placeholder - would integrate with RAG service)
+   * Get university context from database via RAG service
    */
   private static async getUniversityContext(universityId: string): Promise<UniversityContext> {
-    // This would integrate with the RAG data service
-    // For now, return MSU context as default
-    return {
-      universityName: 'Michigan State University',
-      location: 'Michigan, USA',
-      programs: [
-        {
-          id: 'scm',
-          name: 'Supply Chain Management',
-          category: 'Supply Chain Management',
-          description: 'Advanced supply chain strategy and operations',
-          targetAudience: 'Operations professionals',
-          keyBenefits: ['Strategic thinking', 'Analytics mastery', 'Leadership skills']
-        },
-        {
-          id: 'msl',
-          name: 'Management and Leadership',
-          category: 'Management and Leadership',
-          description: 'Executive leadership development',
-          targetAudience: 'Emerging leaders',
-          keyBenefits: ['Leadership skills', 'Team management', 'Strategic planning']
-        },
-        {
-          id: 'hcm',
-          name: 'Human Capital Management',
-          category: 'Human Capital Management',
-          description: 'Strategic HR and talent management',
-          targetAudience: 'HR professionals',
-          keyBenefits: ['Strategic HR', 'Talent development', 'Organizational design']
-        }
-      ],
-      brandGuidelines: 'Professional, academic excellence, career-focused',
-      messagingFramework: 'Advance your career through proven expertise and strategic thinking'
-    };
+    try {
+      // Get university data from RAG service
+      const universities = await RAGDataService.getAvailableUniversities();
+      const university = universities.find(u => u.id === universityId);
+      
+      if (!university) {
+        throw new Error(`University not found: ${universityId}`);
+      }
+
+      // Get programs for this university from database
+      const programs = await RAGDataService.getAllPrograms(universityId);
+      
+      return {
+        universityName: university.name,
+        location: university.location,
+        programs: programs,
+        brandGuidelines: 'Professional, academic excellence, career-focused',
+        messagingFramework: 'Advance your career through proven expertise and strategic thinking'
+      };
+    } catch (error) {
+      console.warn('Failed to load university context from database, using fallback:', error);
+      
+      // Fallback to hardcoded MSU context
+      return {
+        universityName: 'Michigan State University',
+        location: 'Michigan, USA',
+        programs: [
+          {
+            id: 'scm',
+            name: 'Supply Chain Management',
+            category: 'Supply Chain Management',
+            description: 'Advanced supply chain strategy and operations',
+            targetAudience: 'Operations professionals',
+            keyBenefits: ['Strategic thinking', 'Analytics mastery', 'Leadership skills']
+          },
+          {
+            id: 'msl',
+            name: 'Management and Leadership',
+            category: 'Management and Leadership',
+            description: 'Executive leadership development',
+            targetAudience: 'Emerging leaders',
+            keyBenefits: ['Leadership skills', 'Team management', 'Strategic planning']
+          },
+          {
+            id: 'hcm',
+            name: 'Human Capital Management',
+            category: 'Human Capital Management',
+            description: 'Strategic HR and talent management',
+            targetAudience: 'HR professionals',
+            keyBenefits: ['Strategic HR', 'Talent development', 'Organizational design']
+          }
+        ],
+        brandGuidelines: 'Professional, academic excellence, career-focused',
+        messagingFramework: 'Advance your career through proven expertise and strategic thinking'
+      };
+    }
   }
 
   /**
@@ -425,5 +451,45 @@ Return only a valid JSON object with the persona data - no additional text or fo
     };
 
     return industryMap[programCategory] || 'Professional Services';
+  }
+
+  /**
+   * Get program names from IDs
+   */
+  private static getSelectedProgramNames(context: UniversityContext, programIds: string[]): string[] {
+    return programIds.map(id => {
+      const program = context.programs.find(p => p.id === id);
+      return program ? program.name : id;
+    });
+  }
+
+  /**
+   * Save generated personas to database
+   */
+  static async savePersonas(personas: Persona[], userId: string): Promise<Persona[]> {
+    const { supabase } = await import('../../integrations/supabase/client');
+    const savedPersonas: Persona[] = [];
+
+    for (const persona of personas) {
+      try {
+        const { data, error } = await supabase
+          .from('personas')
+          .insert({
+            ...persona,
+            user_id: userId,
+            id: undefined // Let database generate ID
+          })
+          .select()
+          .single();
+
+        if (error) throw error;
+        savedPersonas.push(data);
+      } catch (error) {
+        console.error('Failed to save persona:', error);
+        // Continue with other personas
+      }
+    }
+
+    return savedPersonas;
   }
 }

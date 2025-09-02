@@ -11,12 +11,15 @@ import { Badge } from "@/components/ui/badge";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { ChevronDown, ChevronUp, Lightbulb, Users, Sparkles, Settings } from "lucide-react";
 import { RAGDataService } from "../../services/ragDataService";
-import { PersonaGenerationRequest } from "../../services/ai/personaGenerator";
+import { PersonaGenerationRequest, AIPersonaGenerator } from "../../services/ai/personaGenerator";
+import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
 
 interface AIPersonaPromptDialogProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
-  onGenerate: (request: PersonaGenerationRequest) => void;
+  onGenerate?: (request: PersonaGenerationRequest) => void;
+  onPersonasGenerated?: () => void;
   isGenerating?: boolean;
 }
 
@@ -60,7 +63,7 @@ const EXAMPLE_PROMPTS = [
   }
 ];
 
-export function AIPersonaPromptDialog({ isOpen, onOpenChange, onGenerate, isGenerating = false }: AIPersonaPromptDialogProps) {
+export function AIPersonaPromptDialog({ isOpen, onOpenChange, onGenerate, onPersonasGenerated, isGenerating: externalGenerating = false }: AIPersonaPromptDialogProps) {
   const [universities, setUniversities] = useState<University[]>([]);
   const [programs, setPrograms] = useState<Program[]>([]);
   const [prompt, setPrompt] = useState('');
@@ -72,6 +75,9 @@ export function AIPersonaPromptDialog({ isOpen, onOpenChange, onGenerate, isGene
   const [imageGeneration, setImageGeneration] = useState(true);
   const [showExamples, setShowExamples] = useState(false);
   const [showAdvanced, setShowAdvanced] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const { user } = useAuth();
+  const { toast } = useToast();
 
   useEffect(() => {
     loadUniversities();
@@ -120,8 +126,8 @@ export function AIPersonaPromptDialog({ isOpen, onOpenChange, onGenerate, isGene
     setShowExamples(false);
   };
 
-  const handleGenerate = () => {
-    if (!selectedUniversity || selectedPrograms.length === 0 || !prompt.trim()) {
+  const handleGenerate = async () => {
+    if (!selectedUniversity || selectedPrograms.length === 0 || !prompt.trim() || !user) {
       return;
     }
 
@@ -129,13 +135,64 @@ export function AIPersonaPromptDialog({ isOpen, onOpenChange, onGenerate, isGene
       universityId: selectedUniversity,
       programs: selectedPrograms,
       prompt: prompt.trim(),
-      count: personaCount
+      count: personaCount,
+      generateImages: imageGeneration,
+      intelligenceLevel: 'basic'
     };
 
-    onGenerate(request);
+    // If external onGenerate handler is provided, use it
+    if (onGenerate) {
+      onGenerate(request);
+      return;
+    }
+
+    // Otherwise, handle generation internally
+    setIsGenerating(true);
+    try {
+      toast({
+        title: "Generating Personas",
+        description: `Creating ${personaCount} personas using AI...`,
+      });
+
+      // Generate personas using AI
+      const personas = await AIPersonaGenerator.generatePersonas(request);
+      
+      if (personas.length === 0) {
+        throw new Error('No personas were generated');
+      }
+
+      // Save personas to database
+      const savedPersonas = await AIPersonaGenerator.savePersonas(personas, user.id);
+      
+      toast({
+        title: "Success!",
+        description: `Generated and saved ${savedPersonas.length} personas successfully.`,
+      });
+
+      // Reset form and close dialog
+      setPrompt('');
+      setSelectedPrograms([]);
+      setPersonaCount(5);
+      setImageGeneration(false);
+      onOpenChange(false);
+      
+      // Notify parent component
+      onPersonasGenerated?.();
+      
+    } catch (error) {
+      console.error('Persona generation failed:', error);
+      toast({
+        title: "Generation Failed",
+        description: error instanceof Error ? error.message : "Failed to generate personas. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   const isValid = selectedUniversity && selectedPrograms.length > 0 && prompt.trim().length > 20;
+  const generatingState = isGenerating || externalGenerating;
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -311,15 +368,15 @@ Example: 'Create 5 personas for MSU's Management & Leadership program targeting 
 
           {/* Action Buttons */}
           <div className="flex justify-between pt-4">
-            <Button variant="outline" onClick={() => onOpenChange(false)} disabled={isGenerating}>
+            <Button variant="outline" onClick={() => onOpenChange(false)} disabled={generatingState}>
               Cancel
             </Button>
             <Button 
               onClick={handleGenerate} 
-              disabled={!isValid || isGenerating}
+              disabled={!isValid || generatingState}
               className="min-w-32"
             >
-              {isGenerating ? (
+              {generatingState ? (
                 <div className="flex items-center gap-2">
                   <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
                   Generating...
