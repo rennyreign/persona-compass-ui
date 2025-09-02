@@ -5,13 +5,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { BulkCampaignCreator } from '@/components/admin/BulkCampaignCreator';
-import { PersonaManagementDashboard } from '@/components/admin/PersonaManagementDashboard';
-import { ProgramManager } from '@/components/admin/ProgramManager';
-import { Settings, Users, Target, Building, AlertCircle, Shield } from "lucide-react";
+import { ProgramManagementTable } from '@/components/admin/ProgramManagementTable';
+import { PersonaManagementTable } from '@/components/admin/PersonaManagementTable';
+import { StickyCampaignCreator } from '@/components/admin/StickyCampaignCreator';
+import { Settings, Building, AlertCircle, Shield, ArrowRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { Organization } from "@/types/persona";
+import { Organization, Persona } from "@/types/persona";
 
 export default function Admin() {
   const [selectedOrganization, setSelectedOrganization] = useState<string>('');
@@ -20,7 +20,7 @@ export default function Admin() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showBootstrap, setShowBootstrap] = useState(false);
-  const [componentError, setComponentError] = useState<string | null>(null);
+  const [selectedPersonas, setSelectedPersonas] = useState<Persona[]>([]);
   const { user } = useAuth();
 
   // Bootstrap admin access
@@ -239,48 +239,91 @@ export default function Admin() {
                 <Alert className="mt-4">
                   <AlertCircle className="h-4 w-4" />
                   <AlertDescription>
-                    Please select a university to enable bulk creation tools.
+                    Please select a university to enable admin tools.
                   </AlertDescription>
-                </Alert>
-              )}
-
-              {componentError && (
-                <Alert variant="destructive" className="mt-4">
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertDescription>{componentError}</AlertDescription>
                 </Alert>
               )}
             </div>
           </div>
 
           {/* Main Content */}
-          <div className="w-full px-6 py-8">
+          <div className="w-full px-6 py-8 pb-24">
             {selectedOrganization ? (
-              <div className="space-y-12">
+              <div className="space-y-8">
                 
-                {/* Row 1: Program Management */}
-                <div className="w-full">
-                  <AdminComponentWrapper title="Program Manager">
-                    <ProgramManager selectedOrganization={selectedOrganization} />
-                  </AdminComponentWrapper>
-                </div>
-
-                {/* Row 2: Persona Management Dashboard */}
-                <div className="w-full">
-                  <AdminComponentWrapper title="Persona Management Dashboard">
-                    <PersonaManagementDashboard />
-                  </AdminComponentWrapper>
-                </div>
-
-                {/* Row 3: Bulk Campaign Creator */}
-                <div className="w-full">
-                  <div className="flex items-center space-x-3 mb-6">
-                    <Target className="w-6 h-6 text-purple-600" />
-                    <h2 className="text-2xl font-bold text-foreground">Bulk Campaign Creator</h2>
+                {/* Step 1: Program Management - Inputs */}
+                <div className="relative">
+                  <div className="absolute -left-8 top-6 w-6 h-6 bg-primary rounded-full flex items-center justify-center text-primary-foreground text-sm font-bold">
+                    1
                   </div>
-                  <AdminComponentWrapper title="Bulk Campaign Creator">
-                    <BulkCampaignCreator selectedOrganization={selectedOrganization} />
-                  </AdminComponentWrapper>
+                  <ProgramManagementTable selectedOrganization={selectedOrganization} />
+                </div>
+
+                {/* Flow Arrow */}
+                <div className="flex items-center justify-center py-4">
+                  <div className="flex items-center gap-3 text-muted-foreground">
+                    <div className="w-12 h-px bg-border"></div>
+                    <ArrowRight className="h-5 w-5" />
+                    <div className="w-12 h-px bg-border"></div>
+                  </div>
+                </div>
+
+                {/* Step 2: Persona Management - Outputs */}
+                <div className="relative">
+                  <div className="absolute -left-8 top-6 w-6 h-6 bg-primary rounded-full flex items-center justify-center text-primary-foreground text-sm font-bold">
+                    2
+                  </div>
+                  <PersonaManagementTable onSelectionChange={setSelectedPersonas} />
+                </div>
+
+                {/* Flow Arrow */}
+                <div className="flex items-center justify-center py-4">
+                  <div className="flex items-center gap-3 text-muted-foreground">
+                    <div className="w-12 h-px bg-border"></div>
+                    <ArrowRight className="h-5 w-5" />
+                    <div className="w-12 h-px bg-border"></div>
+                  </div>
+                </div>
+
+                {/* Step 3: Campaign Creation - Actions */}
+                <div className="relative">
+                  <div className="absolute -left-8 top-6 w-6 h-6 bg-primary rounded-full flex items-center justify-center text-primary-foreground text-sm font-bold">
+                    3
+                  </div>
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <Settings className="h-5 w-5 text-primary" />
+                        Campaign Creation
+                      </CardTitle>
+                      <p className="text-sm text-muted-foreground">
+                        Select personas above to create targeted campaigns
+                      </p>
+                    </CardHeader>
+                    <CardContent>
+                      {selectedPersonas.length === 0 ? (
+                        <div className="text-center py-8">
+                          <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
+                            <Settings className="h-8 w-8 text-muted-foreground" />
+                          </div>
+                          <h3 className="text-lg font-semibold mb-2">Ready for Campaign Creation</h3>
+                          <p className="text-muted-foreground">
+                            Select personas from the table above to begin creating targeted campaigns.
+                          </p>
+                        </div>
+                      ) : (
+                        <div className="text-center py-8">
+                          <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <Settings className="h-8 w-8 text-primary" />
+                          </div>
+                          <h3 className="text-lg font-semibold mb-2">Campaign Actions Available</h3>
+                          <p className="text-muted-foreground mb-4">
+                            Use the sticky footer below to create campaigns with your selected personas.
+                          </p>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
                 </div>
 
               </div>
@@ -290,12 +333,18 @@ export default function Admin() {
                   <Building className="w-16 h-16 text-muted-foreground mx-auto" />
                   <div>
                     <h3 className="text-lg font-semibold text-foreground">Select University</h3>
-                    <p className="text-muted-foreground">Choose a university from the dropdown above to access bulk creation tools.</p>
+                    <p className="text-muted-foreground">Choose a university from the dropdown above to access admin tools.</p>
                   </div>
                 </div>
               </div>
             )}
           </div>
+
+          {/* Sticky Campaign Creator */}
+          <StickyCampaignCreator 
+            selectedPersonas={selectedPersonas}
+            onClearSelection={() => setSelectedPersonas([])}
+          />
         </div>
       </div>
     </div>
