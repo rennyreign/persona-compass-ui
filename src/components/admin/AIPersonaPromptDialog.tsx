@@ -101,6 +101,33 @@ export function AIPersonaPromptDialog({ isOpen, onOpenChange, onGenerate, onPers
     }
   };
 
+  // Generate a varied placeholder avatar URL to avoid identical grid when generation fails
+  const getRandomPlaceholderAvatar = (seed: string) => {
+    const styles = [
+      'adventurer-neutral',
+      'big-ears',
+      'big-smile',
+      'bottts',
+      'croodles-neutral',
+      'micah',
+      'open-peeps',
+      'shapes',
+      'thumbs'
+    ];
+    const index = Math.abs(hashCode(seed)) % styles.length;
+    const style = styles[index];
+    return `https://api.dicebear.com/7.x/${style}/svg?seed=${encodeURIComponent(seed)}&backgroundType=gradientLinear&radius=50`;
+  };
+
+  const hashCode = (str: string) => {
+    let h = 0;
+    for (let i = 0; i < str.length; i++) {
+      h = (h << 5) - h + str.charCodeAt(i);
+      h |= 0;
+    }
+    return h;
+  };
+
   const loadPrograms = async (universityId: string) => {
     try {
       const progs = await RAGDataService.getAllPrograms(universityId);
@@ -127,7 +154,30 @@ export function AIPersonaPromptDialog({ isOpen, onOpenChange, onGenerate, onPers
   };
 
   const handleGenerate = async () => {
+    console.log('Generate button clicked', { 
+      selectedUniversity, 
+      selectedPrograms, 
+      prompt: prompt.trim(), 
+      promptLength: prompt.trim().length,
+      user: !!user,
+      universities: universities.length,
+      programs: programs.length
+    });
+    
     if (!selectedUniversity || selectedPrograms.length === 0 || !prompt.trim() || !user) {
+      const missing = [];
+      if (!selectedUniversity) missing.push('University');
+      if (selectedPrograms.length === 0) missing.push('Programs');
+      if (!prompt.trim()) missing.push('Prompt');
+      if (prompt.trim().length < 20) missing.push('Prompt (minimum 20 characters)');
+      if (!user) missing.push('User authentication');
+      
+      console.log('Validation failed - missing:', missing);
+      toast({
+        title: "Missing Required Fields",
+        description: `Please select/fill: ${missing.join(', ')}`,
+        variant: "destructive",
+      });
       return;
     }
 
@@ -142,11 +192,13 @@ export function AIPersonaPromptDialog({ isOpen, onOpenChange, onGenerate, onPers
 
     // If external onGenerate handler is provided, use it
     if (onGenerate) {
+      console.log('Using external onGenerate handler');
       onGenerate(request);
       return;
     }
 
     // Otherwise, handle generation internally
+    console.log('Starting internal persona generation');
     setIsGenerating(true);
     try {
       toast({
@@ -154,8 +206,16 @@ export function AIPersonaPromptDialog({ isOpen, onOpenChange, onGenerate, onPers
         description: `Creating ${personaCount} personas using AI...`,
       });
 
+      // Check API key first
+      const apiKey = import.meta.env.VITE_GOOGLE_API_KEY;
+      if (!apiKey) {
+        throw new Error('Google AI API key not configured. Please set VITE_GOOGLE_API_KEY in your environment.');
+      }
+      console.log('Google AI API key found, generating personas with Gemini...');
+
       // Generate personas using AI
       const personas = await AIPersonaGenerator.generatePersonas(request);
+      console.log('Generated personas:', personas.length);
       
       if (personas.length === 0) {
         throw new Error('No personas were generated');
@@ -163,13 +223,65 @@ export function AIPersonaPromptDialog({ isOpen, onOpenChange, onGenerate, onPers
 
       // Save personas to database
       const savedPersonas = await AIPersonaGenerator.savePersonas(personas, user.id);
+      console.log('Saved personas:', savedPersonas.length);
+      
+      // Generate images if enabled
+      if (imageGeneration && savedPersonas.length > 0) {
+        toast({
+          title: "Generating Images...",
+          description: `Creating unique AI images for ${savedPersonas.length} personas...`,
+        });
+        
+        // Generate unique images for each persona with delays to ensure uniqueness
+        for (let i = 0; i < savedPersonas.length; i++) {
+          const persona = savedPersonas[i];
+          try {
+            console.log(`Generating unique image for persona ${i + 1}/${savedPersonas.length}: ${persona.name}`);
+            
+            // Add a delay between requests to ensure uniqueness
+            if (i > 0) {
+              console.log(`Waiting 2 seconds before generating image for ${persona.name}...`);
+              await new Promise(resolve => setTimeout(resolve, 2000));
+            }
+            
+            // Create a unique, varied prompt for each persona
+            const uniquePrompt = createUniquePersonaPrompt(persona);
+            console.log(`Unique prompt for ${persona.name}:`, uniquePrompt);
+            
+            // Generate image using Gemini with unique prompt
+            await generatePersonaImageWithPrompt(persona.id, uniquePrompt);
+            console.log(`Successfully generated image for ${persona.name}`);
+            
+          } catch (imageError) {
+            console.error(`Failed to generate image for ${persona.name}:`);
+            console.error('Error type:', typeof imageError);
+            console.error('Error message:', (imageError as any)?.message);
+            console.error('Error stack:', (imageError as any)?.stack);
+            console.error('Full error object:', imageError);
+            // Fallback: set a randomized placeholder avatar so the grid varies
+            try {
+              const placeholderUrl = getRandomPlaceholderAvatar(persona.id);
+              const { supabase } = await import('../../integrations/supabase/client');
+              const updateResult = await supabase.from('personas').update({
+                avatar_url: placeholderUrl
+              }).eq('id', persona.id);
+              if ((updateResult as any).error) {
+                console.error('Failed to set placeholder avatar:', (updateResult as any).error);
+              }
+            } catch (fallbackErr) {
+              console.error('Placeholder fallback failed:', fallbackErr);
+            }
+            // Continue with other personas even if one fails
+          }
+        }
+      }
       
       toast({
         title: "Success!",
-        description: `Generated and saved ${savedPersonas.length} personas successfully.`,
+        description: `Generated ${savedPersonas.length} personas${imageGeneration ? ' with unique AI images' : ''} successfully.`,
       });
 
-      // Reset form and close dialog
+      // Reset form and close dialog ONLY on success
       setPrompt('');
       setSelectedPrograms([]);
       setPersonaCount(5);
@@ -181,13 +293,144 @@ export function AIPersonaPromptDialog({ isOpen, onOpenChange, onGenerate, onPers
       
     } catch (error) {
       console.error('Persona generation failed:', error);
+      console.error('Error details:', {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined,
+        type: typeof error,
+        stringified: JSON.stringify(error)
+      });
+      
       toast({
         title: "Generation Failed",
-        description: error instanceof Error ? error.message : "Failed to generate personas. Please try again.",
+        description: error instanceof Error ? error.message : "Failed to generate personas. Please check console for details.",
         variant: "destructive",
       });
     } finally {
       setIsGenerating(false);
+    }
+  };
+
+  // Helper method to create unique prompts for each persona
+  const createUniquePersonaPrompt = (persona: any) => {
+    const variations = getRandomVariations();
+    // Create a safe, neutral prompt (avoid age/gender/ethnicity/unique identifiers)
+    return `Photorealistic professional business headshot portrait photograph of ${persona.occupation || 'business professional'}, ${variations.hair}, ${variations.expression}, wearing ${variations.attire}, ${variations.background}, ${variations.lighting}, sharp focus, professional photography, corporate headshot style, realistic human face, natural skin texture, professional studio portrait, 8k quality, hyper-realistic`;
+  };
+
+  const extractDemographics = (persona: any) => {
+    const description = persona.description?.toLowerCase() || '';
+    const ageRange = persona.age_range || '30-40';
+    const avgAge = Math.floor((parseInt(ageRange.split('-')[0]) + parseInt(ageRange.split('-')[1])) / 2);
+    
+    // Use persona ID as seed for consistent but different randomization per persona
+    const personaSeed = persona.id ? parseInt(persona.id.replace(/-/g, '').substring(0, 8), 16) : Math.floor(Math.random() * 1000000);
+    const seededRandom = (seed: number) => {
+      const x = Math.sin(seed) * 10000;
+      return x - Math.floor(x);
+    };
+    
+    const genderRandom = seededRandom(personaSeed);
+    const ethnicityRandom = seededRandom(personaSeed + 1);
+    
+    const ethnicities = [
+      'African American', 'Caucasian', 'Hispanic', 'Asian', 
+      'Middle Eastern', 'Mixed heritage', 'Indian', 'Native American', 
+      'Pacific Islander', 'European', 'Latino', 'Black'
+    ];
+    
+    return {
+      age: avgAge,
+      gender: description.includes('female') || description.includes('woman') ? 'female' : 
+              description.includes('male') || description.includes('man') ? 'male' : 
+              genderRandom > 0.5 ? 'female' : 'male',
+      ethnicity: ethnicities[Math.floor(ethnicityRandom * ethnicities.length)]
+    };
+  };
+
+  const getRandomVariations = () => {
+    const timestamp = Date.now();
+    const randomSeed = Math.floor(Math.random() * 1000000);
+    
+    const hairStyles = [
+      'short professional haircut', 'neat business style', 'modern professional cut', 
+      'polished hairstyle', 'sleek bob cut', 'professional waves', 'contemporary style',
+      'classic business cut', 'stylish professional look', 'well-groomed appearance',
+      'sophisticated hairstyle', 'trendy professional cut'
+    ];
+    
+    const expressions = [
+      'warm smile', 'confident expression', 'friendly demeanor', 'professional bearing',
+      'approachable smile', 'serious professional look', 'kind eyes', 'focused gaze',
+      'welcoming expression', 'thoughtful appearance', 'engaging smile', 'calm confidence'
+    ];
+    
+    const attire = [
+      'crisp business attire', 'professional suit', 'modern business casual', 
+      'executive style clothing', 'elegant business wear', 'contemporary professional outfit',
+      'classic business suit', 'polished business attire', 'sophisticated work wear',
+      'professional blazer', 'formal business dress', 'smart business clothing'
+    ];
+    
+    const backgrounds = [
+      'neutral gray background', 'soft white backdrop', 'professional studio background', 
+      'clean modern background', 'gradient gray backdrop', 'office environment background',
+      'corporate setting', 'minimalist backdrop', 'professional workspace', 'subtle blue background',
+      'warm neutral background', 'contemporary office setting'
+    ];
+    
+    const lighting = [
+      'natural soft lighting', 'professional studio lighting', 'warm natural light', 
+      'balanced professional lighting', 'soft directional lighting', 'even studio illumination',
+      'flattering portrait lighting', 'professional headshot lighting', 'gentle key lighting',
+      'corporate portrait lighting', 'refined studio setup', 'premium portrait lighting'
+    ];
+    
+    // Use timestamp and random seed to ensure uniqueness
+    const timeBasedIndex = (timestamp + randomSeed) % hairStyles.length;
+    
+    return {
+      hair: hairStyles[(timeBasedIndex) % hairStyles.length],
+      expression: expressions[(timeBasedIndex + 1) % expressions.length],
+      attire: attire[(timeBasedIndex + 2) % attire.length],
+      background: backgrounds[(timeBasedIndex + 3) % backgrounds.length],
+      lighting: lighting[(timeBasedIndex + 4) % lighting.length]
+    };
+  };
+
+  const generatePersonaImageWithPrompt = async (personaId: string, prompt: string) => {
+    try {
+      console.log('Requesting image from Netlify function for persona:', personaId);
+      const response = await fetch('/.netlify/functions/generate-image', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt }),
+      });
+
+      const text = await response.text();
+      console.log('Image function response status:', response.status);
+      if (!response.ok) {
+        console.error('Image function error payload:', text);
+        throw new Error(`Image function error (${response.status}): ${text}`);
+      }
+
+      const data = JSON.parse(text);
+      const imageUrl: string = data.imageUrl;
+      if (!imageUrl) {
+        throw new Error('Image function did not return imageUrl');
+      }
+
+      // Update the persona's avatar_url directly
+      const { supabase } = await import('../../integrations/supabase/client');
+      const updateResult = await supabase.from('personas').update({
+        avatar_url: imageUrl
+      }).eq('id', personaId);
+
+      if ((updateResult as any).error) {
+        throw new Error(`Failed to update persona avatar: ${(updateResult as any).error.message}`);
+      }
+    } catch (err: any) {
+      console.error('Image generation failed:', err);
+      throw err;
     }
   };
 
