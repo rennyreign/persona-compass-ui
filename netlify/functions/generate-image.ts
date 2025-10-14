@@ -33,15 +33,24 @@ export const handler: Handler = async (event) => {
 
   try {
     const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-    const SUPABASE_URL = process.env.VITE_SUPABASE_URL;
-    const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    const SUPABASE_URL = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
+    const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY;
 
     if (!OPENAI_API_KEY) {
       return { statusCode: 500, body: JSON.stringify({ error: 'OPENAI_API_KEY not configured' }) };
     }
 
     if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
-      return { statusCode: 500, body: JSON.stringify({ error: 'Supabase credentials not configured' }) };
+      return {
+        statusCode: 500,
+        body: JSON.stringify({
+          error: 'Supabase credentials not configured',
+          details: {
+            hasUrl: !!SUPABASE_URL,
+            hasServiceRole: !!SUPABASE_SERVICE_KEY,
+          },
+        }),
+      };
     }
 
     const body = event.body ? JSON.parse(event.body) : {};
@@ -91,8 +100,8 @@ export const handler: Handler = async (event) => {
       return { statusCode: 502, body: JSON.stringify({ error: 'Failed to download generated image' }) };
     }
 
-    const imageBuffer = await imageResp.arrayBuffer();
-    const imageBlob = new Blob([imageBuffer], { type: 'image/png' });
+    const imageArrayBuffer = await imageResp.arrayBuffer();
+    const imageBuffer = Buffer.from(imageArrayBuffer);
 
     // Step 3: Upload to Supabase Storage for permanent storage
     const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
@@ -101,7 +110,7 @@ export const handler: Handler = async (event) => {
 
     const { data: uploadData, error: uploadError } = await supabase.storage
       .from('persona-images')
-      .upload(filePath, imageBlob, {
+      .upload(filePath, imageBuffer, {
         contentType: 'image/png',
         upsert: true,
       });
