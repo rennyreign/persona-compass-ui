@@ -48,5 +48,5 @@
   status = 200
 
 [context.production.environment]
-  VITE_SUPABASE_URL = "https://hhbzjfnqhqcbqzwvjbqw.supabase.co"
-  VITE_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhoYnpqZm5xaHFjYnF6d3ZqYnF3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzY5ODY4MjcsImV4cCI6MjA1MjU2MjgyN30.rjxgKKQwLxFKYGYFKPSUJhZHKpkJYrYfIqQKcQmJJhY"
+  VITE_SUPABASE_URL = "https://strostafzewfkycctzes.supabase.co"
+  VITE_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN0cm9zdGFmemV3Zmt5Y2N0emVzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI3MDQ5MDIsImV4cCI6MjA2ODI4MDkwMn0.-0oG1dB4RvibQXOEFitA3D4-zs4s8vpojRZgHM1Z7Ec"
