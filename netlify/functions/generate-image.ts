@@ -20,8 +20,8 @@ function sanitizePrompt(input: string): string {
   const professionMatch = p.match(/\b(manager|analyst|director|coordinator|specialist|consultant|professional|executive|administrator|officer)\b/);
   const profession = professionMatch ? professionMatch[0] : 'business professional';
 
-  // Compose realistic DSLR headshot prompt
-  const base = `Professional headshot photo of a ${ageRange} year old ${profession}, taken with a DSLR camera. Realistic lighting, soft background (gray or light neutral), wearing business professional attire. Natural facial expression, confident and approachable. No artistic filters, no hyper-realism, realistic human photo. Natural skin texture with minor imperfections, authentic photography, corporate headshot style`;
+  // Compose realistic DSLR headshot prompt (explicitly de-stylized)
+  const base = `Professional headshot photo of a ${ageRange} year old ${profession}, photographed with a DSLR (Canon 5D Mark IV) and 85mm lens at f/2.8, ISO 200, 1/125s. Neutral color balance, soft two‑softbox key/fill lighting, even exposure, minimal post‑processing. Soft gray seamless studio background. Wearing navy suit jacket, light blue dress shirt, simple solid tie. Natural facial expression, confident and approachable. Realistic human photo with natural skin texture and subtle imperfections. Not illustration, not 3D render, not CGI, not digital art, not airbrushed, no cinematic look, no dramatic rim lighting, no hyper‑realism, no beauty retouch, no filters`;
   
   return base;
 }
@@ -80,6 +80,7 @@ export const handler: Handler = async (event) => {
         n: 1,
         size: '1024x1024',
         quality: 'standard',
+        style: 'natural',
       }),
     });
 
