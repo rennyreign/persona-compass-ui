@@ -8,12 +8,23 @@ import { Input } from '../ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '../ui/sheet';
 import { ScrollArea } from '../ui/scroll-area';
-import { Search, Users, Filter, Eye, Sparkles } from 'lucide-react';
+import { Search, Users, Filter, Eye, Sparkles, ExternalLink, Trash2 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { Persona } from '@/types/persona';
 import { useToast } from '@/hooks/use-toast';
 import { PersonaValidationService } from '@/services/personaValidation';
 import { AIPersonaPromptDialog } from './AIPersonaPromptDialog';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface PersonaManagementTableProps {
   onSelectionChange: (selectedPersonas: Persona[]) => void;
@@ -36,6 +47,9 @@ export function PersonaManagementTable({ onSelectionChange }: PersonaManagementT
   const [selectedPersona, setSelectedPersona] = useState<Persona | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showAIDialog, setShowAIDialog] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [personaToDelete, setPersonaToDelete] = useState<string | null>(null);
+  const [bulkDeleteDialogOpen, setBulkDeleteDialogOpen] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -118,6 +132,76 @@ export function PersonaManagementTable({ onSelectionChange }: PersonaManagementT
     });
   };
 
+  const handleDeletePersona = async (personaId: string) => {
+    try {
+      const { error } = await supabase
+        .from('personas')
+        .delete()
+        .eq('id', personaId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Success",
+        description: "Persona deleted successfully.",
+      });
+
+      // Remove from local state
+      setPersonas(prev => prev.filter(p => p.id !== personaId));
+      setSelectedPersonas(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(personaId);
+        return newSet;
+      });
+    } catch (error) {
+      console.error('Error deleting persona:', error);
+      toast({
+        title: "Error",
+        description: "Failed to delete persona.",
+        variant: "destructive",
+      });
+    } finally {
+      setDeleteDialogOpen(false);
+      setPersonaToDelete(null);
+    }
+  };
+
+  const handleBulkDelete = async () => {
+    try {
+      const idsToDelete = Array.from(selectedPersonas);
+      
+      const { error } = await supabase
+        .from('personas')
+        .delete()
+        .in('id', idsToDelete);
+
+      if (error) throw error;
+
+      toast({
+        title: "Success",
+        description: `${idsToDelete.length} persona(s) deleted successfully.`,
+      });
+
+      // Remove from local state
+      setPersonas(prev => prev.filter(p => !selectedPersonas.has(p.id)));
+      setSelectedPersonas(new Set());
+    } catch (error) {
+      console.error('Error deleting personas:', error);
+      toast({
+        title: "Error",
+        description: "Failed to delete personas.",
+        variant: "destructive",
+      });
+    } finally {
+      setBulkDeleteDialogOpen(false);
+    }
+  };
+
+  const confirmDelete = (personaId: string) => {
+    setPersonaToDelete(personaId);
+    setDeleteDialogOpen(true);
+  };
+
   if (isLoading) {
     return (
       <Card>
@@ -140,10 +224,23 @@ export function PersonaManagementTable({ onSelectionChange }: PersonaManagementT
               <Badge variant="default" className="ml-1">{selectedPersonas.size} Selected</Badge>
             )}
           </CardTitle>
-          <Button size="sm" className="flex items-center gap-2" onClick={() => setShowAIDialog(true)}>
-            <Sparkles className="h-4 w-4" />
-            Generate AI Personas
-          </Button>
+          <div className="flex items-center gap-2">
+            {selectedPersonas.size > 0 && (
+              <Button 
+                size="sm" 
+                variant="destructive" 
+                className="flex items-center gap-2" 
+                onClick={() => setBulkDeleteDialogOpen(true)}
+              >
+                <Trash2 className="h-4 w-4" />
+                Delete Selected ({selectedPersonas.size})
+              </Button>
+            )}
+            <Button size="sm" className="flex items-center gap-2" onClick={() => setShowAIDialog(true)}>
+              <Sparkles className="h-4 w-4" />
+              Generate AI Personas
+            </Button>
+          </div>
         </div>
         <p className="text-sm text-muted-foreground">
           Review and select personas for campaign creation. Click rows to view details.
@@ -271,7 +368,13 @@ export function PersonaManagementTable({ onSelectionChange }: PersonaManagementT
                       </TableCell>
                       <TableCell className="font-medium">
                         <div>
-                          <div className="font-semibold">{persona.name}</div>
+                          <Link 
+                            to={`/persona/${persona.id}`}
+                            className="font-semibold text-blue-600 hover:text-blue-800 hover:underline"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            {persona.name}
+                          </Link>
                           <div className="text-sm text-muted-foreground">
                             {persona.occupation} • {persona.age_range}
                           </div>
@@ -309,12 +412,30 @@ export function PersonaManagementTable({ onSelectionChange }: PersonaManagementT
                         {formatDate(persona.updated_at)}
                       </TableCell>
                       <TableCell onClick={(e) => e.stopPropagation()}>
-                        <Sheet>
-                          <SheetTrigger asChild>
-                            <Button variant="ghost" size="sm">
-                              <Eye className="h-4 w-4" />
+                        <div className="flex gap-1">
+                          <Link to={`/persona/${persona.id}`}>
+                            <Button variant="ghost" size="sm" title="View Profile">
+                              <ExternalLink className="h-4 w-4" />
                             </Button>
-                          </SheetTrigger>
+                          </Link>
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            title="Delete Persona"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              confirmDelete(persona.id);
+                            }}
+                            className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                          <Sheet>
+                            <SheetTrigger asChild>
+                              <Button variant="ghost" size="sm" title="Quick Preview">
+                                <Eye className="h-4 w-4" />
+                              </Button>
+                            </SheetTrigger>
                           <SheetContent side="right" className="w-[600px]">
                             <SheetHeader>
                               <SheetTitle>{persona.name}</SheetTitle>
@@ -390,6 +511,7 @@ export function PersonaManagementTable({ onSelectionChange }: PersonaManagementT
                             </ScrollArea>
                           </SheetContent>
                         </Sheet>
+                        </div>
                       </TableCell>
                     </TableRow>
                   );
@@ -404,13 +526,55 @@ export function PersonaManagementTable({ onSelectionChange }: PersonaManagementT
       <AIPersonaPromptDialog 
         isOpen={showAIDialog}
         onOpenChange={setShowAIDialog}
-        onGenerate={(request) => {
-          // Handle persona generation request
-          console.log('Generating personas with request:', request);
-          setShowAIDialog(false);
-          loadPersonas(); // Refresh personas after generation
+        onPersonasGenerated={() => {
+          // Refresh personas list after successful generation
+          loadPersonas();
         }}
       />
+
+      {/* Single Delete Confirmation Dialog */}
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Persona</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete this persona? This action cannot be undone.
+              All associated data including campaigns and analytics will be permanently removed.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => personaToDelete && handleDeletePersona(personaToDelete)}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Bulk Delete Confirmation Dialog */}
+      <AlertDialog open={bulkDeleteDialogOpen} onOpenChange={setBulkDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Multiple Personas</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete {selectedPersonas.size} persona(s)? This action cannot be undone.
+              All associated data including campaigns and analytics will be permanently removed.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleBulkDelete}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Delete {selectedPersonas.size} Persona(s)
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Card>
   );
 }
