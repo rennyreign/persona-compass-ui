@@ -1,4 +1,5 @@
 import type { Handler } from '@netlify/functions';
+import { createClient } from '@supabase/supabase-js';
 
 // Remove PII-like terms and sensitive attributes to avoid policy blocks
 function sanitizePrompt(input: string): string {
@@ -24,18 +25,32 @@ export const handler: Handler = async (event) => {
 
   try {
     const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+    const SUPABASE_URL = process.env.VITE_SUPABASE_URL;
+    const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
     if (!OPENAI_API_KEY) {
       return { statusCode: 500, body: JSON.stringify({ error: 'OPENAI_API_KEY not configured' }) };
     }
 
+    if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
+      return { statusCode: 500, body: JSON.stringify({ error: 'Supabase credentials not configured' }) };
+    }
+
     const body = event.body ? JSON.parse(event.body) : {};
     const rawPrompt: string = body.prompt || '';
+    const personaId: string = body.personaId || '';
+    
     if (!rawPrompt || rawPrompt.length < 10) {
       return { statusCode: 400, body: JSON.stringify({ error: 'Missing or too short prompt' }) };
     }
 
+    if (!personaId) {
+      return { statusCode: 400, body: JSON.stringify({ error: 'Missing personaId' }) };
+    }
+
     const prompt = sanitizePrompt(rawPrompt);
 
+    // Step 1: Generate image with DALL-E
     const resp = await fetch('https://api.openai.com/v1/images/generations', {
       method: 'POST',
       headers: {
@@ -57,12 +72,45 @@ export const handler: Handler = async (event) => {
     }
 
     const data = JSON.parse(text);
-    const imageUrl: string | undefined = data?.data?.[0]?.url;
-    if (!imageUrl) {
+    const tempImageUrl: string | undefined = data?.data?.[0]?.url;
+    if (!tempImageUrl) {
       return { statusCode: 502, body: JSON.stringify({ error: 'No image URL returned', details: data }) };
     }
 
-    return { statusCode: 200, body: JSON.stringify({ imageUrl }) };
+    // Step 2: Download the image from DALL-E's temporary URL
+    const imageResp = await fetch(tempImageUrl);
+    if (!imageResp.ok) {
+      return { statusCode: 502, body: JSON.stringify({ error: 'Failed to download generated image' }) };
+    }
+
+    const imageBuffer = await imageResp.arrayBuffer();
+    const imageBlob = new Blob([imageBuffer], { type: 'image/png' });
+
+    // Step 3: Upload to Supabase Storage for permanent storage
+    const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
+    const fileName = `${personaId}-${Date.now()}.png`;
+    const filePath = `persona-avatars/${fileName}`;
+
+    const { data: uploadData, error: uploadError } = await supabase.storage
+      .from('persona-images')
+      .upload(filePath, imageBlob, {
+        contentType: 'image/png',
+        upsert: true,
+      });
+
+    if (uploadError) {
+      console.error('Supabase upload error:', uploadError);
+      return { statusCode: 500, body: JSON.stringify({ error: 'Failed to upload image to storage', details: uploadError.message }) };
+    }
+
+    // Step 4: Get the public URL
+    const { data: publicUrlData } = supabase.storage
+      .from('persona-images')
+      .getPublicUrl(filePath);
+
+    const permanentUrl = publicUrlData.publicUrl;
+
+    return { statusCode: 200, body: JSON.stringify({ imageUrl: permanentUrl }) };
   } catch (err: any) {
     return { statusCode: 500, body: JSON.stringify({ error: 'Server error', message: err?.message || String(err) }) };
   }

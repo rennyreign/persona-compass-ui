@@ -403,7 +403,7 @@ export function AIPersonaPromptDialog({ isOpen, onOpenChange, onGenerate, onPers
       const response = await fetch('/.netlify/functions/generate-image', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt }),
+        body: JSON.stringify({ prompt, personaId }),
       });
 
       const text = await response.text();
