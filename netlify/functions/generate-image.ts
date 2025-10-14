@@ -4,18 +4,26 @@ import { createClient } from '@supabase/supabase-js';
 // Remove PII-like terms and sensitive attributes to avoid policy blocks
 function sanitizePrompt(input: string): string {
   const lowered = input.toLowerCase();
-  // Remove age, gender, ethnicity, unique identifiers
+  
+  // Extract age range if present (we'll keep this for the prompt structure)
+  const ageMatch = lowered.match(/\b(\d{1,2}[-–]\d{1,2})\b/);
+  const ageRange = ageMatch ? ageMatch[1] : '30-40';
+  
+  // Remove specific identifiers but keep general descriptors
   let p = lowered
     .replace(/\b\d{1,2}\s*year\s*old\b/g, '')
-    .replace(/\b(male|female|non\s*binary|man|woman|boy|girl)\b/g, '')
-    .replace(/\b(caucasian|white|black|african american|asian|hispanic|latino|middle eastern|indian|european|pacific islander|native american|ethnicity)\b/g, '')
     .replace(/\bphoto id\b|\bunique individual\b|\bseed\b|\bssn\b|\bidentifier\b/g, '')
-    .replace(/\s+/g, ' ') // collapse whitespace
+    .replace(/\s+/g, ' ')
     .trim();
 
-  // Compose safe, neutral headshot style with strong photorealism emphasis
-  const base = 'Photorealistic professional business headshot portrait photograph, real human person, polished business attire, neutral studio background, professional portrait lighting, sharp focus, natural skin texture, realistic facial features, corporate photography style, high-resolution professional headshot, studio quality';
-  return `${base}, ${p}`;
+  // Extract profession/role from the input
+  const professionMatch = p.match(/\b(manager|analyst|director|coordinator|specialist|consultant|professional|executive|administrator|officer)\b/);
+  const profession = professionMatch ? professionMatch[0] : 'business professional';
+
+  // Compose realistic DSLR headshot prompt
+  const base = `Professional headshot photo of a ${ageRange} year old ${profession}, taken with a DSLR camera. Realistic lighting, soft background (gray or light neutral), wearing business professional attire. Natural facial expression, confident and approachable. No artistic filters, no hyper-realism, realistic human photo. Natural skin texture with minor imperfections, authentic photography, corporate headshot style`;
+  
+  return base;
 }
 
 export const handler: Handler = async (event) => {

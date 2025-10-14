@@ -312,9 +312,21 @@ export function AIPersonaPromptDialog({ isOpen, onOpenChange, onGenerate, onPers
 
   // Helper method to create unique prompts for each persona
   const createUniquePersonaPrompt = (persona: any) => {
-    const variations = getRandomVariations();
-    // Create a safe, neutral prompt (avoid age/gender/ethnicity/unique identifiers)
-    return `Photorealistic professional business headshot portrait photograph of ${persona.occupation || 'business professional'}, ${variations.hair}, ${variations.expression}, wearing ${variations.attire}, ${variations.background}, ${variations.lighting}, sharp focus, professional photography, corporate headshot style, realistic human face, natural skin texture, professional studio portrait, 8k quality, hyper-realistic`;
+    const ageRange = persona.age_range || '30-40';
+    const occupation = persona.occupation || 'business professional';
+    
+    // Vary attire slightly for diversity
+    const attireOptions = [
+      'business suit',
+      'professional blazer',
+      'business casual attire',
+      'formal business wear',
+      'corporate attire'
+    ];
+    const attire = attireOptions[Math.floor(Math.random() * attireOptions.length)];
+    
+    // Create realistic DSLR headshot prompt following the user's structure
+    return `Professional headshot photo of a ${ageRange} year old ${occupation}, taken with a DSLR camera. Realistic lighting, soft background (gray or light neutral), wearing ${attire}. Natural facial expression, confident and approachable. No artistic filters, no hyper-realism, realistic human photo. Natural skin texture with minor imperfections, authentic photography, corporate headshot style`;
   };
 
   const extractDemographics = (persona: any) => {
