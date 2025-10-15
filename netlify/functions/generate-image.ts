@@ -1,6 +1,9 @@
 import type { Handler } from '@netlify/functions';
 import { createClient } from '@supabase/supabase-js';
 
+// Extend max duration to reduce 504s on slower image generations
+export const config = { maxDuration: 26 };
+
 // Remove PII-like terms and sensitive attributes to avoid policy blocks
 function sanitizePrompt(input: string): string {
   const lowered = input.toLowerCase();
@@ -78,9 +81,10 @@ export const handler: Handler = async (event) => {
         model: 'dall-e-3',
         prompt,
         n: 1,
-        size: '1024x1024',
+        size: '512x512',
         quality: 'standard',
         style: 'natural',
+        response_format: 'b64_json',
       }),
     });
 
@@ -90,19 +94,14 @@ export const handler: Handler = async (event) => {
     }
 
     const data = JSON.parse(text);
-    const tempImageUrl: string | undefined = data?.data?.[0]?.url;
-    if (!tempImageUrl) {
-      return { statusCode: 502, body: JSON.stringify({ error: 'No image URL returned', details: data }) };
+    const b64: string | undefined = data?.data?.[0]?.b64_json;
+    if (!b64) {
+      return { statusCode: 502, body: JSON.stringify({ error: 'No image data returned', details: data }) };
     }
 
-    // Step 2: Download the image from DALL-E's temporary URL
-    const imageResp = await fetch(tempImageUrl);
-    if (!imageResp.ok) {
-      return { statusCode: 502, body: JSON.stringify({ error: 'Failed to download generated image' }) };
-    }
-
-    const imageArrayBuffer = await imageResp.arrayBuffer();
-    const imageBuffer = Buffer.from(imageArrayBuffer);
+    // Step 2: Convert base64 to Blob (skip external download step)
+    const imageBuffer = Buffer.from(b64, 'base64');
+    const imageBlob = new Blob([imageBuffer], { type: 'image/png' });
 
     // Step 3: Upload to Supabase Storage for permanent storage
     const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
@@ -111,7 +110,7 @@ export const handler: Handler = async (event) => {
 
     const { data: uploadData, error: uploadError } = await supabase.storage
       .from('persona-images')
-      .upload(filePath, imageBuffer, {
+      .upload(filePath, imageBlob, {
         contentType: 'image/png',
         upsert: true,
       });
