@@ -1,5 +1,6 @@
 import type { Handler } from '@netlify/functions';
 import { createClient } from '@supabase/supabase-js';
+import { GoogleAuth } from 'google-auth-library';
 
 // Extend max duration to reduce 504s on slower image generations
 export const config = { maxDuration: 26 };
@@ -35,12 +36,14 @@ export const handler: Handler = async (event) => {
   }
 
   try {
-    const GOOGLE_API_KEY = process.env.VITE_GOOGLE_API_KEY || process.env.GOOGLE_API_KEY;
+    const GOOGLE_CREDENTIALS = process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON;
+    const PROJECT_ID = process.env.GOOGLE_CLOUD_PROJECT || 'sharp-quest-476102-i2';
+    const LOCATION = process.env.GOOGLE_CLOUD_LOCATION || 'us-central1';
     const SUPABASE_URL = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
     const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY;
 
-    if (!GOOGLE_API_KEY) {
-      return { statusCode: 500, body: JSON.stringify({ error: 'GOOGLE_API_KEY not configured' }) };
+    if (!GOOGLE_CREDENTIALS) {
+      return { statusCode: 500, body: JSON.stringify({ error: 'GOOGLE_APPLICATION_CREDENTIALS_JSON not configured' }) };
     }
 
     if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
@@ -70,7 +73,20 @@ export const handler: Handler = async (event) => {
 
     const prompt = sanitizePrompt(rawPrompt);
 
-    // Step 1: Generate image with Google Imagen (with retry for network errors)
+    // Step 1: Authenticate with Google Cloud using service account
+    const credentials = JSON.parse(GOOGLE_CREDENTIALS);
+    const auth = new GoogleAuth({
+      credentials,
+      scopes: ['https://www.googleapis.com/auth/cloud-platform'],
+    });
+    const client = await auth.getClient();
+    const accessToken = await client.getAccessToken();
+
+    if (!accessToken.token) {
+      return { statusCode: 500, body: JSON.stringify({ error: 'Failed to get access token' }) };
+    }
+
+    // Step 2: Generate image with Vertex AI Imagen 3 (with retry for network errors)
     let resp;
     let text;
     const maxRetries = 3;
@@ -78,15 +94,15 @@ export const handler: Handler = async (event) => {
     
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
       try {
-        console.log(`Imagen 3 generation attempt ${attempt}/${maxRetries}`);
+        console.log(`Vertex AI Imagen 3 generation attempt ${attempt}/${maxRetries}`);
         
-        // Use Google's Imagen 3 API via Generative Language API
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-001:predict`;
+        // Use Vertex AI Imagen 3 API
+        const apiUrl = `https://${LOCATION}-aiplatform.googleapis.com/v1/projects/${PROJECT_ID}/locations/${LOCATION}/publishers/google/models/imagen-3.0-generate-001:predict`;
         
         resp = await fetch(apiUrl, {
           method: 'POST',
           headers: {
-            'x-goog-api-key': GOOGLE_API_KEY,
+            'Authorization': `Bearer ${accessToken.token}`,
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
@@ -106,14 +122,14 @@ export const handler: Handler = async (event) => {
         text = await resp.text();
         
         if (!resp.ok) {
-          console.error(`Imagen 3 error (attempt ${attempt}):`, resp.status, text);
+          console.error(`Vertex AI Imagen 3 error (attempt ${attempt}):`, resp.status, text);
           if (attempt < maxRetries && [408, 429, 500, 502, 503, 504].includes(resp.status)) {
             const delay = Math.pow(2, attempt - 1) * 1000;
             console.log(`Retrying after ${delay}ms...`);
             await new Promise(resolve => setTimeout(resolve, delay));
             continue;
           }
-          return { statusCode: resp.status, body: JSON.stringify({ error: 'Imagen 3 error', details: text }) };
+          return { statusCode: resp.status, body: JSON.stringify({ error: 'Vertex AI Imagen 3 error', details: text }) };
         }
         
         // Success - break out of retry loop
@@ -127,12 +143,12 @@ export const handler: Handler = async (event) => {
           await new Promise(resolve => setTimeout(resolve, delay));
           continue;
         }
-        return { statusCode: 500, body: JSON.stringify({ error: 'Network error calling Imagen 3', message: err.message }) };
+        return { statusCode: 500, body: JSON.stringify({ error: 'Network error calling Vertex AI Imagen 3', message: err.message }) };
       }
     }
 
     const data = JSON.parse(text!);
-    // Extract base64 image from Imagen response
+    // Extract base64 image from Vertex AI Imagen response
     const b64: string | undefined = data?.predictions?.[0]?.bytesBase64Encoded;
     if (!b64) {
       return { statusCode: 502, body: JSON.stringify({ error: 'No image data returned', details: data }) };
