@@ -35,12 +35,12 @@ export const handler: Handler = async (event) => {
   }
 
   try {
-    const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+    const GOOGLE_API_KEY = process.env.VITE_GOOGLE_API_KEY || process.env.GOOGLE_API_KEY;
     const SUPABASE_URL = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
     const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY;
 
-    if (!OPENAI_API_KEY) {
-      return { statusCode: 500, body: JSON.stringify({ error: 'OPENAI_API_KEY not configured' }) };
+    if (!GOOGLE_API_KEY) {
+      return { statusCode: 500, body: JSON.stringify({ error: 'GOOGLE_API_KEY not configured' }) };
     }
 
     if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
@@ -70,7 +70,7 @@ export const handler: Handler = async (event) => {
 
     const prompt = sanitizePrompt(rawPrompt);
 
-    // Step 1: Generate image with DALL-E (with retry for network errors)
+    // Step 1: Generate image with Google Imagen (with retry for network errors)
     let resp;
     let text;
     const maxRetries = 3;
@@ -78,35 +78,41 @@ export const handler: Handler = async (event) => {
     
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
       try {
-        console.log(`DALL-E request attempt ${attempt}/${maxRetries}`);
-        resp = await fetch('https://api.openai.com/v1/images/generations', {
+        console.log(`Google Imagen request attempt ${attempt}/${maxRetries}`);
+        
+        // Use Google's Generative Language API for image generation
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-001:predict?key=${GOOGLE_API_KEY}`;
+        
+        resp = await fetch(apiUrl, {
           method: 'POST',
           headers: {
-            'Authorization': `Bearer ${OPENAI_API_KEY}`,
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            model: 'dall-e-3',
-            prompt,
-            n: 1,
-            size: '1024x1024',
-            quality: 'standard',
-            style: 'natural',
-            response_format: 'b64_json',
+            instances: [{
+              prompt: prompt,
+            }],
+            parameters: {
+              sampleCount: 1,
+              aspectRatio: "1:1",
+              negativePrompt: "illustration, 3D render, CGI, digital art, airbrushed, cinematic look, dramatic rim lighting, hyper-realism, beauty retouch, filters, cartoon, anime, painting, drawing",
+              safetyFilterLevel: "block_some",
+              personGeneration: "allow_adult"
+            }
           }),
         });
 
         text = await resp.text();
         
         if (!resp.ok) {
-          console.error(`DALL-E error (attempt ${attempt}):`, resp.status, text);
+          console.error(`Google Imagen error (attempt ${attempt}):`, resp.status, text);
           if (attempt < maxRetries && [408, 429, 500, 502, 503, 504].includes(resp.status)) {
             const delay = Math.pow(2, attempt - 1) * 1000;
             console.log(`Retrying after ${delay}ms...`);
             await new Promise(resolve => setTimeout(resolve, delay));
             continue;
           }
-          return { statusCode: resp.status, body: JSON.stringify({ error: 'OpenAI error', details: text }) };
+          return { statusCode: resp.status, body: JSON.stringify({ error: 'Google Imagen error', details: text }) };
         }
         
         // Success - break out of retry loop
@@ -120,17 +126,17 @@ export const handler: Handler = async (event) => {
           await new Promise(resolve => setTimeout(resolve, delay));
           continue;
         }
-        return { statusCode: 500, body: JSON.stringify({ error: 'Network error calling OpenAI', message: err.message }) };
+        return { statusCode: 500, body: JSON.stringify({ error: 'Network error calling Google Imagen', message: err.message }) };
       }
     }
 
     const data = JSON.parse(text!);
-    const b64: string | undefined = data?.data?.[0]?.b64_json;
+    const b64: string | undefined = data?.predictions?.[0]?.bytesBase64Encoded;
     if (!b64) {
       return { statusCode: 502, body: JSON.stringify({ error: 'No image data returned', details: data }) };
     }
 
-    // Step 2: Convert base64 to Blob (skip external download step)
+    // Step 2: Convert base64 to Blob
     const imageBuffer = Buffer.from(b64, 'base64');
     const imageBlob = new Blob([imageBuffer], { type: 'image/png' });
 
