@@ -78,10 +78,10 @@ export const handler: Handler = async (event) => {
     
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
       try {
-        console.log(`Gemini image generation attempt ${attempt}/${maxRetries}`);
+        console.log(`Imagen 3 generation attempt ${attempt}/${maxRetries}`);
         
-        // Use Google's Gemini 2.5 Flash Image API
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent`;
+        // Use Google's Imagen 3 API via Generative Language API
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-001:predict`;
         
         resp = await fetch(apiUrl, {
           method: 'POST',
@@ -90,25 +90,30 @@ export const handler: Handler = async (event) => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            contents: [{
-              parts: [{
-                text: prompt
-              }]
-            }]
+            instances: [{
+              prompt: prompt
+            }],
+            parameters: {
+              sampleCount: 1,
+              aspectRatio: "1:1",
+              negativePrompt: "illustration, 3D render, CGI, digital art, airbrushed, cinematic look, dramatic rim lighting, hyper-realism, beauty retouch, filters, cartoon, anime, painting, drawing, sketch",
+              safetyFilterLevel: "block_some",
+              personGeneration: "allow_adult"
+            }
           }),
         });
 
         text = await resp.text();
         
         if (!resp.ok) {
-          console.error(`Gemini image error (attempt ${attempt}):`, resp.status, text);
+          console.error(`Imagen 3 error (attempt ${attempt}):`, resp.status, text);
           if (attempt < maxRetries && [408, 429, 500, 502, 503, 504].includes(resp.status)) {
             const delay = Math.pow(2, attempt - 1) * 1000;
             console.log(`Retrying after ${delay}ms...`);
             await new Promise(resolve => setTimeout(resolve, delay));
             continue;
           }
-          return { statusCode: resp.status, body: JSON.stringify({ error: 'Gemini image error', details: text }) };
+          return { statusCode: resp.status, body: JSON.stringify({ error: 'Imagen 3 error', details: text }) };
         }
         
         // Success - break out of retry loop
@@ -122,13 +127,13 @@ export const handler: Handler = async (event) => {
           await new Promise(resolve => setTimeout(resolve, delay));
           continue;
         }
-        return { statusCode: 500, body: JSON.stringify({ error: 'Network error calling Gemini', message: err.message }) };
+        return { statusCode: 500, body: JSON.stringify({ error: 'Network error calling Imagen 3', message: err.message }) };
       }
     }
 
     const data = JSON.parse(text!);
-    // Extract base64 image from Gemini response
-    const b64: string | undefined = data?.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+    // Extract base64 image from Imagen response
+    const b64: string | undefined = data?.predictions?.[0]?.bytesBase64Encoded;
     if (!b64) {
       return { statusCode: 502, body: JSON.stringify({ error: 'No image data returned', details: data }) };
     }
