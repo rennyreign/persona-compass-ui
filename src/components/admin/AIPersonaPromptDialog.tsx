@@ -410,33 +410,62 @@ export function AIPersonaPromptDialog({ isOpen, onOpenChange, onGenerate, onPers
   };
 
   const generatePersonaImageWithPrompt = async (personaId: string, prompt: string) => {
+    // Retry with exponential backoff and a per-attempt timeout to avoid transient 5xx/timeout issues
+    const maxAttempts = 3;
+    const retriable = (status: number) => [408, 429, 500, 502, 503, 504].includes(status);
+    const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
+
+    const attemptFetch = async (attempt: number): Promise<string> => {
+      const controller = new AbortController();
+      const timeoutMs = 30000; // 30s per attempt
+      const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+      try {
+        console.log(`Requesting image (attempt ${attempt}/${maxAttempts}) for persona:`, personaId);
+        const response = await fetch('/.netlify/functions/generate-image', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt, personaId }),
+          signal: controller.signal,
+        });
+
+        const text = await response.text();
+        console.log('Image function response status:', response.status);
+        if (!response.ok) {
+          console.error('Image function error payload:', text);
+          if (retriable(response.status) && attempt < maxAttempts) {
+            const backoff = 1000 * Math.pow(2, attempt - 1); // 1s, 2s
+            console.warn(`Retrying image request after ${backoff}ms (status ${response.status})...`);
+            await delay(backoff);
+            return attemptFetch(attempt + 1);
+          }
+          throw new Error(`Image function error (${response.status}): ${text}`);
+        }
+
+        const data = JSON.parse(text);
+        const imageUrl: string = data.imageUrl;
+        if (!imageUrl) {
+          throw new Error('Image function did not return imageUrl');
+        }
+        return imageUrl;
+      } catch (err: any) {
+        if (err?.name === 'AbortError' && attempt < maxAttempts) {
+          const backoff = 1000 * Math.pow(2, attempt - 1);
+          console.warn(`Image request timed out, retrying after ${backoff}ms...`);
+          await delay(backoff);
+          return attemptFetch(attempt + 1);
+        }
+        throw err;
+      } finally {
+        clearTimeout(timeoutId);
+      }
+    };
+
     try {
-      console.log('Requesting image from Netlify function for persona:', personaId);
-      const response = await fetch('/.netlify/functions/generate-image', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt, personaId }),
-      });
-
-      const text = await response.text();
-      console.log('Image function response status:', response.status);
-      if (!response.ok) {
-        console.error('Image function error payload:', text);
-        throw new Error(`Image function error (${response.status}): ${text}`);
-      }
-
-      const data = JSON.parse(text);
-      const imageUrl: string = data.imageUrl;
-      if (!imageUrl) {
-        throw new Error('Image function did not return imageUrl');
-      }
-
-      // Update the persona's avatar_url directly
+      const imageUrl = await attemptFetch(1);
       const { supabase } = await import('../../integrations/supabase/client');
       const updateResult = await supabase.from('personas').update({
-        avatar_url: imageUrl
+        avatar_url: imageUrl,
       }).eq('id', personaId);
-
       if ((updateResult as any).error) {
         throw new Error(`Failed to update persona avatar: ${(updateResult as any).error.message}`);
       }
