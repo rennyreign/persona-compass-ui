@@ -70,30 +70,61 @@ export const handler: Handler = async (event) => {
 
     const prompt = sanitizePrompt(rawPrompt);
 
-    // Step 1: Generate image with DALL-E
-    const resp = await fetch('https://api.openai.com/v1/images/generations', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${OPENAI_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'dall-e-3',
-        prompt,
-        n: 1,
-        size: '1024x1024',
-        quality: 'standard',
-        style: 'natural',
-        response_format: 'b64_json',
-      }),
-    });
+    // Step 1: Generate image with DALL-E (with retry for network errors)
+    let resp;
+    let text;
+    const maxRetries = 3;
+    let lastError;
+    
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        console.log(`DALL-E request attempt ${attempt}/${maxRetries}`);
+        resp = await fetch('https://api.openai.com/v1/images/generations', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${OPENAI_API_KEY}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            model: 'dall-e-3',
+            prompt,
+            n: 1,
+            size: '1024x1024',
+            quality: 'standard',
+            style: 'natural',
+            response_format: 'b64_json',
+          }),
+        });
 
-    const text = await resp.text();
-    if (!resp.ok) {
-      return { statusCode: resp.status, body: JSON.stringify({ error: 'OpenAI error', details: text }) };
+        text = await resp.text();
+        
+        if (!resp.ok) {
+          console.error(`DALL-E error (attempt ${attempt}):`, resp.status, text);
+          if (attempt < maxRetries && [408, 429, 500, 502, 503, 504].includes(resp.status)) {
+            const delay = Math.pow(2, attempt - 1) * 1000;
+            console.log(`Retrying after ${delay}ms...`);
+            await new Promise(resolve => setTimeout(resolve, delay));
+            continue;
+          }
+          return { statusCode: resp.status, body: JSON.stringify({ error: 'OpenAI error', details: text }) };
+        }
+        
+        // Success - break out of retry loop
+        break;
+      } catch (err: any) {
+        lastError = err;
+        console.error(`Network error on attempt ${attempt}:`, err.message);
+        if (attempt < maxRetries) {
+          const delay = Math.pow(2, attempt - 1) * 1000;
+          console.log(`Retrying after ${delay}ms...`);
+          await new Promise(resolve => setTimeout(resolve, delay));
+          continue;
+        }
+        return { statusCode: 500, body: JSON.stringify({ error: 'Network error calling OpenAI', message: err.message }) };
+      }
     }
 
-    const data = JSON.parse(text);
+    const data = JSON.parse(text!);
     const b64: string | undefined = data?.data?.[0]?.b64_json;
     if (!b64) {
       return { statusCode: 502, body: JSON.stringify({ error: 'No image data returned', details: data }) };
