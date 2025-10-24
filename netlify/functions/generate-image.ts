@@ -81,7 +81,7 @@ export const handler: Handler = async (event) => {
         model: 'dall-e-3',
         prompt,
         n: 1,
-        size: '512x512',
+        size: '1024x1024',
         quality: 'standard',
         style: 'natural',
         response_format: 'b64_json',
